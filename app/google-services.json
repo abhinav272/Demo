@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "54965687462",
+    "firebase_url": "https://shopr-dde54.firebaseio.com",
+    "project_id": "shopr-dde54",
+    "storage_bucket": "shopr-dde54.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:54965687462:android:edc428faa5d8c552",
+        "android_client_info": {
+          "package_name": "com.android.shopr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "54965687462-5f1lmht2sn41aj72gv6k4eqelb9v5f9g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.android.shopr",
+            "certificate_hash": "6C11658037CB26D7484531071683E91BCBAFBE96"
+          }
+        },
+        {
+          "client_id": "54965687462-8eo840p1s20tm6vn0b8crmoaqsbur2v2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGynXQCJkclyVPq-bq24uAb1Y0-H_Xu4M"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "54965687462-8eo840p1s20tm6vn0b8crmoaqsbur2v2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
