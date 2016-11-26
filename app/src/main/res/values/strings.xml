@@ -2,4 +2,5 @@
     <string name="app_name">Shopr</string>
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="default_web_client_id_gcp">54965687462-8eo840p1s20tm6vn0b8crmoaqsbur2v2.apps.googleusercontent.com</string>
+    <string name="facebook_app_id">1894417650782027</string>
 </resources>
