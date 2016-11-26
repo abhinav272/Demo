@@ -38,7 +38,6 @@ public class LoginFragment extends BaseFragment implements GoogleApiClient.OnCon
     private GoogleApiClient mGoogleApiClient;
     private FirebaseAuth mAuth;
     private ProgressDialog progress;
-    private Button googleSignIn;
 
     @Nullable
     @Override
@@ -50,7 +49,7 @@ public class LoginFragment extends BaseFragment implements GoogleApiClient.OnCon
     }
 
     private void setupUI(View view) {
-        googleSignIn = (Button) view.findViewById(R.id.btn_google_sign_in);
+        Button googleSignIn = (Button) view.findViewById(R.id.btn_google_sign_in);
         googleSignIn.setOnClickListener(this);
     }
 
