@@ -7,5 +7,11 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+    
+    <style name="shoprFBLoginButton">
+        <item name="android:textSize">16sp</item>
+        <item name="android:background">@drawable/bg_rounded_button</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
 
 </resources>
