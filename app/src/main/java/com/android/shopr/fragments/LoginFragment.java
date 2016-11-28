@@ -1,5 +1,6 @@
 package com.android.shopr.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +16,14 @@ import android.widget.Toast;
 
 import com.android.shopr.OnBoardActivity;
 import com.android.shopr.R;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.Profile;
+import com.facebook.ProfileTracker;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -32,12 +41,21 @@ import com.google.firebase.auth.GoogleAuthProvider;
 /**
  * Created by abhinav.sharma on 11/26/2016.
  */
-public class LoginFragment extends BaseFragment implements GoogleApiClient.OnConnectionFailedListener, FirebaseAuth.AuthStateListener, View.OnClickListener {
+public class LoginFragment extends BaseFragment implements GoogleApiClient.OnConnectionFailedListener, FirebaseAuth.AuthStateListener, View.OnClickListener, FacebookCallback<LoginResult> {
     private static final String TAG = LoginFragment.class.getSimpleName();
     private static final int RC_SIGN_IN = 0X2F;
     private GoogleApiClient mGoogleApiClient;
     private FirebaseAuth mAuth;
     private ProgressDialog progress;
+    private LoginButton fbSignIn;
+    private CallbackManager callbackManager;
+    private ProfileTracker mProfileTracker;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
+    }
 
     @Nullable
     @Override
@@ -48,9 +66,20 @@ public class LoginFragment extends BaseFragment implements GoogleApiClient.OnCon
         return view;
     }
 
+    @SuppressLint("WrongViewCast")
     private void setupUI(View view) {
         Button googleSignIn = (Button) view.findViewById(R.id.btn_google_sign_in);
         googleSignIn.setOnClickListener(this);
+        fbSignIn = (LoginButton) view.findViewById(R.id.btn_fb_sign_in);
+        callbackManager = CallbackManager.Factory.create();
+        setUpFBLoginButton();
+    }
+
+    private void setUpFBLoginButton() {
+        fbSignIn.setReadPermissions(new String[]{"email", "public_profile", "user_birthday"});
+        fbSignIn.setFragment(this);
+        fbSignIn.registerCallback(callbackManager, this);
+        fbSignIn.setOnClickListener(this);
     }
 
     @Override
@@ -76,11 +105,6 @@ public class LoginFragment extends BaseFragment implements GoogleApiClient.OnCon
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.e(TAG, "onConnectionFailed: " + connectionResult.getErrorMessage());
     }
@@ -101,6 +125,8 @@ public class LoginFragment extends BaseFragment implements GoogleApiClient.OnCon
                 handleSignInResult(result);
             else Toast.makeText(getActivity(), "Google Sign-in failed", Toast.LENGTH_SHORT).show();
         }
+
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
@@ -196,5 +222,31 @@ public class LoginFragment extends BaseFragment implements GoogleApiClient.OnCon
                 signInWithGoogle();
                 break;
         }
+    }
+
+    @Override
+    public void onSuccess(LoginResult loginResult) {
+        Log.d(TAG, "FB login success -- Auth token :  " + loginResult.getAccessToken());
+        Log.d(TAG, "FB login success -- Granted Permmission : " + loginResult.getRecentlyGrantedPermissions().toString() );
+        Log.d(TAG, "FB login success -- Denied Permission :  " + loginResult.getRecentlyDeniedPermissions().toString() );
+        if (Profile.getCurrentProfile() == null) {
+            mProfileTracker = new ProfileTracker() {
+                @Override
+                protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+                    Log.d(TAG, "onCurrentProfileChanged: " + currentProfile.getFirstName());
+                    mProfileTracker.stopTracking();
+                }
+            };
+        } else Log.d(TAG, "FB login success -- Profile :  " + Profile.getCurrentProfile().getFirstName() + " # " + Profile.getCurrentProfile().getId() );
+    }
+
+    @Override
+    public void onCancel() {
+        Log.e(TAG, "FB Login onCancel: ");
+    }
+
+    @Override
+    public void onError(FacebookException error) {
+        Log.e(TAG, "FB Login onError: ", error.fillInStackTrace());
     }
 }
