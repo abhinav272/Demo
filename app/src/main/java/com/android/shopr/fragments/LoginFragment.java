@@ -16,12 +16,14 @@ import android.widget.Toast;
 
 import com.android.shopr.OnBoardActivity;
 import com.android.shopr.R;
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -34,6 +36,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -41,7 +44,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 /**
  * Created by abhinav.sharma on 11/26/2016.
  */
-public class LoginFragment extends BaseFragment implements GoogleApiClient.OnConnectionFailedListener, FirebaseAuth.AuthStateListener, View.OnClickListener, FacebookCallback<LoginResult> {
+public class LoginFragment extends BaseFragment implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener, FacebookCallback<LoginResult> {
     private static final String TAG = LoginFragment.class.getSimpleName();
     private static final int RC_SIGN_IN = 0X2F;
     private GoogleApiClient mGoogleApiClient;
@@ -49,7 +52,7 @@ public class LoginFragment extends BaseFragment implements GoogleApiClient.OnCon
     private ProgressDialog progress;
     private LoginButton fbSignIn;
     private CallbackManager callbackManager;
-    private ProfileTracker mProfileTracker;
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,9 +64,29 @@ public class LoginFragment extends BaseFragment implements GoogleApiClient.OnCon
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
+        initFirebaseAuth();
         buildGoogleApiClient();
         setupUI(view);
         return view;
+    }
+
+    private void initFirebaseAuth() {
+        mAuth = FirebaseAuth.getInstance();
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    onAccountSelected(user);
+
+                } else {
+                    // User is signed out
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+            }
+        };
     }
 
     @SuppressLint("WrongViewCast")
@@ -85,12 +108,18 @@ public class LoginFragment extends BaseFragment implements GoogleApiClient.OnCon
     @Override
     public void onStart() {
         super.onStart();
-        mAuth.addAuthStateListener(this);
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
     }
 
     private void buildGoogleApiClient() {
-        mAuth = FirebaseAuth.getInstance();
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id_gcp))
                 .requestEmail()
@@ -100,8 +129,6 @@ public class LoginFragment extends BaseFragment implements GoogleApiClient.OnCon
                 .enableAutoManage(getActivity(), this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
-
-        mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -132,16 +159,10 @@ public class LoginFragment extends BaseFragment implements GoogleApiClient.OnCon
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
-            // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
-            Log.d(TAG, "handleSignInResult: " + acct.getDisplayName());
-            Log.d(TAG, "handleSignInResult: " + acct.getEmail());
-            Log.d(TAG, "handleSignInResult: " + acct.getPhotoUrl());
-            Log.d(TAG, "handleSignInResult: " + acct.getGrantedScopes());
-//            updateUI(true);
             firebaseAuthWithGoogle(acct);
         } else {
-            // TODO -- show screen for re-authentication and educate user
+            Log.e(TAG, "handleSignInResult: sign in failed");
         }
     }
 
@@ -157,8 +178,7 @@ public class LoginFragment extends BaseFragment implements GoogleApiClient.OnCon
                             Log.w(TAG, "signInWithCredential", task.getException());
                             showShortToast("User Authentication failed");
                             hideProgress();
-                        } else {
-                            showHomeActivity();
+                            revokeAccess();
                         }
                     }
                 });
@@ -168,31 +188,25 @@ public class LoginFragment extends BaseFragment implements GoogleApiClient.OnCon
         ((OnBoardActivity) getActivity()).showHomeActivity();
     }
 
-    @Override
-    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        if (user != null) {
-            // User is signed in
-            Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-            onAccountSelected(user);
-
-        } else {
-            // User is signed out
-            Log.d(TAG, "onAuthStateChanged:signed_out");
-        }
-    }
-
     private void onAccountSelected(FirebaseUser user) {
         try {
             String personName = user.getDisplayName();
             String personPhotoUrl = user.getPhotoUrl().toString();
             String email = user.getEmail();
             Log.e(TAG, "onAccountSelected: " + personName + " " + personPhotoUrl + " " + email);
+            showHomeActivity();
         } catch (Exception e) {
             e.printStackTrace();
+            revokeAccess();
         } finally {
             hideProgress();
         }
+    }
+
+    private void revokeAccess() {
+        Log.d(TAG, "revokeAccess: ");
+        LoginManager.getInstance().logOut();
+        mAuth.signOut();
     }
 
     private void hideProgress() {
@@ -226,18 +240,26 @@ public class LoginFragment extends BaseFragment implements GoogleApiClient.OnCon
 
     @Override
     public void onSuccess(LoginResult loginResult) {
-        Log.d(TAG, "FB login success -- Auth token :  " + loginResult.getAccessToken());
-        Log.d(TAG, "FB login success -- Granted Permmission : " + loginResult.getRecentlyGrantedPermissions().toString() );
-        Log.d(TAG, "FB login success -- Denied Permission :  " + loginResult.getRecentlyDeniedPermissions().toString() );
-        if (Profile.getCurrentProfile() == null) {
-            mProfileTracker = new ProfileTracker() {
-                @Override
-                protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
-                    Log.d(TAG, "onCurrentProfileChanged: " + currentProfile.getFirstName());
-                    mProfileTracker.stopTracking();
-                }
-            };
-        } else Log.d(TAG, "FB login success -- Profile :  " + Profile.getCurrentProfile().getFirstName() + " # " + Profile.getCurrentProfile().getId() );
+        handleFacebookAccessToken(loginResult.getAccessToken());
+    }
+
+    private void handleFacebookAccessToken(AccessToken accessToken) {
+        showProgress("Connecting...");
+        Log.d(TAG, "handleFacebookAccessToken:" + accessToken);
+        AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "signInWithCredential", task.getException());
+                            showShortToast("Authentication failed.");
+                            hideProgress();
+                            revokeAccess();
+                        }
+                    }
+                });
     }
 
     @Override
