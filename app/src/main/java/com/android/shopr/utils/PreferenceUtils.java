@@ -3,6 +3,8 @@ package com.android.shopr.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.android.shopr.model.UserProfile;
+
 /**
  * Created by abhinav.sharma on 11/29/2016.
  */
@@ -17,6 +19,12 @@ public class PreferenceUtils {
 
     }
 
+    public static PreferenceUtils getInstance(Context context) {
+        if (preferenceUtils == null)
+            preferenceUtils = new PreferenceUtils();
+        return preferenceUtils;
+    }
+
     private SharedPreferences getSharedPreferences(Context context) {
         if (sharedPreferences == null) {
             sharedPreferences = context.getSharedPreferences(APP_PREFERENCE, Context.MODE_PRIVATE);
@@ -25,10 +33,8 @@ public class PreferenceUtils {
         return sharedPreferences;
     }
 
-    public PreferenceUtils getInstance(Context context) {
-        if (preferenceUtils == null)
-            preferenceUtils = new PreferenceUtils();
-        return preferenceUtils;
+    public void saveUserProfile(Context context, UserProfile userProfile) {
+
     }
 
 }

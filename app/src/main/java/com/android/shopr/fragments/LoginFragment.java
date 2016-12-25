@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.android.shopr.OnBoardActivity;
 import com.android.shopr.R;
+import com.android.shopr.model.UserProfile;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -190,10 +191,17 @@ public class LoginFragment extends BaseFragment implements GoogleApiClient.OnCon
 
     private void onAccountSelected(FirebaseUser user) {
         try {
-            String personName = user.getDisplayName();
-            String personPhotoUrl = user.getPhotoUrl().toString();
-            String email = user.getEmail();
-            Log.e(TAG, "onAccountSelected: " + personName + " " + personPhotoUrl + " " + email);
+            UserProfile userProfile = new UserProfile();
+            if (user != null) {
+                userProfile.setPersonName(user.getDisplayName());
+                userProfile.setuId(user.getUid());
+                userProfile.setContact(null);
+                userProfile.setPicUrl(user.getPhotoUrl().toString());
+                userProfile.setEmailId(user.getEmail());
+                userProfile.setProvider(user.getProviders());
+            }
+            saveProfileData(userProfile);
+            Log.e(TAG, "onAccountSelected: " + userProfile.getPersonName() + " " + userProfile.getProvider());
             showHomeActivity();
         } catch (Exception e) {
             e.printStackTrace();
@@ -201,6 +209,10 @@ public class LoginFragment extends BaseFragment implements GoogleApiClient.OnCon
         } finally {
             hideProgress();
         }
+    }
+
+    private void saveProfileData(UserProfile userProfile) {
+
     }
 
     private void revokeAccess() {
