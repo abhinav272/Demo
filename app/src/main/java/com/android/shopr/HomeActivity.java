@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.zxing.Result;
 
@@ -23,6 +24,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     Button qrScanner, qrGenerator;
     ImageView ivTemp;
     ZXingScannerView mScannerView;
+    TextView scanText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         qrGenerator = (Button) findViewById(R.id.btn_create_qr);
         ivTemp = (ImageView) findViewById(R.id.iv_temp);
         qrScanner = (Button) findViewById(R.id.btn_scan);
+        scanText = (TextView) findViewById(R.id.tv_scan_text);
         qrScanner.setOnClickListener(this);
         qrGenerator.setOnClickListener(this);
     }
@@ -66,7 +69,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     public void handleResult(Result result) {
         mScannerView.stopCamera();
         setContentView(R.layout.activity_home);
+        setUpViews();
         Log.d(TAG, "handleResult: " + result.getText());
         Log.d(TAG, "handleResult: " + result.getBarcodeFormat());
+
+        scanText.setText(result.getText() + " ## " + result.getBarcodeFormat());
     }
 }
