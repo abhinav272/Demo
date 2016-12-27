@@ -1,6 +1,7 @@
 package com.android.shopr;
 
 import android.graphics.Bitmap;
+import android.hardware.Camera;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -62,12 +63,16 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onPause() {
         super.onPause();
-        mScannerView.stopCamera();
+        if (mScannerView != null) {
+            mScannerView.stopCamera();
+        }
     }
 
     @Override
     public void handleResult(Result result) {
-        mScannerView.stopCamera();
+        if (mScannerView != null) {
+            mScannerView.stopCamera();
+        }
         setContentView(R.layout.activity_home);
         setUpViews();
         Log.d(TAG, "handleResult: " + result.getText());
