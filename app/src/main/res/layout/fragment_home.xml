@@ -1,40 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn_create_qr"
-        android:text="Get QR Code"
-        android:textAllCaps="false"
-        android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <ImageView
-        android:id="@+id/iv_temp"
-        android:layout_below="@+id/btn_create_qr"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:layout_width="300dp"
-        android:layout_height="300dp" />
-
-    <Button
-        android:id="@+id/btn_scan"
-        android:layout_below="@+id/iv_temp"
-        android:text="Start Scanner"
-        android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/tv_scan_text"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/btn_scan"
+    <me.dm7.barcodescanner.zxing.ZXingScannerView
+        android:id="@+id/scanner_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+    </me.dm7.barcodescanner.zxing.ZXingScannerView>
+
+    <RelativeLayout
+        android:id="@+id/view_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/btn_create_qr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Get QR Code"
+            android:textAllCaps="false" />
+
+        <ImageView
+            android:id="@+id/iv_temp"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_below="@+id/btn_create_qr"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp" />
+
+        <Button
+            android:id="@+id/btn_scan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_temp"
+            android:layout_centerHorizontal="true"
+            android:text="Start Scanner" />
+
+        <TextView
+            android:id="@+id/tv_scan_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_scan"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp" />
+    </RelativeLayout>
+
 
 </RelativeLayout>

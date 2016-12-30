@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.shopr.HomeActivity;
@@ -30,6 +31,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     ImageView ivTemp;
     ZXingScannerView mScannerView;
     TextView scanText;
+    RelativeLayout viewContainer;
 
     @Nullable
     @Override
@@ -41,6 +43,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        viewContainer = (RelativeLayout) view.findViewById(R.id.view_container);
+        mScannerView = (ZXingScannerView) view.findViewById(R.id.scanner_view);
         qrGenerator = (Button) view.findViewById(R.id.btn_create_qr);
         ivTemp = (ImageView) view.findViewById(R.id.iv_temp);
         qrScanner = (Button) view.findViewById(R.id.btn_scan);
@@ -65,17 +69,23 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 ivTemp.setImageBitmap(bitmap);
                 break;
             case R.id.btn_scan:
-                mScannerView = new ZXingScannerView(getActivity());
+//                mScannerView = new ZXingScannerView(getActivity());
 //                setContentView(mScannerView);
-                inflateScannerView(mScannerView);
+                inflateScannerView();
                 mScannerView.setResultHandler(this);
                 mScannerView.startCamera();
                 break;
         }
     }
 
-    private void inflateScannerView(ZXingScannerView mScannerView) {
-        ((HomeActivity) getActivity()).showScannerView(mScannerView);
+    private void inflateScannerView() {
+        viewContainer.setVisibility(View.GONE);
+        mScannerView.setVisibility(View.VISIBLE);
+    }
+
+    private void deflateScannerView() {
+        mScannerView.setVisibility(View.GONE);
+        viewContainer.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -83,9 +93,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         if (mScannerView != null) {
             mScannerView.stopCamera();
         }
-
-        ((HomeActivity) getActivity()).setContentView(R.layout.activity_home);
-        ((HomeActivity) getActivity()).setUpHomeFragment();
+        deflateScannerView();
         Log.d(TAG, "handleResult: " + result.getText());
         Log.d(TAG, "handleResult: " + result.getBarcodeFormat());
 
