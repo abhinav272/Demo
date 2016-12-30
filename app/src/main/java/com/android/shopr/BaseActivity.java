@@ -9,7 +9,5 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
  */
 
 public class BaseActivity extends AppCompatActivity {
-    public void showScannerView(ZXingScannerView mScannerView) {
-        setContentView(mScannerView);
-    }
+
 }
