@@ -22,6 +22,7 @@ public class HomeActivity extends BaseActivity {
     private CharSequence mTitle;
     private Toolbar toolbar;
     private NavigationView navigationView;
+    private View headerView;
 
 
     @Override
@@ -58,6 +59,7 @@ public class HomeActivity extends BaseActivity {
         };
         mDrawerToggle.setDrawerIndicatorEnabled(true);
         mDrawerLayout.addDrawerListener(mDrawerToggle);
+        headerView = getHeaderView(navigationView);
     }
 
     @Override
@@ -75,6 +77,12 @@ public class HomeActivity extends BaseActivity {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
+    }
+
+    private View getHeaderView(NavigationView navigationView){
+        if (navigationView.getHeaderCount()>0)
+            return navigationView.getHeaderView(0);
+        return null;
     }
 
     public void setUpHomeFragment() {
