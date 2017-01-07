@@ -4,4 +4,6 @@
     <string name="default_web_client_id_gcp">54965687462-8eo840p1s20tm6vn0b8crmoaqsbur2v2.apps.googleusercontent.com</string>
     <string name="facebook_app_id">1894417650782027</string>
     <string name="sign_in_with_fb">Sign in with facebook</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 </resources>
