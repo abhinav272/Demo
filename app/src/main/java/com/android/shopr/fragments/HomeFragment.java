@@ -65,7 +65,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btn_create_qr:
-                Bitmap bitmap = QRCode.from("O Haan vai Kiddan ??").bitmap();
+                Bitmap bitmap = QRCode.from("Shopr custom text for testing").bitmap();
                 ivTemp.setImageBitmap(bitmap);
                 break;
             case R.id.btn_scan:
