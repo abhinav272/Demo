@@ -36,11 +36,18 @@ public class PreferenceUtils {
         return sharedPreferences;
     }
 
-    public void saveUserProfile(Context context, UserProfile userProfile) {
+    public void saveUserProfile(UserProfile userProfile) {
         Gson gson = new Gson();
         String json = gson.toJson(userProfile);
         sharedPreferences.edit().putString(ShoprConstants.USER_PROFILE_PREFS_KEYS, json).apply();
         Log.d(TAG, "saveUserProfile: profile saved");
+        Log.d(TAG, "saveUserProfile: on thread " + Thread.currentThread().getName());
+    }
+
+    public UserProfile getUserProfile() {
+        String string = sharedPreferences.getString(ShoprConstants.USER_PROFILE_PREFS_KEYS, null);
+        Gson gson = new Gson();
+        return gson.fromJson(string, UserProfile.class);
     }
 
 }
