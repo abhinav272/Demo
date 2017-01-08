@@ -17,6 +17,8 @@ import android.widget.Toast;
 import com.android.shopr.OnBoardActivity;
 import com.android.shopr.R;
 import com.android.shopr.model.UserProfile;
+import com.android.shopr.utils.ExecutorSupplier;
+import com.android.shopr.utils.PreferenceUtils;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -211,8 +213,13 @@ public class LoginFragment extends BaseFragment implements GoogleApiClient.OnCon
         }
     }
 
-    private void saveProfileData(UserProfile userProfile) {
-
+    private void saveProfileData(final UserProfile userProfile) {
+        ExecutorSupplier.getInstance().getWorkerThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                PreferenceUtils.getInstance(getActivity()).saveUserProfile(userProfile);
+            }
+        });
     }
 
     private void revokeAccess() {
