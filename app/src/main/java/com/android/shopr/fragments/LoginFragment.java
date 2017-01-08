@@ -198,7 +198,9 @@ public class LoginFragment extends BaseFragment implements GoogleApiClient.OnCon
                 userProfile.setPersonName(user.getDisplayName());
                 userProfile.setuId(user.getUid());
                 userProfile.setContact(null);
-                userProfile.setPicUrl(user.getPhotoUrl().toString());
+                if (user.getPhotoUrl() != null) {
+                    userProfile.setPicUrl(user.getPhotoUrl().toString());
+                }
                 userProfile.setEmailId(user.getEmail());
                 userProfile.setProvider(user.getProviders());
             }
