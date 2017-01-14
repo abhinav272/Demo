@@ -41,6 +41,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
@@ -275,9 +276,11 @@ public class LoginFragment extends BaseFragment implements GoogleApiClient.OnCon
                                             Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
                                             if (!task.isSuccessful()) {
                                                 Log.w(TAG, "signInWithCredential", task.getException());
-                                                showShortToast("Authentication failed.");
+                                                if (task.getException().getClass().getSimpleName().equals("FirebaseAuthUserCollisionException"))
+                                                    showShortToast("Try signing in with Google");
+                                                else showShortToast("Authentication failed.");
                                                 hideProgress();
-                            revokeAccess();
+                                                revokeAccess();
                         }
                     }
                 });
