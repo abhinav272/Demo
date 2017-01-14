@@ -8,7 +8,7 @@ import java.util.List;
 
 public class UserProfile {
 
-    private String uId;
+    private String accessToken;
     private String personName;
     private String emailId;
     private String picUrl;
@@ -23,12 +23,12 @@ public class UserProfile {
         this.provider = provider;
     }
 
-    public String getuId() {
-        return uId;
+    public String getAccessToken() {
+        return accessToken;
     }
 
-    public void setuId(String uId) {
-        this.uId = uId;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 
     public String getContact() {
