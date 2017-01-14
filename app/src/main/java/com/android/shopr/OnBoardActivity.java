@@ -21,19 +21,19 @@ public class OnBoardActivity extends BaseActivity {
         setContentView(R.layout.activity_on_board);
         showSplashFragment();
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showLoginFragment();
-            }
-        },2000);
+//        Handler handler = new Handler();
+//        handler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                showLoginFragment();
+//            }
+//        });
     }
 
-    private void showLoginFragment() {
+    public void showLoginFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction()
-                .replace(R.id.frame_container, new LoginFragment(), SplashFragment.class.getSimpleName());
+                .replace(R.id.frame_container, new LoginFragment(), LoginFragment.class.getSimpleName());
         transaction.commit();
     }
 
