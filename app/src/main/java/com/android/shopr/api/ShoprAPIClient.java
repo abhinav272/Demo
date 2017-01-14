@@ -11,11 +11,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ShoprAPIClient {
 
     private static Retrofit retrofit;
+    private static APIInterface apiInterface;
 
     private ShoprAPIClient() {
     }
 
-    public static Retrofit getClient() {
+    private static Retrofit getClient() {
         if (retrofit==null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(ShoprConstants.BASE_URL)
@@ -24,4 +25,9 @@ public class ShoprAPIClient {
         }
         return retrofit;
     }
+
+    public static APIInterface getApiInterface() {
+        return getClient().create(APIInterface.class);
+    }
+
 }
