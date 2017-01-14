@@ -16,19 +16,21 @@ public class PreferenceUtils {
 
     private static final String TAG = "PreferenceUtils";
     private static PreferenceUtils preferenceUtils;
-    private SharedPreferences sharedPreferences;
+    private static SharedPreferences sharedPreferences;
 
     private PreferenceUtils() {
 
     }
 
     public static PreferenceUtils getInstance(Context context) {
-        if (preferenceUtils == null)
+        if (preferenceUtils == null){
             preferenceUtils = new PreferenceUtils();
+            sharedPreferences = getSharedPreferences(context);
+        }
         return preferenceUtils;
     }
 
-    private SharedPreferences getSharedPreferences(Context context) {
+    private static SharedPreferences getSharedPreferences(Context context) {
         if (sharedPreferences == null) {
             sharedPreferences = context.getSharedPreferences(ShoprConstants.APP_PREFERENCE, Context.MODE_PRIVATE);
         }
