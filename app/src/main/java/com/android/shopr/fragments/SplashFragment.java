@@ -49,14 +49,24 @@ public class SplashFragment extends BaseFragment implements Callback<GenericResp
             @Override
             public void run() {
                 userProfile = PreferenceUtils.getInstance(getActivity()).getUserProfile();
-                Handler handler = new Handler(Looper.getMainLooper());
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Call<GenericResponse> call = ShoprAPIClient.getApiInterface().check(userProfile.getEmailId(), userProfile.getAccessToken());
-                        call.enqueue(SplashFragment.this);
-                    }
-                });
+                if (userProfile != null) {
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Call<GenericResponse> call = ShoprAPIClient.getApiInterface().check(userProfile.getEmailId(), userProfile.getAccessToken());
+                            call.enqueue(SplashFragment.this);
+                        }
+                    });
+                } else {
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            ((OnBoardActivity) getActivity()).showLoginFragment();
+                        }
+                    });
+                }
             }
         });
     }
