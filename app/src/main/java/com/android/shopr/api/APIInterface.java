@@ -1,6 +1,8 @@
 package com.android.shopr.api;
 
 import com.android.shopr.api.reponse.GenericResponse;
+import com.android.shopr.model.Category;
+import com.android.shopr.model.Store;
 import com.android.shopr.utils.ShoprConstants;
 import com.google.gson.Gson;
 
@@ -9,6 +11,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
@@ -23,7 +26,7 @@ public interface APIInterface {
             "Content-Type: application/x-www-form-urlencoded",
     })
     @FormUrlEncoded
-    @POST("/login")
+    @POST("auth/login")
     Call<GenericResponse> login(@Field("email") String email,
                                 @Field("user_name") String userName,
                                 @Field("access_token") String accessToken);
@@ -32,7 +35,7 @@ public interface APIInterface {
             "Content-Type: application/x-www-form-urlencoded",
     })
     @FormUrlEncoded
-    @POST("/check")
+    @POST("auth/check")
     Call<GenericResponse> check(@Field("email") String email,
                                 @Field("access_token") String accessToken);
 
@@ -40,8 +43,21 @@ public interface APIInterface {
             "Content-Type: application/x-www-form-urlencoded",
     })
     @FormUrlEncoded
-    @POST("/logout")
+    @POST("auth/logout")
     Call<GenericResponse> logout(@Field("access_token") String accessToken);
+
+    @Headers({
+            "Content-Type: application/x-www-form-urlencoded",
+    })
+    @FormUrlEncoded
+    @POST("categories/all")
+    Call<Category.List> getStoreWiseCategories(@Field("store_id") int storeId);
+
+    @Headers({
+            "Content-Type: application/x-www-form-urlencoded",
+    })
+    @GET("stores/all")
+    Call<Store.List> getAllStores();
 
 
 }
