@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.android.shopr.fragments.LoginFragment;
 import com.android.shopr.fragments.SplashFragment;
+import com.android.shopr.utils.Utils;
 
 /**
  * Created by abhinav.sharma on 11/26/2016.
@@ -31,6 +32,7 @@ public class OnBoardActivity extends BaseActivity {
     }
 
     public void showLoginFragment() {
+        Utils.clearAllDataAndRevokeAccess(this);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction()
                 .replace(R.id.frame_container, new LoginFragment(), LoginFragment.class.getSimpleName());
