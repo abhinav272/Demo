@@ -9,8 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.shopr.HomeActivity;
 import com.android.shopr.R;
-import com.android.shopr.adapters.TwoImageRecyclerViewAdapter;
+import com.android.shopr.adapters.StoresRecyclerViewAdapter;
 import com.android.shopr.api.ShoprAPIClient;
 import com.android.shopr.model.Store;
 import com.android.shopr.utils.ExecutorSupplier;
@@ -23,11 +24,11 @@ import retrofit2.Response;
  * Created by abhinav.sharma on 1/8/2017.
  */
 
-public class HomeFragment extends BaseFragment implements Callback<Store.List> {
+public class HomeFragment extends BaseFragment implements Callback<Store.List>,StoresRecyclerViewAdapter.DelegateEvent {
 
     private static final String TAG = "HomeFragment";
     private RecyclerView mRecyclerView;
-    private TwoImageRecyclerViewAdapter mTwoImageRecyclerViewAdapter;
+    private StoresRecyclerViewAdapter mStoresRecyclerViewAdapter;
     private Store.List mStores;
 
     @Override
@@ -47,7 +48,8 @@ public class HomeFragment extends BaseFragment implements Callback<Store.List> {
         ExecutorSupplier.getInstance().getWorkerThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
-                Call<Store.List> call = ShoprAPIClient.getApiInterface().getAllStores();
+                String emptyBody = "";
+                Call<Store.List> call = ShoprAPIClient.getApiInterface().getAllStores(emptyBody);
                 call.enqueue(HomeFragment.this);
             }
         });
@@ -59,16 +61,23 @@ public class HomeFragment extends BaseFragment implements Callback<Store.List> {
 
     @Override
     public void onResponse(Call<Store.List> call, Response<Store.List> response) {
-        mStores = response.body();
-        mTwoImageRecyclerViewAdapter = new TwoImageRecyclerViewAdapter(mStores, getActivity());
-        mRecyclerView.setAdapter(mTwoImageRecyclerViewAdapter);
-        for (Store s:mStores) {
-            Log.e("onResponse: ", s.getStoreName());
+        if(response.isSuccessful() && response.code() == 200){
+            mStores = response.body();
+            mStoresRecyclerViewAdapter = new StoresRecyclerViewAdapter(mStores, getActivity(), this);
+            mRecyclerView.setAdapter(mStoresRecyclerViewAdapter);
+            for (Store s:mStores) {
+                Log.e("onResponse: ", s.getStoreName());
+            }
         }
     }
 
     @Override
     public void onFailure(Call<Store.List> call, Throwable t) {
         Log.e(TAG, "onFailure: ", t);
+    }
+
+    @Override
+    public void delegateToHost(int position) {
+        ((HomeActivity) getActivity()).showCategoriesFragment(position);
     }
 }
