@@ -11,42 +11,17 @@ import java.util.ArrayList;
 
 public class Store {
 
-    @SerializedName("active")
-    @Expose
-    private int active;
-    @SerializedName("created")
-    @Expose
-    private long created;
-    @SerializedName("imgUrl")
+    @SerializedName("image_url")
     @Expose
     private String imgUrl;
-    @SerializedName("modified")
-    @Expose
-    private int modified;
-    @SerializedName("storeId")
+    @SerializedName("store_id")
     @Expose
     private int storeId;
-    @SerializedName("storeName")
+    @SerializedName("store_name")
     @Expose
     private String storeName;
 
     public static class List extends ArrayList<Store> {
-    }
-
-    public int getActive() {
-        return active;
-    }
-
-    public void setActive(int active) {
-        this.active = active;
-    }
-
-    public long getCreated() {
-        return created;
-    }
-
-    public void setCreated(long created) {
-        this.created = created;
     }
 
     public String getImgUrl() {
@@ -55,14 +30,6 @@ public class Store {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
-    }
-
-    public int getModified() {
-        return modified;
-    }
-
-    public void setModified(int modified) {
-        this.modified = modified;
     }
 
     public int getStoreId() {

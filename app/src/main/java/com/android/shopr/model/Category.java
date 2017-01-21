@@ -12,38 +12,17 @@ import java.util.List;
 
 public class Category {
 
-    @SerializedName("active")
-    @Expose
-    private int active;
-    @SerializedName("categoryId")
+    @SerializedName("category_id")
     @Expose
     private int categoryId;
-    @SerializedName("categoryName")
+    @SerializedName("category_name")
     @Expose
     private String categoryName;
-    @SerializedName("created")
-    @Expose
-    private int created;
-    @SerializedName("imgUrl")
+    @SerializedName("image_url")
     @Expose
     private String imgUrl;
-    @SerializedName("modified")
-    @Expose
-    private int modified;
-    @SerializedName("storeId")
-    @Expose
-    private int storeId;
 
     public static class List extends ArrayList<Category> {
-    }
-
-
-    public int getActive() {
-        return active;
-    }
-
-    public void setActive(int active) {
-        this.active = active;
     }
 
     public int getCategoryId() {
@@ -62,36 +41,12 @@ public class Category {
         this.categoryName = categoryName;
     }
 
-    public int getCreated() {
-        return created;
-    }
-
-    public void setCreated(int created) {
-        this.created = created;
-    }
-
     public String getImgUrl() {
         return imgUrl;
     }
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
-    }
-
-    public int getModified() {
-        return modified;
-    }
-
-    public void setModified(int modified) {
-        this.modified = modified;
-    }
-
-    public int getStoreId() {
-        return storeId;
-    }
-
-    public void setStoreId(int storeId) {
-        this.storeId = storeId;
     }
 
 }
