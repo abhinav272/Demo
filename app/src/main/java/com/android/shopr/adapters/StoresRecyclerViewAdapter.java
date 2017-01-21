@@ -18,7 +18,7 @@ import com.squareup.picasso.Picasso;
 public class StoresRecyclerViewAdapter extends RecyclerView.Adapter<SingleImageAndTextViewHolder>{
 
     public interface DelegateEvent{
-        void delegateToHost(int position);
+        void delegateToHost(int storeId);
     }
 
     private Store.List mStores;
@@ -44,7 +44,7 @@ public class StoresRecyclerViewAdapter extends RecyclerView.Adapter<SingleImageA
         holder.mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                delegateEvent.delegateToHost(position);
+                delegateEvent.delegateToHost(getItem(position).getStoreId());
             }
         });
     }
