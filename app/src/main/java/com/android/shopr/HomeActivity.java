@@ -11,7 +11,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.android.shopr.fragments.CategoriesFragment;
 import com.android.shopr.fragments.HomeFragment;
+import com.android.shopr.utils.ShoprConstants;
 
 public class HomeActivity extends BaseActivity {
 
@@ -93,4 +95,14 @@ public class HomeActivity extends BaseActivity {
     }
 
 
+    public void showCategoriesFragment(int position) {
+        CategoriesFragment categoriesFragment = new CategoriesFragment();
+        Bundle argBundle = new Bundle();
+        argBundle.putInt(ShoprConstants.STORE_ID, position);
+        categoriesFragment.setArguments(argBundle);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.frame_container, categoriesFragment, CategoriesFragment.class.getSimpleName());
+        fragmentTransaction.commit();
+    }
 }
