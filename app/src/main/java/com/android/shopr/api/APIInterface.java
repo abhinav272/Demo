@@ -3,6 +3,7 @@ package com.android.shopr.api;
 import com.android.shopr.api.reponse.GenericResponse;
 import com.android.shopr.model.Category;
 import com.android.shopr.model.Store;
+import com.android.shopr.model.StoreWiseCategory;
 import com.android.shopr.utils.ShoprConstants;
 import com.google.gson.Gson;
 
@@ -51,13 +52,14 @@ public interface APIInterface {
     })
     @FormUrlEncoded
     @POST("categories/all")
-    Call<Category.List> getStoreWiseCategories(@Field("store_id") int storeId);
+    Call<StoreWiseCategory> getStoreWiseCategories(@Field("store_id") int storeId);
 
     @Headers({
             "Content-Type: application/x-www-form-urlencoded",
     })
-    @GET("stores/all")
-    Call<Store.List> getAllStores();
+    @FormUrlEncoded
+    @POST("stores/all")
+    Call<Store.List> getAllStores(@Field("none") String emptyBody);
 
 
 }
