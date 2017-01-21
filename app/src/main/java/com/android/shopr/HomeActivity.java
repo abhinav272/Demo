@@ -91,6 +91,7 @@ public class HomeActivity extends BaseActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_container, new HomeFragment(), HomeFragment.class.getSimpleName());
+        fragmentTransaction.addToBackStack(HomeFragment.class.getSimpleName());
         fragmentTransaction.commit();
     }
 
@@ -103,6 +104,7 @@ public class HomeActivity extends BaseActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.frame_container, categoriesFragment, CategoriesFragment.class.getSimpleName());
+        fragmentTransaction.addToBackStack(CategoriesFragment.class.getSimpleName());
         fragmentTransaction.commit();
     }
 }
