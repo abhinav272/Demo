@@ -1,5 +1,6 @@
 package com.android.shopr.api;
 
+import com.android.shopr.utils.NullOnEmptyConverterFactory;
 import com.android.shopr.utils.ShoprConstants;
 
 import retrofit2.Retrofit;
@@ -20,6 +21,7 @@ public class ShoprAPIClient {
         if (retrofit==null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(ShoprConstants.BASE_URL)
+                    .addConverterFactory(new NullOnEmptyConverterFactory())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
