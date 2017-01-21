@@ -11,4 +11,5 @@ public class ShoprConstants {
     public static final String BASE_URL = "http://34.196.71.31:8080/v1/rest/";
     public static final String USER_ALREADY_LOGGED_IN = "LoggedIn";
     public static final String USER_ALREADY_LOGGED_OUT = "LoggedOut";
+    public static final String STORE_ID = "store_id";
 }
