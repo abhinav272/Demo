@@ -1,8 +1,6 @@
 package com.android.shopr.fragments;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,7 +10,7 @@ import android.view.ViewGroup;
 import com.android.shopr.OnBoardActivity;
 import com.android.shopr.R;
 import com.android.shopr.api.ShoprAPIClient;
-import com.android.shopr.api.reponse.GenericResponse;
+import com.android.shopr.model.GenericResponse;
 import com.android.shopr.model.UserProfile;
 import com.android.shopr.utils.ExecutorSupplier;
 import com.android.shopr.utils.PreferenceUtils;
