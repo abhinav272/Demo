@@ -1,18 +1,13 @@
 package com.android.shopr.api;
 
-import com.android.shopr.api.reponse.GenericResponse;
-import com.android.shopr.model.Category;
+import com.android.shopr.model.CategoryWiseProducts;
+import com.android.shopr.model.GenericResponse;
 import com.android.shopr.model.Store;
 import com.android.shopr.model.StoreWiseCategory;
-import com.android.shopr.utils.ShoprConstants;
-import com.google.gson.Gson;
 
 import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
@@ -60,6 +55,13 @@ public interface APIInterface {
     @FormUrlEncoded
     @POST("stores/all")
     Call<Store.List> getAllStores(@Field("none") String emptyBody);
+
+    @Headers({
+            "Content-Type: application/x-www-form-urlencoded",
+    })
+    @FormUrlEncoded
+    @POST("products/all")
+    Call<CategoryWiseProducts> getCategorySpecificProducts(@Field("store_id") int store_id, @Field("category_id") int categoryId);
 
 
 }
