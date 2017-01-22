@@ -13,6 +13,7 @@ import android.view.View;
 
 import com.android.shopr.fragments.CategoriesFragment;
 import com.android.shopr.fragments.HomeFragment;
+import com.android.shopr.fragments.ProductsFragment;
 import com.android.shopr.utils.ShoprConstants;
 
 public class HomeActivity extends BaseActivity {
@@ -48,14 +49,14 @@ public class HomeActivity extends BaseActivity {
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                getSupportActionBar().setTitle(mTitle);
+                setActionBarTitle(mTitle);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle(mDrawerTitle);
+                setActionBarTitle(mDrawerTitle);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
@@ -66,7 +67,7 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
@@ -81,8 +82,8 @@ public class HomeActivity extends BaseActivity {
         mDrawerToggle.syncState();
     }
 
-    private View getHeaderView(NavigationView navigationView){
-        if (navigationView.getHeaderCount()>0)
+    private View getHeaderView(NavigationView navigationView) {
+        if (navigationView.getHeaderCount() > 0)
             return navigationView.getHeaderView(0);
         return null;
     }
@@ -91,7 +92,7 @@ public class HomeActivity extends BaseActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_container, new HomeFragment(), HomeFragment.class.getSimpleName());
-        fragmentTransaction.addToBackStack(HomeFragment.class.getSimpleName());
+//        fragmentTransaction.addToBackStack(HomeFragment.class.getSimpleName());
         fragmentTransaction.commit();
     }
 
@@ -106,5 +107,22 @@ public class HomeActivity extends BaseActivity {
         fragmentTransaction.add(R.id.frame_container, categoriesFragment, CategoriesFragment.class.getSimpleName());
         fragmentTransaction.addToBackStack(CategoriesFragment.class.getSimpleName());
         fragmentTransaction.commit();
+    }
+
+    public void showProductsFragment(int storeId, int categoryId) {
+        ProductsFragment productsFragment = new ProductsFragment();
+        Bundle argBundle = new Bundle();
+        argBundle.putInt(ShoprConstants.STORE_ID, storeId);
+        argBundle.putInt(ShoprConstants.CATEGORY_ID, categoryId);
+        productsFragment.setArguments(argBundle);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.frame_container, productsFragment, ProductsFragment.class.getSimpleName());
+        fragmentTransaction.addToBackStack(ProductsFragment.class.getSimpleName());
+        fragmentTransaction.commit();
+    }
+
+    public void setActionBarTitle(CharSequence title){
+        getSupportActionBar().setTitle(title);
     }
 }
