@@ -17,6 +17,17 @@ public class StoreWiseCategory {
     @SerializedName("categories")
     @Expose
     private List<Category> categories = null;
+    @SerializedName("store_name")
+    @Expose
+    private String storeName;
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
 
     public int getStoreId() {
         return storeId;
