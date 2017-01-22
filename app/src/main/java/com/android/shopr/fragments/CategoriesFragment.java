@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.shopr.HomeActivity;
 import com.android.shopr.R;
 import com.android.shopr.adapters.CategoriesRecyclerViewAdapter;
 import com.android.shopr.api.ShoprAPIClient;
@@ -66,8 +67,9 @@ public class CategoriesFragment extends BaseFragment implements Callback<StoreWi
     public void onResponse(Call<StoreWiseCategory> call, Response<StoreWiseCategory> response) {
         if (response.isSuccessful() && response.code() == 200) {
             mStoreWiseCategory = response.body();
-            mCategoriesRecyclerViewAdapter = new CategoriesRecyclerViewAdapter(getActivity(), this, mStoreWiseCategory.getCategories());
+            mCategoriesRecyclerViewAdapter = new CategoriesRecyclerViewAdapter(getActivity(), this, mStoreWiseCategory);
             mRecyclerView.setAdapter(mCategoriesRecyclerViewAdapter);
+            ((HomeActivity) getActivity()).setActionBarTitle(mStoreWiseCategory.getStoreName());
         }
     }
 
@@ -78,6 +80,6 @@ public class CategoriesFragment extends BaseFragment implements Callback<StoreWi
 
     @Override
     public void delegateToHost(int storeId, int categoryId) {
-        Log.e(TAG, "delegateToHost: " + storeId + " " + categoryId);
+        ((HomeActivity) getActivity()).showProductsFragment(storeId, categoryId);
     }
 }
