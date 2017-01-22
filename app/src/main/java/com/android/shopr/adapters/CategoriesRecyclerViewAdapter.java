@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.android.shopr.R;
 import com.android.shopr.adapters.viewholders.SingleImageAndTextViewHolder;
 import com.android.shopr.model.Category;
+import com.android.shopr.model.StoreWiseCategory;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -21,16 +22,18 @@ public class CategoriesRecyclerViewAdapter extends RecyclerView.Adapter<SingleIm
 
     private Context mContext;
     private DelegateEvent delegateEvent;
+    private StoreWiseCategory mStoreWiseCategory;
     private List<Category> mCategories;
 
     public interface DelegateEvent{
         void delegateToHost(int storeId, int categoryId);
     }
 
-    public CategoriesRecyclerViewAdapter(Context mContext, DelegateEvent delegateEvent, List<Category> mCategories) {
+    public CategoriesRecyclerViewAdapter(Context mContext, DelegateEvent delegateEvent, StoreWiseCategory mStoreWiseCategory) {
         this.mContext = mContext;
         this.delegateEvent = delegateEvent;
-        this.mCategories = mCategories;
+        this.mStoreWiseCategory = mStoreWiseCategory;
+        this.mCategories = mStoreWiseCategory.getCategories();
     }
 
     @Override
@@ -40,9 +43,15 @@ public class CategoriesRecyclerViewAdapter extends RecyclerView.Adapter<SingleIm
     }
 
     @Override
-    public void onBindViewHolder(SingleImageAndTextViewHolder holder, int position) {
+    public void onBindViewHolder(SingleImageAndTextViewHolder holder, final int position) {
         Picasso.with(mContext).load(getItem(position).getImgUrl()).into(holder.mImageView);
         holder.mTextView.setText(getItem(position).getCategoryName());
+        holder.mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delegateEvent.delegateToHost(mStoreWiseCategory.getStoreId(), getItem(position).getCategoryId());
+            }
+        });
     }
 
     @Override
