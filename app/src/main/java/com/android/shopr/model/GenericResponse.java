@@ -1,4 +1,4 @@
-package com.android.shopr.api.reponse;
+package com.android.shopr.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
