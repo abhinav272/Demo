@@ -82,4 +82,14 @@ public class CategoriesFragment extends BaseFragment implements Callback<StoreWi
     public void delegateToHost(int storeId, int categoryId) {
         ((HomeActivity) getActivity()).showProductsFragment(storeId, categoryId);
     }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser){
+            if (mStoreWiseCategory != null) {
+                ((HomeActivity) getActivity()).setActionBarTitle(mStoreWiseCategory.getStoreName());
+            }
+        }
+    }
 }
