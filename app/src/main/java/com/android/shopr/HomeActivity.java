@@ -1,5 +1,7 @@
 package com.android.shopr;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -8,15 +10,22 @@ import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.shopr.fragments.CategoriesFragment;
 import com.android.shopr.fragments.HomeFragment;
 import com.android.shopr.fragments.ProductsFragment;
+import com.android.shopr.model.UserProfile;
+import com.android.shopr.utils.ExecutorSupplier;
+import com.android.shopr.utils.PreferenceUtils;
 import com.android.shopr.utils.ShoprConstants;
+import com.squareup.picasso.Picasso;
 
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends BaseActivity implements FragmentManager.OnBackStackChangedListener {
 
     private static final String TAG = "HomeActivity";
     private DrawerLayout mDrawerLayout;
@@ -25,7 +34,8 @@ public class HomeActivity extends BaseActivity {
     private CharSequence mTitle;
     private Toolbar toolbar;
     private NavigationView navigationView;
-    private View headerView;
+    private View mHeaderView;
+    private FragmentManager mFragmentManager;
 
 
     @Override
@@ -36,7 +46,15 @@ public class HomeActivity extends BaseActivity {
         setUpHomeFragment();
     }
 
+    private void setUpNavigationItems(UserProfile userProfile) {
+        Picasso.with(this).load(userProfile.getPicUrl()).fit().centerCrop().into((ImageView) mHeaderView.findViewById(R.id.iv_user_image));
+        Log.e(TAG, "setUpNavigationItems: " + userProfile.getPicUrl());
+        ((TextView) mHeaderView.findViewById(R.id.tv_user_name)).setText(userProfile.getPersonName());
+    }
+
     private void setUpViews() {
+        mFragmentManager = getSupportFragmentManager();
+        mFragmentManager.addOnBackStackChangedListener(this);
         navigationView = (NavigationView) findViewById(R.id.nvView);
         mTitle = mDrawerTitle = getTitle();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -56,13 +74,26 @@ public class HomeActivity extends BaseActivity {
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                setActionBarTitle(mDrawerTitle);
+                setActionBarTitle(mTitle);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
         mDrawerToggle.setDrawerIndicatorEnabled(true);
         mDrawerLayout.addDrawerListener(mDrawerToggle);
-        headerView = getHeaderView(navigationView);
+        mHeaderView = getHeaderView(navigationView);
+        ExecutorSupplier.getInstance().getWorkerThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                final UserProfile userProfile = PreferenceUtils.getInstance(HomeActivity.this).getUserProfile();
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        setUpNavigationItems(userProfile);
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -89,8 +120,7 @@ public class HomeActivity extends BaseActivity {
     }
 
     public void setUpHomeFragment() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_container, new HomeFragment(), HomeFragment.class.getSimpleName());
 //        fragmentTransaction.addToBackStack(HomeFragment.class.getSimpleName());
         fragmentTransaction.commit();
@@ -102,8 +132,7 @@ public class HomeActivity extends BaseActivity {
         Bundle argBundle = new Bundle();
         argBundle.putInt(ShoprConstants.STORE_ID, position);
         categoriesFragment.setArguments(argBundle);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.frame_container, categoriesFragment, CategoriesFragment.class.getSimpleName());
         fragmentTransaction.addToBackStack(CategoriesFragment.class.getSimpleName());
         fragmentTransaction.commit();
@@ -115,14 +144,26 @@ public class HomeActivity extends BaseActivity {
         argBundle.putInt(ShoprConstants.STORE_ID, storeId);
         argBundle.putInt(ShoprConstants.CATEGORY_ID, categoryId);
         productsFragment.setArguments(argBundle);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.frame_container, productsFragment, ProductsFragment.class.getSimpleName());
         fragmentTransaction.addToBackStack(ProductsFragment.class.getSimpleName());
         fragmentTransaction.commit();
     }
 
-    public void setActionBarTitle(CharSequence title){
+    public void setActionBarTitle(CharSequence title) {
+        mTitle = title;
         getSupportActionBar().setTitle(title);
+    }
+
+
+    @Override
+    public void onBackStackChanged() {
+        if (mFragmentManager.getBackStackEntryCount() > 0) {
+            switch (mFragmentManager.getBackStackEntryAt(0).getName()){
+                case "CategoriesFragment":
+
+                    break;
+            }
+        }
     }
 }
