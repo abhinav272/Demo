@@ -70,7 +70,7 @@ public class ProductsFragment extends BaseFragment implements Callback<CategoryW
             mCategoryWiseProducts = response.body();
             mProductsRecyclerViewAdapter = new ProductsRecyclerViewAdapter(getActivity(), this, mCategoryWiseProducts);
             mRecyclerView.setAdapter(mProductsRecyclerViewAdapter);
-            ((HomeActivity) getActivity()).setActionBarTitle(mCategoryWiseProducts.getCategoryName());
+            ((HomeActivity) getActivity()).pushTitleStack(mCategoryWiseProducts.getCategoryName());
         }
     }
 

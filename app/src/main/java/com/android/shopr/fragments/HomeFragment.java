@@ -65,9 +65,9 @@ public class HomeFragment extends BaseFragment implements Callback<Store.List>,S
             mStores = response.body();
             mStoresRecyclerViewAdapter = new StoresRecyclerViewAdapter(mStores, getActivity(), this);
             mRecyclerView.setAdapter(mStoresRecyclerViewAdapter);
-            for (Store s:mStores) {
-                Log.e("onResponse: ", s.getStoreName());
-            }
+//            for (Store s:mStores) {
+//                Log.e("onResponse: ", s.getStoreName());
+//            }
         }
     }
 
