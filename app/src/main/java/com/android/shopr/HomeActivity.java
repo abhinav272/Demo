@@ -51,7 +51,7 @@ public class HomeActivity extends BaseActivity {
     private void setUpNavigationItems(UserProfile userProfile) {
 
         ImageView iv = (ImageView) mHeaderView.findViewById(R.id.iv_user_image);
-        Picasso.with(this).load(userProfile.getPicUrl()).fit().centerInside().into(iv);
+        Picasso.with(this).load(userProfile.getPicUrl()).fit().centerCrop().into(iv);
         Log.e(TAG, "setUpNavigationItems: " + userProfile.getPicUrl());
         ((TextView) mHeaderView.findViewById(R.id.tv_user_name)).setText(userProfile.getPersonName());
 
