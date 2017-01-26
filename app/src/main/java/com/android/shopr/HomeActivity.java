@@ -25,17 +25,19 @@ import com.android.shopr.utils.PreferenceUtils;
 import com.android.shopr.utils.ShoprConstants;
 import com.squareup.picasso.Picasso;
 
-public class HomeActivity extends BaseActivity implements FragmentManager.OnBackStackChangedListener {
+import java.util.Stack;
+
+public class HomeActivity extends BaseActivity {
 
     private static final String TAG = "HomeActivity";
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-    private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private Toolbar toolbar;
     private NavigationView navigationView;
     private View mHeaderView;
     private FragmentManager mFragmentManager;
+    private Stack<String> mTitleStack;
 
 
     @Override
@@ -47,16 +49,21 @@ public class HomeActivity extends BaseActivity implements FragmentManager.OnBack
     }
 
     private void setUpNavigationItems(UserProfile userProfile) {
-        Picasso.with(this).load(userProfile.getPicUrl()).fit().centerCrop().into((ImageView) mHeaderView.findViewById(R.id.iv_user_image));
+
+        ImageView iv = (ImageView) mHeaderView.findViewById(R.id.iv_user_image);
+        Picasso.with(this).load(userProfile.getPicUrl()).fit().centerInside().into(iv);
         Log.e(TAG, "setUpNavigationItems: " + userProfile.getPicUrl());
         ((TextView) mHeaderView.findViewById(R.id.tv_user_name)).setText(userProfile.getPersonName());
+
     }
 
     private void setUpViews() {
+        mTitleStack = new Stack<>();
         mFragmentManager = getSupportFragmentManager();
-        mFragmentManager.addOnBackStackChangedListener(this);
+
         navigationView = (NavigationView) findViewById(R.id.nvView);
-        mTitle = mDrawerTitle = getTitle();
+        mTitle = getTitle();
+        mTitleStack.push((String) mTitle);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -67,14 +74,14 @@ public class HomeActivity extends BaseActivity implements FragmentManager.OnBack
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                setActionBarTitle(mTitle);
+                setActionBarTitle();
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                setActionBarTitle(mTitle);
+                setActionBarTitle();
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
@@ -150,20 +157,32 @@ public class HomeActivity extends BaseActivity implements FragmentManager.OnBack
         fragmentTransaction.commit();
     }
 
-    public void setActionBarTitle(CharSequence title) {
-        mTitle = title;
-        getSupportActionBar().setTitle(title);
+    private void setActionBarTitle() {
+//        mTitle = title;
+        if (!mTitleStack.empty())
+            getSupportActionBar().setTitle(mTitleStack.peek());
     }
 
+    public void popTitleStack() {
+        if (!mTitleStack.empty()){
+            mTitleStack.pop();
+            setActionBarTitle();
+        }
+    }
+
+    public void pushTitleStack(String title) {
+        mTitleStack.push(title);
+        setActionBarTitle();
+    }
 
     @Override
-    public void onBackStackChanged() {
-        if (mFragmentManager.getBackStackEntryCount() > 0) {
-            switch (mFragmentManager.getBackStackEntryAt(0).getName()){
-                case "CategoriesFragment":
+    public void onBackPressed() {
+        super.onBackPressed();
+        popTitleStack();
+    }
 
-                    break;
-            }
-        }
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 }
