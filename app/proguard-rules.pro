@@ -15,3 +15,8 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-dontwarn com.squareup.**
+-dontwarn java.nio.file.**
+-dontwarn java.lang.invoke.**
+-dontwarn org.codehaus.mojo.**
