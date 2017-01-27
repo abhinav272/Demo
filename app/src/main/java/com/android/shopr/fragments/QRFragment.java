@@ -32,6 +32,7 @@ public class QRFragment extends BaseFragment implements ZXingScannerView.ResultH
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ((HomeActivity) getActivity()).pushTitleStack("Start Scanning");
         mScannerView = (ZXingScannerView) view.findViewById(R.id.scanner_view);
         mScannerView.setResultHandler(this);
         mScannerView.startCamera();
@@ -40,9 +41,7 @@ public class QRFragment extends BaseFragment implements ZXingScannerView.ResultH
     @Override
     public void onPause() {
         super.onPause();
-        if (mScannerView != null) {
-            mScannerView.stopCamera();
-        }
+        deflateScannerFragment(null);
     }
 
     private void inflateScannerView() {
@@ -50,14 +49,18 @@ public class QRFragment extends BaseFragment implements ZXingScannerView.ResultH
     }
 
     private void deflateScannerFragment(Result result) {
-        getActivity().onBackPressed();
+        if (mScannerView != null) {
+            mScannerView.stopCamera();
+        }
+        ((HomeActivity) getActivity()).setQRResult(result);
+        if (result != null) {
+            getActivity().onBackPressed();
+        }
     }
 
     @Override
     public void handleResult(Result result) {
-        if (mScannerView != null) {
-            mScannerView.stopCamera();
-        }
+
         deflateScannerFragment(result);
         Log.d(TAG, "handleResult: " + result.getText());
         Log.d(TAG, "handleResult: " + result.getBarcodeFormat());
