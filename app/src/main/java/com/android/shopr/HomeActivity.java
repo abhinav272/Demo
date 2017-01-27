@@ -1,14 +1,24 @@
 package com.android.shopr;
 
+import android.*;
+import android.Manifest;
+import android.app.ActivityManager;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -19,15 +29,17 @@ import android.widget.TextView;
 import com.android.shopr.fragments.CategoriesFragment;
 import com.android.shopr.fragments.HomeFragment;
 import com.android.shopr.fragments.ProductsFragment;
+import com.android.shopr.fragments.QRFragment;
 import com.android.shopr.model.UserProfile;
 import com.android.shopr.utils.ExecutorSupplier;
 import com.android.shopr.utils.PreferenceUtils;
 import com.android.shopr.utils.ShoprConstants;
+import com.google.zxing.Result;
 import com.squareup.picasso.Picasso;
 
 import java.util.Stack;
 
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String TAG = "HomeActivity";
     private DrawerLayout mDrawerLayout;
@@ -38,6 +50,9 @@ public class HomeActivity extends BaseActivity {
     private View mHeaderView;
     private FragmentManager mFragmentManager;
     private Stack<String> mTitleStack;
+    private FloatingActionButton floatingActionButton;
+    private Result qrResult;
+    private static final int CAM_PERMISSION_REQ_CODE = 27;
 
 
     @Override
@@ -60,7 +75,7 @@ public class HomeActivity extends BaseActivity {
     private void setUpViews() {
         mTitleStack = new Stack<>();
         mFragmentManager = getSupportFragmentManager();
-
+        floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
         navigationView = (NavigationView) findViewById(R.id.nvView);
         mTitle = getTitle();
         mTitleStack.push((String) mTitle);
@@ -88,6 +103,7 @@ public class HomeActivity extends BaseActivity {
         mDrawerToggle.setDrawerIndicatorEnabled(true);
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         mHeaderView = getHeaderView(navigationView);
+        floatingActionButton.setOnClickListener(this);
         ExecutorSupplier.getInstance().getWorkerThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -164,7 +180,7 @@ public class HomeActivity extends BaseActivity {
     }
 
     public void popTitleStack() {
-        if (!mTitleStack.empty()){
+        if (!mTitleStack.empty()) {
             mTitleStack.pop();
             setActionBarTitle();
         }
@@ -184,5 +200,55 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onStop() {
         super.onStop();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fab:
+                showQRFragment();
+                break;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAM_PERMISSION_REQ_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            showQRFragment();
+        }
+    }
+
+    private void showQRFragment() {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAM_PERMISSION_REQ_CODE);
+            } else {
+                FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+                fragmentTransaction.add(R.id.frame_container, new QRFragment(), QRFragment.class.getSimpleName());
+                fragmentTransaction.addToBackStack(QRFragment.class.getSimpleName());
+                fragmentTransaction.commit();
+            }
+        } else {
+            FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.frame_container, new QRFragment(), QRFragment.class.getSimpleName());
+            fragmentTransaction.addToBackStack(QRFragment.class.getSimpleName());
+            fragmentTransaction.commit();
+        }
+    }
+
+    public void setQRResult(Result result) {
+        if (result != null) {
+            qrResult = result;
+            showResult(result);
+        }
+    }
+
+    private void showResult(Result result) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(result.getBarcodeFormat().toString());
+        builder.setMessage(result.getText());
+        builder.create().show();
+
     }
 }
