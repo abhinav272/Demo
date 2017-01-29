@@ -53,9 +53,8 @@ public class QRFragment extends BaseFragment implements ZXingScannerView.ResultH
             mScannerView.stopCamera();
         }
         ((HomeActivity) getActivity()).setQRResult(result);
-        if (result != null) {
-            getActivity().onBackPressed();
-        }
+        getActivity().getSupportFragmentManager().popBackStack();
+
     }
 
     @Override

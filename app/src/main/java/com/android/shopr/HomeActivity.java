@@ -197,6 +197,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         popTitleStack();
     }
 
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -240,6 +241,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     public void setQRResult(Result result) {
         if (result != null) {
             qrResult = result;
+            popTitleStack();
             showResult(result);
         }
     }
