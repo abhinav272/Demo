@@ -253,4 +253,12 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         builder.create().show();
 
     }
+
+    public void hideFAB() {
+        floatingActionButton.hide();
+    }
+
+    public void showFAB() {
+        floatingActionButton.show();
+    }
 }
