@@ -6,4 +6,8 @@
     <string name="sign_in_with_fb">Sign in with facebook</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="text_self_checkout">Self Checkout</string>
+    <string name="text_store">Stores</string>
+    <string name="text_watching">Watching</string>
+    <string name="text_sale">Sale</string>
 </resources>
