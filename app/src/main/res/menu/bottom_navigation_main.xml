@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_self_checkout"
+        android:enabled="true"
+        android:icon="@drawable/ic_self_checkout"
+        android:title="@string/text_self_checkout"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_store"
+        android:enabled="true"
+        android:icon="@drawable/ic_store"
+        android:title="@string/text_store"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_sale"
+        android:enabled="true"
+        android:icon="@drawable/ic_sale"
+        android:title="@string/text_sale"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_watching"
+        android:enabled="true"
+        android:icon="@drawable/ic_watching"
+        android:title="@string/text_watching"
+        app:showAsAction="always" />
+</menu>
