@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -31,6 +32,7 @@ import com.android.shopr.fragments.HomeFragment;
 import com.android.shopr.fragments.ProductsFragment;
 import com.android.shopr.fragments.QRFragment;
 import com.android.shopr.model.UserProfile;
+import com.android.shopr.utils.BottomNavigationViewHelper;
 import com.android.shopr.utils.ExecutorSupplier;
 import com.android.shopr.utils.PreferenceUtils;
 import com.android.shopr.utils.ShoprConstants;
@@ -53,6 +55,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private FloatingActionButton floatingActionButton;
     private Result qrResult;
     private static final int CAM_PERMISSION_REQ_CODE = 27;
+    private BottomNavigationView mBottomNavigationView;
 
 
     @Override
@@ -117,6 +120,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 });
             }
         });
+        mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        BottomNavigationViewHelper.disableShiftMode(mBottomNavigationView);
+
     }
 
     @Override
