@@ -201,6 +201,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     public void onBackPressed() {
         super.onBackPressed();
         popTitleStack();
+        if (mTitleStack != null && mTitleStack.peek().equalsIgnoreCase(getString(R.string.app_name))) {
+            hideFAB();
+        }
+
     }
 
 
@@ -266,5 +270,13 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     public void showFAB() {
         floatingActionButton.show();
+    }
+
+    public void hideBNV() {
+        mBottomNavigationView.setVisibility(View.GONE);
+    }
+
+    public void showBNV() {
+        mBottomNavigationView.setVisibility(View.VISIBLE);
     }
 }
