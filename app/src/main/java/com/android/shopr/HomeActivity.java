@@ -201,7 +201,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     public void onBackPressed() {
         super.onBackPressed();
         popTitleStack();
-        if (mTitleStack != null && mTitleStack.peek().equalsIgnoreCase(getString(R.string.app_name))) {
+        if (mTitleStack != null && !mTitleStack.empty() && mTitleStack.peek().equalsIgnoreCase(getString(R.string.app_name))) {
             hideFAB();
         }
 
