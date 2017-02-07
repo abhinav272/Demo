@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.android.shopr.R;
 import com.android.shopr.adapters.viewholders.SingleImageAndTextViewHolder;
@@ -37,6 +39,13 @@ public class CategoriesRecyclerViewAdapter extends RecyclerView.Adapter<SingleIm
     }
 
     @Override
+    public void onViewDetachedFromWindow(SingleImageAndTextViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        holder.mTextView.clearAnimation();
+        holder.mImageView.clearAnimation();
+    }
+
+    @Override
     public SingleImageAndTextViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View layoutView = LayoutInflater.from(mContext).inflate(R.layout.two_image_and_text, parent, false);
         return new SingleImageAndTextViewHolder(layoutView);
@@ -52,6 +61,9 @@ public class CategoriesRecyclerViewAdapter extends RecyclerView.Adapter<SingleIm
                 delegateEvent.delegateToHost(mStoreWiseCategory.getStoreId(), getItem(position).getCategoryId());
             }
         });
+        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.up_from_bottom);
+        holder.mTextView.startAnimation(animation);
+        holder.mImageView.startAnimation(animation);
     }
 
     @Override
