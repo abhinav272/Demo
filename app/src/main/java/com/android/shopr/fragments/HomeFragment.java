@@ -41,6 +41,7 @@ public class HomeFragment extends BaseFragment implements Callback<Store.List>,S
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(getLayoutManager());
+        ((HomeActivity) getActivity()).hideFAB();
         getAllStores();
     }
 
@@ -61,6 +62,7 @@ public class HomeFragment extends BaseFragment implements Callback<Store.List>,S
 
     @Override
     public void onResponse(Call<Store.List> call, Response<Store.List> response) {
+        Log.e(TAG, "onResponse: ");
         if(response.isSuccessful() && response.code() == 200){
             mStores = response.body();
             mStoresRecyclerViewAdapter = new StoresRecyclerViewAdapter(mStores, getActivity(), this);

@@ -37,6 +37,7 @@ public class QRFragment extends BaseFragment implements ZXingScannerView.ResultH
         mScannerView.setResultHandler(this);
         mScannerView.startCamera();
         ((HomeActivity) getActivity()).hideFAB();
+        ((HomeActivity) getActivity()).hideBNV();
     }
 
     @Override
@@ -56,6 +57,7 @@ public class QRFragment extends BaseFragment implements ZXingScannerView.ResultH
         ((HomeActivity) getActivity()).setQRResult(result);
         getActivity().getSupportFragmentManager().popBackStack();
         ((HomeActivity) getActivity()).showFAB();
+        ((HomeActivity) getActivity()).showBNV();
 
     }
 

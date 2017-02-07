@@ -48,6 +48,7 @@ public class ProductsFragment extends BaseFragment implements Callback<CategoryW
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(getLayoutManager());
+        ((HomeActivity) getActivity()).showFAB();
         getCategoryWiseProducts(storeId, categoryId);
     }
 
@@ -66,6 +67,7 @@ public class ProductsFragment extends BaseFragment implements Callback<CategoryW
 
     @Override
     public void onResponse(Call<CategoryWiseProducts> call, Response<CategoryWiseProducts> response) {
+        Log.e(TAG, "onResponse: ");
         if (response.isSuccessful() && response.code() == 200) {
             mCategoryWiseProducts = response.body();
             mProductsRecyclerViewAdapter = new ProductsRecyclerViewAdapter(getActivity(), this, mCategoryWiseProducts);
