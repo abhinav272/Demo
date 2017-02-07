@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.android.shopr.R;
 import com.android.shopr.adapters.viewholders.SingleImageAndTextViewHolder;
@@ -37,6 +39,12 @@ public class ProductsRecyclerViewAdapter extends RecyclerView.Adapter<SingleImag
         void delegateToHost(int storeId, int categoryId, int productId);
     }
 
+    @Override
+    public void onViewDetachedFromWindow(SingleImageAndTextViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        holder.mImageView.clearAnimation();
+        holder.mTextView.clearAnimation();
+    }
 
     @Override
     public SingleImageAndTextViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -46,8 +54,11 @@ public class ProductsRecyclerViewAdapter extends RecyclerView.Adapter<SingleImag
 
     @Override
     public void onBindViewHolder(SingleImageAndTextViewHolder holder, int position) {
-        Picasso.with(mContext).load(getItem(position).getImageUrl()).into(holder.mImageView);
+        Picasso.with(mContext).load(getItem(position).getImageUrl()).placeholder(R.drawable.placeholder).into(holder.mImageView);
         holder.mTextView.setText(getItem(position).getProductName());
+        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.up_from_bottom);
+        holder.mTextView.startAnimation(animation);
+        holder.mImageView.startAnimation(animation);
     }
 
     @Override
