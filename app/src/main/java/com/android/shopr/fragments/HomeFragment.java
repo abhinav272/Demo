@@ -8,10 +8,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 
 import com.android.shopr.HomeActivity;
 import com.android.shopr.R;
 import com.android.shopr.adapters.StoresRecyclerViewAdapter;
+import com.android.shopr.adapters.animators.SlideInUpAnimator;
 import com.android.shopr.api.ShoprAPIClient;
 import com.android.shopr.model.Store;
 import com.android.shopr.utils.ExecutorSupplier;
@@ -41,8 +43,13 @@ public class HomeFragment extends BaseFragment implements Callback<Store.List>,S
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(getLayoutManager());
+        mRecyclerView.setItemAnimator(getItemAnimator());
         ((HomeActivity) getActivity()).hideFAB();
         getAllStores();
+    }
+
+    private RecyclerView.ItemAnimator getItemAnimator() {
+        return new SlideInUpAnimator();
     }
 
     private void getAllStores() {
