@@ -1,5 +1,8 @@
 package com.android.shopr.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -7,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by abhinav.sharma on 21/01/17.
  */
 
-public class Product {
+public class Product implements Parcelable {
 
     @SerializedName("product_id")
     @Expose
@@ -64,4 +67,42 @@ public class Product {
     public void setUnits(int units) {
         this.units = units;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.productId);
+        dest.writeString(this.productName);
+        dest.writeString(this.imageUrl);
+        dest.writeInt(this.price);
+        dest.writeInt(this.units);
+    }
+
+    public Product() {
+    }
+
+    protected Product(Parcel in) {
+        this.productId = in.readInt();
+        this.productName = in.readString();
+        this.imageUrl = in.readString();
+        this.price = in.readInt();
+        this.units = in.readInt();
+    }
+
+    public static final Creator<Product> CREATOR = new Creator<Product>() {
+        @Override
+        public Product createFromParcel(Parcel source) {
+            return new Product(source);
+        }
+
+        @Override
+        public Product[] newArray(int size) {
+            return new Product[size];
+        }
+    };
 }
