@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/img_product"
+        android:layout_width="match_parent"
+        android:layout_height="450dp" />
+
+    <com.android.shopr.ShoprTextView
+        android:id="@+id/tv_product_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/img_product"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="10dp"
+        android:text="Henley Brown Jacket"
+        android:textColor="@color/colorBlack"
+        android:textSize="16sp"
+        app:fontFile="Roboto-Regular" />
+
+    <com.android.shopr.ShoprTextView
+        android:id="@+id/tv_product_price_after_discount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_product_name"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Rs. 899"
+        android:textColor="@color/colorBlack"
+        android:textSize="16sp"
+        app:fontFile="Roboto-Bold" />
+
+    <com.android.shopr.ShoprTextView
+        android:id="@+id/tv_product_price_original"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_product_name"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@+id/tv_product_price_after_discount"
+        android:background="@drawable/bg_strikethrough"
+        android:paddingLeft="1dp"
+        android:paddingRight="1dp"
+        android:text="Rs. 899"
+        android:textColor="@color/colorBlack"
+        android:textSize="16sp"
+        app:fontFile="Roboto-Bold" />
+
+    <com.android.shopr.ShoprTextView
+        android:id="@+id/tv_product_discount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_product_name"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@+id/tv_product_price_original"
+        android:paddingLeft="1dp"
+        android:paddingRight="1dp"
+        android:text="50% OFF"
+        android:textColor="@color/colorRed"
+        android:textSize="16sp"
+        app:fontFile="Roboto-Bold" />
+
+</RelativeLayout>
