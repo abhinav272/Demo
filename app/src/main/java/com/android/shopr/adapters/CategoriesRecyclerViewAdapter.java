@@ -1,6 +1,8 @@
 package com.android.shopr.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import com.android.shopr.R;
 import com.android.shopr.adapters.viewholders.SingleImageAndTextViewHolder;
 import com.android.shopr.model.Category;
 import com.android.shopr.model.StoreWiseCategory;
+import com.android.shopr.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -53,7 +56,8 @@ public class CategoriesRecyclerViewAdapter extends RecyclerView.Adapter<SingleIm
 
     @Override
     public void onBindViewHolder(SingleImageAndTextViewHolder holder, final int position) {
-        Picasso.with(mContext).load(getItem(position).getImgUrl()).into(holder.mImageView);
+        Picasso.with(mContext).load(getItem(position).getImgUrl())
+                .placeholder(new ColorDrawable(Utils.getRandomBackgroundColor())).into(holder.mImageView);
         holder.mTextView.setText(getItem(position).getCategoryName());
         holder.mImageView.setOnClickListener(new View.OnClickListener() {
             @Override

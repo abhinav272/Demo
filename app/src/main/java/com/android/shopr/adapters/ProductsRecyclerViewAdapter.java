@@ -1,6 +1,8 @@
 package com.android.shopr.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import com.android.shopr.adapters.viewholders.SingleImageAndTextViewHolder;
 import com.android.shopr.model.Category;
 import com.android.shopr.model.CategoryWiseProducts;
 import com.android.shopr.model.Product;
+import com.android.shopr.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -54,7 +57,8 @@ public class ProductsRecyclerViewAdapter extends RecyclerView.Adapter<SingleImag
 
     @Override
     public void onBindViewHolder(SingleImageAndTextViewHolder holder, int position) {
-        Picasso.with(mContext).load(getItem(position).getImageUrl()).placeholder(R.drawable.placeholder).into(holder.mImageView);
+        Picasso.with(mContext).load(getItem(position).getImageUrl())
+                .placeholder(new ColorDrawable(Utils.getRandomBackgroundColor())).into(holder.mImageView);
         holder.mTextView.setText(getItem(position).getProductName());
         Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.up_from_bottom);
         holder.mTextView.startAnimation(animation);
