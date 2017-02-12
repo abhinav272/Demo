@@ -29,8 +29,10 @@ import android.widget.TextView;
 
 import com.android.shopr.fragments.CategoriesFragment;
 import com.android.shopr.fragments.HomeFragment;
+import com.android.shopr.fragments.ProductDetailFragment;
 import com.android.shopr.fragments.ProductsFragment;
 import com.android.shopr.fragments.QRFragment;
+import com.android.shopr.model.Product;
 import com.android.shopr.model.UserProfile;
 import com.android.shopr.utils.BottomNavigationViewHelper;
 import com.android.shopr.utils.ExecutorSupplier;
@@ -176,6 +178,19 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.frame_container, productsFragment, ProductsFragment.class.getSimpleName());
         fragmentTransaction.addToBackStack(ProductsFragment.class.getSimpleName());
+        fragmentTransaction.commit();
+    }
+
+    public void showProductDetailFragment(int storeId, int categoryId, Product product) {
+        ProductDetailFragment productDetailFragment = new ProductDetailFragment();
+        Bundle argBundle = new Bundle();
+        argBundle.putInt(ShoprConstants.STORE_ID, storeId);
+        argBundle.putInt(ShoprConstants.CATEGORY_ID, categoryId);
+        argBundle.putParcelable(ShoprConstants.PRODUCT_OBJ, product);
+        productDetailFragment.setArguments(argBundle);
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.frame_container, productDetailFragment, ProductDetailFragment.class.getSimpleName());
+        fragmentTransaction.addToBackStack(ProductDetailFragment.class.getSimpleName());
         fragmentTransaction.commit();
     }
 
