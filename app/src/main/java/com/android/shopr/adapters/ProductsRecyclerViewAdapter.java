@@ -60,9 +60,9 @@ public class ProductsRecyclerViewAdapter extends RecyclerView.Adapter<SingleImag
         Picasso.with(mContext).load(getItem(position).getImageUrl())
                 .placeholder(new ColorDrawable(Utils.getRandomBackgroundColor())).into(holder.mImageView);
         holder.mTextView.setText(getItem(position).getProductName());
-        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.up_from_bottom);
-        holder.mTextView.startAnimation(animation);
-        holder.mImageView.startAnimation(animation);
+//        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.up_from_bottom);
+//        holder.mTextView.startAnimation(animation);
+//        holder.mImageView.startAnimation(animation);
     }
 
     @Override

@@ -65,9 +65,9 @@ public class CategoriesRecyclerViewAdapter extends RecyclerView.Adapter<SingleIm
                 delegateEvent.delegateToHost(mStoreWiseCategory.getStoreId(), getItem(position).getCategoryId());
             }
         });
-        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.up_from_bottom);
-        holder.mTextView.startAnimation(animation);
-        holder.mImageView.startAnimation(animation);
+//        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.up_from_bottom);
+//        holder.mTextView.startAnimation(animation);
+//        holder.mImageView.startAnimation(animation);
     }
 
     @Override
