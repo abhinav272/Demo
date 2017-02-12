@@ -43,7 +43,7 @@ public class HomeFragment extends BaseFragment implements Callback<Store.List>,S
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(getLayoutManager());
-        mRecyclerView.setItemAnimator(getItemAnimator());
+//        mRecyclerView.setItemAnimator(getItemAnimator());
         ((HomeActivity) getActivity()).hideFAB();
         getAllStores();
     }
