@@ -14,6 +14,7 @@ import com.android.shopr.R;
 import com.android.shopr.adapters.ProductsRecyclerViewAdapter;
 import com.android.shopr.api.ShoprAPIClient;
 import com.android.shopr.model.CategoryWiseProducts;
+import com.android.shopr.model.Product;
 import com.android.shopr.utils.ExecutorSupplier;
 import com.android.shopr.utils.ShoprConstants;
 
@@ -82,7 +83,7 @@ public class ProductsFragment extends BaseFragment implements Callback<CategoryW
     }
 
     @Override
-    public void delegateToHost(int storeId, int categoryId, int productId) {
-        Log.d(TAG, "delegateToHost: " + storeId + " " + categoryId);
+    public void delegateToHost(int storeId, int categoryId, Product product) {
+        ((HomeActivity) getActivity()).showProductDetailFragment(storeId, categoryId, product);
     }
 }
