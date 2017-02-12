@@ -39,7 +39,7 @@ public class ProductsRecyclerViewAdapter extends RecyclerView.Adapter<SingleImag
     }
 
     public interface DelegateEvent {
-        void delegateToHost(int storeId, int categoryId, int productId);
+        void delegateToHost(int storeId, int categoryId, Product product);
     }
 
     @Override
@@ -56,10 +56,16 @@ public class ProductsRecyclerViewAdapter extends RecyclerView.Adapter<SingleImag
     }
 
     @Override
-    public void onBindViewHolder(SingleImageAndTextViewHolder holder, int position) {
+    public void onBindViewHolder(SingleImageAndTextViewHolder holder, final int position) {
         Picasso.with(mContext).load(getItem(position).getImageUrl())
                 .placeholder(new ColorDrawable(Utils.getRandomBackgroundColor())).into(holder.mImageView);
         holder.mTextView.setText(getItem(position).getProductName());
+        holder.mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delegateEvent.delegateToHost(mCategoryWiseProducts.getStoreId(), mCategoryWiseProducts.getCategoryId(), getItem(position));
+            }
+        });
 //        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.up_from_bottom);
 //        holder.mTextView.startAnimation(animation);
 //        holder.mImageView.startAnimation(animation);
