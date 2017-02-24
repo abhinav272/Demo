@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/colorPrimary"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <com.android.shopr.views.ShoprTextView
         android:text="shopr"
         android:textSize="70sp"
         android:gravity="center"
         android:textAllCaps="true"
         android:layout_marginTop="170dp"
-        android:textStyle="italic|bold"
+        app:fontFile="Roboto-BoldItalic.ttf"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

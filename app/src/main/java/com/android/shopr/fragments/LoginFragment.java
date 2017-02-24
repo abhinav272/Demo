@@ -49,20 +49,20 @@ import com.google.firebase.auth.GoogleAuthProvider;
 /**
  * Created by abhinav.sharma on 11/26/2016.
  */
-public class LoginFragment extends BaseFragment implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener, FacebookCallback<LoginResult> {
+public class LoginFragment extends BaseFragment implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
     private static final String TAG = LoginFragment.class.getSimpleName();
     private static final int RC_SIGN_IN = 0X2F;
     private GoogleApiClient mGoogleApiClient;
     private FirebaseAuth mAuth;
     private ProgressDialog progress;
-    private LoginButton fbSignIn;
+//    private LoginButton fbSignIn;
     private CallbackManager callbackManager;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
+//        FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
     }
 
     @Nullable
@@ -104,17 +104,17 @@ public class LoginFragment extends BaseFragment implements GoogleApiClient.OnCon
     private void setupUI(View view) {
         Button googleSignIn = (Button) view.findViewById(R.id.btn_google_sign_in);
         googleSignIn.setOnClickListener(this);
-        fbSignIn = (LoginButton) view.findViewById(R.id.btn_fb_sign_in);
+//        fbSignIn = (LoginButton) view.findViewById(R.id.btn_fb_sign_in);
         callbackManager = CallbackManager.Factory.create();
-        setUpFBLoginButton();
+//        setUpFBLoginButton();
     }
 
-    private void setUpFBLoginButton() {
-        fbSignIn.setReadPermissions(new String[]{"email", "public_profile", "user_birthday"});
-        fbSignIn.setFragment(this);
-        fbSignIn.registerCallback(callbackManager, this);
-        fbSignIn.setOnClickListener(this);
-    }
+//    private void setUpFBLoginButton() {
+//        fbSignIn.setReadPermissions(new String[]{"email", "public_profile", "user_birthday"});
+//        fbSignIn.setFragment(this);
+//        fbSignIn.registerCallback(callbackManager, this);
+//        fbSignIn.setOnClickListener(this);
+//    }
 
     @Override
     public void onStart() {
@@ -164,7 +164,7 @@ public class LoginFragment extends BaseFragment implements GoogleApiClient.OnCon
             else Toast.makeText(getActivity(), "Google Sign-in failed", Toast.LENGTH_SHORT).show();
         }
 
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+//        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
@@ -235,7 +235,7 @@ public class LoginFragment extends BaseFragment implements GoogleApiClient.OnCon
 
     private void revokeAccess() {
         Log.d(TAG, "revokeAccess: ");
-        LoginManager.getInstance().logOut();
+//        LoginManager.getInstance().logOut();
         mAuth.signOut();
     }
 
@@ -268,39 +268,39 @@ public class LoginFragment extends BaseFragment implements GoogleApiClient.OnCon
         }
     }
 
-    @Override
-    public void onSuccess(LoginResult loginResult) {
-        handleFacebookAccessToken(loginResult.getAccessToken());
-    }
+//    @Override
+//    public void onSuccess(LoginResult loginResult) {
+//        handleFacebookAccessToken(loginResult.getAccessToken());
+//    }
 
-    private void handleFacebookAccessToken(AccessToken accessToken) {
-        showProgress("Connecting...");
-        Log.d(TAG, "handleFacebookAccessToken:" + accessToken);
-        AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "signInWithCredential", task.getException());
-                            if (task.getException().getClass().getSimpleName().equals("FirebaseAuthUserCollisionException"))
-                                showShortToast("Try signing in with Google");
-                            else showShortToast("Authentication failed.");
-                            hideProgress();
-                            revokeAccess();
-                        }
-                    }
-                });
-    }
-
-    @Override
-    public void onCancel() {
-        Log.e(TAG, "FB Login onCancel: ");
-    }
-
-    @Override
-    public void onError(FacebookException error) {
-        Log.e(TAG, "FB Login onError: ", error.fillInStackTrace());
-    }
+//    private void handleFacebookAccessToken(AccessToken accessToken) {
+//        showProgress("Connecting...");
+//        Log.d(TAG, "handleFacebookAccessToken:" + accessToken);
+//        AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
+//        mAuth.signInWithCredential(credential)
+//                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
+//                        if (!task.isSuccessful()) {
+//                            Log.w(TAG, "signInWithCredential", task.getException());
+//                            if (task.getException().getClass().getSimpleName().equals("FirebaseAuthUserCollisionException"))
+//                                showShortToast("Try signing in with Google");
+//                            else showShortToast("Authentication failed.");
+//                            hideProgress();
+//                            revokeAccess();
+//                        }
+//                    }
+//                });
+//    }
+//
+//    @Override
+//    public void onCancel() {
+//        Log.e(TAG, "FB Login onCancel: ");
+//    }
+//
+//    @Override
+//    public void onError(FacebookException error) {
+//        Log.e(TAG, "FB Login onError: ", error.fillInStackTrace());
+//    }
 }

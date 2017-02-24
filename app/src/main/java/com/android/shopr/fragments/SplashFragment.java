@@ -1,6 +1,7 @@
 package com.android.shopr.fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,7 +40,13 @@ public class SplashFragment extends BaseFragment implements Callback<GenericResp
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        checkIfLoginNeeded();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                checkIfLoginNeeded();
+            }
+        },1000);
     }
 
     private void checkIfLoginNeeded() {
