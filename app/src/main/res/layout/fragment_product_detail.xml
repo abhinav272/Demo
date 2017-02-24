@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="450dp" />
 
-    <com.android.shopr.ShoprTextView
+    <com.android.shopr.views.ShoprTextView
         android:id="@+id/tv_product_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,9 +20,9 @@
         android:text="Henley Brown Jacket"
         android:textColor="@color/colorBlack"
         android:textSize="16sp"
-        app:fontFile="Roboto-Regular" />
+        app:fontFile="Roboto-Regular.ttf" />
 
-    <com.android.shopr.ShoprTextView
+    <com.android.shopr.views.ShoprTextView
         android:id="@+id/tv_product_price_after_discount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,9 +32,9 @@
         android:text="Rs. 899"
         android:textColor="@color/colorBlack"
         android:textSize="16sp"
-        app:fontFile="Roboto-Bold" />
+        app:fontFile="Roboto-Bold.ttf" />
 
-    <com.android.shopr.ShoprTextView
+    <com.android.shopr.views.ShoprTextView
         android:id="@+id/tv_product_price_original"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -48,9 +48,9 @@
         android:text="Rs. 899"
         android:textColor="@color/colorBlack"
         android:textSize="16sp"
-        app:fontFile="Roboto-Bold" />
+        app:fontFile="Roboto-Bold.ttf" />
 
-    <com.android.shopr.ShoprTextView
+    <com.android.shopr.views.ShoprTextView
         android:id="@+id/tv_product_discount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -63,6 +63,6 @@
         android:text="50% OFF"
         android:textColor="@color/colorRed"
         android:textSize="16sp"
-        app:fontFile="Roboto-Bold" />
+        app:fontFile="Roboto-Bold.ttf" />
 
 </RelativeLayout>
