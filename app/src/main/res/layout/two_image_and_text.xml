@@ -14,13 +14,13 @@
             android:layout_width="match_parent"
             android:layout_height="180dp" />
 
-        <com.android.shopr.ShoprTextView
+        <com.android.shopr.views.ShoprTextView
             android:id="@+id/tv_text"
             android:layout_below="@+id/iv_image"
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
             android:textSize="16sp"
-            app:fontFile="Roboto-MediumItalic"
+            app:fontFile="Roboto-MediumItalic.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center" />
