@@ -7,6 +7,12 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+    <style name="BottomNavTheme" parent="ThemeOverlay.AppCompat.Dark">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorWhite</item>
+        <item name="android:textColorSecondary">@color/colorGray</item>
+    </style>
     
     <style name="shoprFBLoginButton">
         <item name="android:textSize">16sp</item>
