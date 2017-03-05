@@ -20,6 +20,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -86,7 +87,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         mTitleStack.push((String) mTitle);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 toolbar, R.string.drawer_open, R.string.drawer_close) {
@@ -105,7 +105,14 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
-        mDrawerToggle.setDrawerIndicatorEnabled(true);
+        mDrawerToggle.setDrawerIndicatorEnabled(false);
+        mDrawerToggle.setHomeAsUpIndicator(R.drawable.ic_shopr_drawer);
+        mDrawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDrawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         mHeaderView = getHeaderView(navigationView);
         floatingActionButton.setOnClickListener(this);
@@ -129,11 +136,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
