@@ -32,7 +32,7 @@ public class OnBoardActivity extends BaseActivity {
     }
 
     public void showLoginFragment() {
-        Utils.clearAllDataAndRevokeAccess(this);
+//        Utils.clearAllDataAndRevokeAccess(this);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction()
                 .replace(R.id.frame_container, new LoginFragment(), LoginFragment.class.getSimpleName());
