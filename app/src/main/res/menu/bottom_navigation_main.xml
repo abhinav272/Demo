@@ -8,7 +8,7 @@
         android:title="@string/text_quick_checkout"
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_store"
+        android:id="@+id/action_shops"
         android:enabled="true"
         android:icon="@drawable/ic_stores_normal"
         android:title="@string/text_shops"
