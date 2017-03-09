@@ -1,32 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="192dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="?attr/colorPrimaryDark"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+    android:layout_width="match_parent"
+    android:layout_height="140dp"
+    android:background="@color/colorDarkGrey"
     android:orientation="vertical"
-    android:gravity="bottom">
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <com.android.shopr.views.CircleImageView
         android:id="@+id/iv_user_image"
-        android:layout_width="155dp"
-        app:civ_border_width="3dp"
-        android:layout_centerHorizontal="true"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
         app:civ_border_color="@color/colorAccent"
-        android:layout_height="155dp" />
+        app:civ_border_width="3dp" />
 
-    <TextView
+    <com.android.shopr.views.ShoprTextView
         android:id="@+id/tv_user_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:text="Header"
-        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/iv_user_image"
         android:layout_marginLeft="10dp"
-        android:layout_below="@+id/iv_user_image"
-        android:layout_alignParentBottom="true"
+        android:layout_marginTop="25dp"
+        android:text="Header"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@android:color/white"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+        android:textSize="18sp"
+        app:fontFile="Roboto-Regular.ttf"/>
+
+    <com.android.shopr.views.ShoprTextView
+        android:id="@+id/tv_edit_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/iv_user_image"
+        android:layout_below="@+id/tv_user_name"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:text="Edit Profile"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display4"
+        android:textColor="@color/colorWhite"
+        app:fontFile="Roboto-Medium.ttf"
+        android:textSize="14sp" />
 
 </RelativeLayout>
