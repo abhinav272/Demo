@@ -11,11 +11,14 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -28,6 +31,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.shopr.adapters.ViewPagerAdapter;
 import com.android.shopr.fragments.CategoriesFragment;
 import com.android.shopr.fragments.HomeFragment;
 import com.android.shopr.fragments.ProductDetailFragment;
@@ -59,6 +63,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private Result qrResult;
     private static final int CAM_PERMISSION_REQ_CODE = 27;
     private BottomNavigationView mBottomNavigationView;
+    private TabLayout mTabLayout;
+    private ViewPager mViewPager;
 
 
     @Override
@@ -66,7 +72,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         setUpViews();
-        setUpHomeFragment();
+//        setUpHomeFragment();
     }
 
     private void setUpNavigationItems(UserProfile userProfile) {
@@ -131,7 +137,19 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         });
         mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         BottomNavigationViewHelper.disableShiftMode(mBottomNavigationView);
+        mTabLayout = (TabLayout) findViewById(R.id.tl_tab);
+        mViewPager = ((ViewPager) findViewById(R.id.viewpager));
+        setupViewPager(mViewPager);
+        mTabLayout.setupWithViewPager(mViewPager);
 
+    }
+
+    public void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new Fragment(), "ONE");
+        adapter.addFragment(new Fragment(), "TWO");
+        adapter.addFragment(new Fragment(), "THREE");
+        viewPager.setAdapter(adapter);
     }
 
     @Override
