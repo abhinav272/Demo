@@ -7,6 +7,5 @@
     app:tabTextColor="@color/colorWhite"
     app:tabSelectedTextColor="@color/colorPrimaryDark"
     app:tabIndicatorColor="@color/colorPrimaryDark"
-    app:tabGravity="fill"
-    app:tabMode="fixed">
+    app:tabGravity="fill">
 </android.support.design.widget.TabLayout>
