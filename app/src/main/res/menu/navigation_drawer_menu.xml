@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_search"
+            android:title="Option 1" />
+        <item
+            android:id="@+id/nav_photos"
+            android:icon="@drawable/ic_cart"
+            android:title="Option 2" />
+        <item
+            android:id="@+id/nav_movies"
+            android:icon="@drawable/ic_cross"
+            android:title="Option 3" />
+
+        <item
+            android:id="@+id/nav_notifications"
+            android:icon="@drawable/ic_stores_normal"
+            android:title="Option 4" />
+
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_barcode"
+            android:title="Option 5" />
+    </group>
+
+    <item android:title="Shopr Option">
+        <menu>
+            <item
+                android:id="@+id/nav_about_us"
+                android:title="About Us" />
+            <item
+                android:id="@+id/nav_privacy_policy"
+                android:title="Privacy Policy" />
+        </menu>
+    </item>
+
+</menu>
