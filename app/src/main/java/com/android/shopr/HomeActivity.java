@@ -1,8 +1,6 @@
 package com.android.shopr;
 
-import android.*;
 import android.Manifest;
-import android.app.ActivityManager;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
@@ -23,11 +21,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,7 +39,6 @@ import com.android.shopr.fragments.ProductsFragment;
 import com.android.shopr.fragments.QRFragment;
 import com.android.shopr.model.Product;
 import com.android.shopr.model.UserProfile;
-import com.android.shopr.utils.BottomNavigationViewHelper;
 import com.android.shopr.utils.ExecutorSupplier;
 import com.android.shopr.utils.PreferenceUtils;
 import com.android.shopr.utils.ShoprConstants;
@@ -48,7 +47,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Stack;
 
-public class HomeActivity extends BaseActivity implements View.OnClickListener {
+public class HomeActivity extends BaseActivity implements View.OnClickListener, BottomNavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "HomeActivity";
     private DrawerLayout mDrawerLayout;
@@ -65,6 +64,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private BottomNavigationView mBottomNavigationView;
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
+    private TextView mPageType, mLocationName;
 
 
     @Override
@@ -136,12 +136,23 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             }
         });
         mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-        BottomNavigationViewHelper.disableShiftMode(mBottomNavigationView);
+//        BottomNavigationViewHelper.disableShiftMode(mBottomNavigationView);
+        mBottomNavigationView.setOnNavigationItemSelectedListener(this);
         mTabLayout = (TabLayout) findViewById(R.id.tl_tab);
         mViewPager = ((ViewPager) findViewById(R.id.viewpager));
         setupViewPager(mViewPager);
         mTabLayout.setupWithViewPager(mViewPager);
+        mPageType = (TextView) toolbar.findViewById(R.id.tv_page_type);
+        mLocationName = (TextView) toolbar.findViewById(R.id.tv_location_name);
 
+    }
+
+    public void setPageType(String pageType){
+        mPageType.setText(pageType);
+    }
+
+    public void setLocationName(String locationName){
+        mPageType.setText(locationName);
     }
 
     public void setupViewPager(ViewPager viewPager) {
@@ -154,6 +165,14 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_search:
+                // TODO: 09/03/17 Add Search activity or similar feature
+                break;
+            case R.id.action_cart:
+                showShortToast("Cart");
+                break;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -168,6 +187,13 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         if (navigationView.getHeaderCount() > 0)
             return navigationView.getHeaderView(0);
         return null;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
     }
 
     public void setUpHomeFragment() {
@@ -313,5 +339,22 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     public void showBNV() {
         mBottomNavigationView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_quick_checkout:
+                setPageType(getString(R.string.text_quick_checkout));
+                break;
+            case R.id.action_sales:
+                setPageType(getString(R.string.text_sale));
+                break;
+            case R.id.action_shops:
+                setPageType(getString(R.string.text_shops));
+                break;
+        }
+
+        return true;
     }
 }
