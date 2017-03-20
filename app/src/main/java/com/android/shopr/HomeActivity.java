@@ -1,6 +1,7 @@
 package com.android.shopr;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
@@ -27,7 +28,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -42,14 +42,26 @@ import com.android.shopr.model.UserProfile;
 import com.android.shopr.utils.ExecutorSupplier;
 import com.android.shopr.utils.PreferenceUtils;
 import com.android.shopr.utils.ShoprConstants;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceLikelihood;
+import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.zxing.Result;
 import com.squareup.picasso.Picasso;
 
 import java.util.Stack;
 
-public class HomeActivity extends BaseActivity implements View.OnClickListener, BottomNavigationView.OnNavigationItemSelectedListener {
+public class HomeActivity extends BaseActivity implements View.OnClickListener, BottomNavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = "HomeActivity";
+    private static final int LOCATION_PERMISSION_REQ_CODE = 72;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private CharSequence mTitle;
@@ -61,10 +73,13 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     private FloatingActionButton floatingActionButton;
     private Result qrResult;
     private static final int CAM_PERMISSION_REQ_CODE = 27;
+    public static final int PLACE_PICKER_REQUEST = 1;
     private BottomNavigationView mBottomNavigationView;
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
     private TextView mPageType, mLocationName;
+    private GoogleApiClient mGoogleApiClient;
+    private ImageView mManuallySelectPlace;
 
 
     @Override
@@ -72,7 +87,45 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         setUpViews();
+        connectToGoogleClient();
+        getPlaces();
 //        setUpHomeFragment();
+    }
+
+    private void connectToGoogleClient() {
+        mGoogleApiClient = new GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, this)
+                .build();
+    }
+
+    private void getPlaces() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestLocationPermission();
+            return;
+        }
+        PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi.getCurrentPlace(mGoogleApiClient, null);
+        result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
+            @Override
+            public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
+                for (PlaceLikelihood placeLikelihood : likelyPlaces) {
+                    Log.i(TAG, String.format("Place '%s' has likelihood: %g",
+                            placeLikelihood.getPlace().getName(), placeLikelihood.getLikelihood()));
+                }
+                if (likelyPlaces.getStatus().isSuccess()) {
+                    setLocationName(likelyPlaces.get(0).getPlace().getName() + "");
+                    fetchCategoriesAndStores(likelyPlaces.get(0).getPlace());
+                }
+                likelyPlaces.release();
+            }
+        });
+    }
+
+    private void fetchCategoriesAndStores(Place place) {
+        // TODO: 19/03/17 API call for categories and stores
+        Log.d(TAG, "fetchCategoriesAndStores: " + place.getName());
     }
 
     private void setUpNavigationItems(UserProfile userProfile) {
@@ -144,15 +197,15 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         mTabLayout.setupWithViewPager(mViewPager);
         mPageType = (TextView) toolbar.findViewById(R.id.tv_page_type);
         mLocationName = (TextView) toolbar.findViewById(R.id.tv_location_name);
-
+        toolbar.findViewById(R.id.ll_location).setOnClickListener(this);
     }
 
-    public void setPageType(String pageType){
+    public void setPageType(String pageType) {
         mPageType.setText(pageType);
     }
 
-    public void setLocationName(String locationName){
-        mPageType.setText(locationName);
+    public void setLocationName(String locationName) {
+        mLocationName.setText(locationName);
     }
 
     public void setupViewPager(ViewPager viewPager) {
@@ -165,7 +218,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_search:
                 // TODO: 09/03/17 Add Search activity or similar feature
                 break;
@@ -280,6 +333,32 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.fab:
                 showQRFragment();
                 break;
+            case R.id.ll_location:
+                manuallySelectLocation();
+                break;
+        }
+    }
+
+    private void manuallySelectLocation() {
+        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+        try {
+            startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(data, this);
+                setLocationName(place.getName()+"");
+                fetchCategoriesAndStores(place);
+            }
         }
     }
 
@@ -288,24 +367,33 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == CAM_PERMISSION_REQ_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             showQRFragment();
+        } else if(requestCode == LOCATION_PERMISSION_REQ_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            getPlaces();
         }
     }
 
     private void showQRFragment() {
+        requestCameraPermission();
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.frame_container, new QRFragment(), QRFragment.class.getSimpleName());
+        fragmentTransaction.addToBackStack(QRFragment.class.getSimpleName());
+        fragmentTransaction.commit();
+
+    }
+
+    private void requestCameraPermission() {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAM_PERMISSION_REQ_CODE);
-            } else {
-                FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-                fragmentTransaction.add(R.id.frame_container, new QRFragment(), QRFragment.class.getSimpleName());
-                fragmentTransaction.addToBackStack(QRFragment.class.getSimpleName());
-                fragmentTransaction.commit();
             }
-        } else {
-            FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.frame_container, new QRFragment(), QRFragment.class.getSimpleName());
-            fragmentTransaction.addToBackStack(QRFragment.class.getSimpleName());
-            fragmentTransaction.commit();
+        }
+    }
+
+    private void requestLocationPermission() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_PERMISSION_REQ_CODE);
         }
     }
 
@@ -343,7 +431,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_quick_checkout:
                 setPageType(getString(R.string.text_quick_checkout));
                 break;
@@ -356,5 +444,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         }
 
         return true;
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.e(TAG, "onConnectionFailed: " + connectionResult.getErrorMessage() + " code : " + connectionResult.getErrorCode());
     }
 }
