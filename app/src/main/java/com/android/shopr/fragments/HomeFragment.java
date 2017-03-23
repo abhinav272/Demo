@@ -16,8 +16,12 @@ import com.android.shopr.R;
 import com.android.shopr.adapters.StoresRecyclerViewAdapter;
 import com.android.shopr.adapters.animators.SlideInUpAnimator;
 import com.android.shopr.api.ShoprAPIClient;
+import com.android.shopr.model.PlaceWiseStores;
 import com.android.shopr.model.Store;
 import com.android.shopr.utils.ExecutorSupplier;
+import com.android.shopr.utils.ShoprConstants;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,12 +31,12 @@ import retrofit2.Response;
  * Created by abhinav.sharma on 1/8/2017.
  */
 
-public class HomeFragment extends BaseFragment implements Callback<Store.List>,StoresRecyclerViewAdapter.DelegateEvent {
+public class HomeFragment extends BaseFragment implements StoresRecyclerViewAdapter.DelegateEvent {
 
     private static final String TAG = "HomeFragment";
     private RecyclerView mRecyclerView;
     private StoresRecyclerViewAdapter mStoresRecyclerViewAdapter;
-    private Store.List mStores;
+    private List<PlaceWiseStores> placeWiseStores;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -60,14 +64,13 @@ public class HomeFragment extends BaseFragment implements Callback<Store.List>,S
     }
 
     private void getAllStores() {
-        ExecutorSupplier.getInstance().getWorkerThreadExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                String emptyBody = "";
-                Call<Store.List> call = ShoprAPIClient.getApiInterface().getAllStores(emptyBody);
-                call.enqueue(HomeFragment.this);
-            }
-        });
+        placeWiseStores = getArguments().getParcelableArrayList(ShoprConstants.PLACE_WISE_STORE_LIST);
+        setupUI(placeWiseStores);
+    }
+
+    private void setupUI(List<PlaceWiseStores> placeWiseStores) {
+        mStoresRecyclerViewAdapter = new StoresRecyclerViewAdapter(placeWiseStores, getActivity(), this);
+        mRecyclerView.setAdapter(mStoresRecyclerViewAdapter);
     }
 
     private GridLayoutManager getLayoutManager(){
@@ -75,25 +78,8 @@ public class HomeFragment extends BaseFragment implements Callback<Store.List>,S
     }
 
     @Override
-    public void onResponse(Call<Store.List> call, Response<Store.List> response) {
-        Log.e(TAG, "onResponse: ");
-        if(response.isSuccessful() && response.code() == 200){
-            mStores = response.body();
-            mStoresRecyclerViewAdapter = new StoresRecyclerViewAdapter(mStores, getActivity(), this);
-            mRecyclerView.setAdapter(mStoresRecyclerViewAdapter);
-//            for (Store s:mStores) {
-//                Log.e("onResponse: ", s.getStoreName());
-//            }
-        }
-    }
-
-    @Override
-    public void onFailure(Call<Store.List> call, Throwable t) {
-        Log.e(TAG, "onFailure: ", t);
-    }
-
-    @Override
     public void delegateToHost(int position) {
-        ((HomeActivity) getActivity()).showCategoriesFragment(position);
+//        ((HomeActivity) getActivity()).showCategoriesFragment(position);
+        ((HomeActivity) getActivity()).showStoresDetailFragment(position);
     }
 }
