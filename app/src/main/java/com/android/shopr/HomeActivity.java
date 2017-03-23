@@ -32,12 +32,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.shopr.adapters.ViewPagerAdapter;
+import com.android.shopr.api.ShoprAPIClient;
 import com.android.shopr.fragments.CategoriesFragment;
 import com.android.shopr.fragments.HomeFragment;
 import com.android.shopr.fragments.ProductDetailFragment;
 import com.android.shopr.fragments.ProductsFragment;
 import com.android.shopr.fragments.QRFragment;
+import com.android.shopr.model.PlaceWiseCategories;
+import com.android.shopr.model.PlaceWiseCategoriesStores;
 import com.android.shopr.model.Product;
+import com.android.shopr.model.Store;
 import com.android.shopr.model.UserProfile;
 import com.android.shopr.utils.ExecutorSupplier;
 import com.android.shopr.utils.PreferenceUtils;
@@ -56,9 +60,14 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.zxing.Result;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
 import java.util.Stack;
 
-public class HomeActivity extends BaseActivity implements View.OnClickListener, BottomNavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class HomeActivity extends BaseActivity implements View.OnClickListener, BottomNavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener, Callback<PlaceWiseCategoriesStores> {
 
     private static final String TAG = "HomeActivity";
     private static final int LOCATION_PERMISSION_REQ_CODE = 72;
@@ -123,9 +132,15 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         });
     }
 
-    private void fetchCategoriesAndStores(Place place) {
-        // TODO: 19/03/17 API call for categories and stores
+    private void fetchCategoriesAndStores(final Place place) {
         Log.d(TAG, "fetchCategoriesAndStores: " + place.getName());
+        ExecutorSupplier.getInstance().getWorkerThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                Call<PlaceWiseCategoriesStores> call = ShoprAPIClient.getApiInterface().getPlaceWiseCategoriesStores(place.getId());
+                call.enqueue(HomeActivity.this);
+            }
+        });
     }
 
     private void setUpNavigationItems(UserProfile userProfile) {
@@ -193,7 +208,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         mBottomNavigationView.setOnNavigationItemSelectedListener(this);
         mTabLayout = (TabLayout) findViewById(R.id.tl_tab);
         mViewPager = ((ViewPager) findViewById(R.id.viewpager));
-        setupViewPager(mViewPager);
         mTabLayout.setupWithViewPager(mViewPager);
         mPageType = (TextView) toolbar.findViewById(R.id.tv_page_type);
         mLocationName = (TextView) toolbar.findViewById(R.id.tv_location_name);
@@ -206,14 +220,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
 
     public void setLocationName(String locationName) {
         mLocationName.setText(locationName);
-    }
-
-    public void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new Fragment(), "ONE");
-        adapter.addFragment(new Fragment(), "TWO");
-        adapter.addFragment(new Fragment(), "THREE");
-        viewPager.setAdapter(adapter);
     }
 
     @Override
@@ -249,12 +255,12 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         return true;
     }
 
-    public void setUpHomeFragment() {
-        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_container, new HomeFragment(), HomeFragment.class.getSimpleName());
-//        fragmentTransaction.addToBackStack(HomeFragment.class.getSimpleName());
-        fragmentTransaction.commit();
-    }
+//    public void setUpHomeFragment() {
+//        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+//        fragmentTransaction.replace(R.id.frame_container, new HomeFragment(), HomeFragment.class.getSimpleName());
+////        fragmentTransaction.addToBackStack(HomeFragment.class.getSimpleName());
+//        fragmentTransaction.commit();
+//    }
 
 
     public void showCategoriesFragment(int position) {
@@ -449,5 +455,27 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.e(TAG, "onConnectionFailed: " + connectionResult.getErrorMessage() + " code : " + connectionResult.getErrorCode());
+    }
+
+    @Override
+    public void onResponse(Call<PlaceWiseCategoriesStores> call, Response<PlaceWiseCategoriesStores> response) {
+        if (response.isSuccessful() && response.code() == 200){
+            PlaceWiseCategoriesStores placeWiseCategoriesStores = response.body();
+            setupCategoriesAndStores(placeWiseCategoriesStores);
+        }
+    }
+
+    private void setupCategoriesAndStores(PlaceWiseCategoriesStores placeWiseCategoriesStores) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), placeWiseCategoriesStores);
+        mViewPager.setAdapter(adapter);
+    }
+
+    @Override
+    public void onFailure(Call<PlaceWiseCategoriesStores> call, Throwable t) {
+        Log.e(TAG, "onFailure: ", t);
+    }
+
+    public void showStoresDetailFragment(int position) {
+
     }
 }
