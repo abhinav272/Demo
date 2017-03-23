@@ -21,9 +21,12 @@ public class Product implements Parcelable {
     @SerializedName("image_url")
     @Expose
     private String imageUrl;
-    @SerializedName("price")
+    @SerializedName("price_after_discount")
     @Expose
-    private int price;
+    private double priceAfterDiscount;
+    @SerializedName("price_before_discount")
+    @Expose
+    private double priceBeforeDiscount;
     @SerializedName("units")
     @Expose
     private int units;
@@ -52,12 +55,20 @@ public class Product implements Parcelable {
         this.imageUrl = imageUrl;
     }
 
-    public int getPrice() {
-        return price;
+    public double getPriceAfterDiscount() {
+        return priceAfterDiscount;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public void setPriceAfterDiscount(double priceAfterDiscount) {
+        this.priceAfterDiscount = priceAfterDiscount;
+    }
+
+    public double getPriceBeforeDiscount() {
+        return priceBeforeDiscount;
+    }
+
+    public void setPriceBeforeDiscount(double priceBeforeDiscount) {
+        this.priceBeforeDiscount = priceBeforeDiscount;
     }
 
     public int getUnits() {
@@ -79,7 +90,8 @@ public class Product implements Parcelable {
         dest.writeInt(this.productId);
         dest.writeString(this.productName);
         dest.writeString(this.imageUrl);
-        dest.writeInt(this.price);
+        dest.writeDouble(this.priceAfterDiscount);
+        dest.writeDouble(this.priceBeforeDiscount);
         dest.writeInt(this.units);
     }
 
@@ -90,7 +102,8 @@ public class Product implements Parcelable {
         this.productId = in.readInt();
         this.productName = in.readString();
         this.imageUrl = in.readString();
-        this.price = in.readInt();
+        this.priceAfterDiscount = in.readDouble();
+        this.priceBeforeDiscount = in.readDouble();
         this.units = in.readInt();
     }
 
