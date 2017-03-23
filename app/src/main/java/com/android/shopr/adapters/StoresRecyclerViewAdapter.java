@@ -12,9 +12,12 @@ import android.view.ViewGroup;
 
 import com.android.shopr.R;
 import com.android.shopr.adapters.viewholders.SingleImageAndTextViewHolder;
+import com.android.shopr.model.PlaceWiseStores;
 import com.android.shopr.model.Store;
 import com.android.shopr.utils.Utils;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 /**
  * Created by abhinav.sharma on 20/01/17.
@@ -26,11 +29,11 @@ public class StoresRecyclerViewAdapter extends RecyclerView.Adapter<SingleImageA
         void delegateToHost(int storeId);
     }
 
-    private Store.List mStores;
+    private List<PlaceWiseStores> mStores;
     private Context mContext;
     private DelegateEvent delegateEvent;
 
-    public StoresRecyclerViewAdapter(Store.List mStores, Context mContext, DelegateEvent delegateEvent) {
+    public StoresRecyclerViewAdapter(List<PlaceWiseStores> mStores, Context mContext, DelegateEvent delegateEvent) {
         this.mStores = mStores;
         this.mContext = mContext;
         this.delegateEvent = delegateEvent;
@@ -44,7 +47,7 @@ public class StoresRecyclerViewAdapter extends RecyclerView.Adapter<SingleImageA
 
     @Override
     public void onBindViewHolder(SingleImageAndTextViewHolder holder, final int position) {
-        Picasso.with(mContext).load(getItem(position).getImgUrl())
+        Picasso.with(mContext).load(getItem(position).getImageUrl())
                 .placeholder(new ColorDrawable(Utils.getRandomBackgroundColor())).into(holder.mImageView);
         holder.mTextView.setText(getItem(position).getStoreName());
         holder.mImageView.setOnClickListener(new View.OnClickListener() {
@@ -60,7 +63,7 @@ public class StoresRecyclerViewAdapter extends RecyclerView.Adapter<SingleImageA
         return mStores.size();
     }
 
-    private Store getItem(int position) {
+    private PlaceWiseStores getItem(int position) {
         return mStores.get(position);
     }
 }
