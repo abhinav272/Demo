@@ -14,4 +14,5 @@ public class ShoprConstants {
     public static final String STORE_ID = "store_id";
     public static final String CATEGORY_ID = "category_id";
     public static final String PRODUCT_OBJ = "product_obj";
+    public static final String PLACE_WISE_STORE_LIST = "place_wise_stores_list";
 }
