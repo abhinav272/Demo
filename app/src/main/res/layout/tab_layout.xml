@@ -7,5 +7,6 @@
     app:tabTextColor="@color/colorWhite"
     app:tabSelectedTextColor="@color/colorPrimaryDark"
     app:tabIndicatorColor="@color/colorPrimaryDark"
+    app:tabMode="scrollable"
     app:tabGravity="fill">
 </android.support.design.widget.TabLayout>
