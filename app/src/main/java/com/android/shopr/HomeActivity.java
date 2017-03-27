@@ -263,16 +263,16 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
 //    }
 
 
-    public void showCategoriesFragment(int position) {
-        CategoriesFragment categoriesFragment = new CategoriesFragment();
-        Bundle argBundle = new Bundle();
-        argBundle.putInt(ShoprConstants.STORE_ID, position);
-        categoriesFragment.setArguments(argBundle);
-        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.frame_container, categoriesFragment, CategoriesFragment.class.getSimpleName());
-        fragmentTransaction.addToBackStack(CategoriesFragment.class.getSimpleName());
-        fragmentTransaction.commit();
-    }
+//    public void showCategoriesFragment(int position) {
+//        CategoriesFragment categoriesFragment = new CategoriesFragment();
+//        Bundle argBundle = new Bundle();
+//        argBundle.putInt(ShoprConstants.STORE_ID, position);
+//        categoriesFragment.setArguments(argBundle);
+//        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+//        fragmentTransaction.add(R.id.frame_container, categoriesFragment, CategoriesFragment.class.getSimpleName());
+//        fragmentTransaction.addToBackStack(CategoriesFragment.class.getSimpleName());
+//        fragmentTransaction.commit();
+//    }
 
     public void showProductsFragment(int storeId, int categoryId) {
         ProductsFragment productsFragment = new ProductsFragment();
@@ -462,6 +462,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         if (response.isSuccessful() && response.code() == 200){
             PlaceWiseCategoriesStores placeWiseCategoriesStores = response.body();
             setupCategoriesAndStores(placeWiseCategoriesStores);
+        } else {
+            showShortToast("No Stores available at this Location");
         }
     }
 
