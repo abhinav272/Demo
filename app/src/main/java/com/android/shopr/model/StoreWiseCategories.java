@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Created by Abhinav on 23/03/17.
  */
@@ -18,7 +20,7 @@ public class StoreWiseCategories implements Parcelable {
     private String categoryName;
     @SerializedName("product")
     @Expose
-    private Product product;
+    private List<Product> products;
 
     public int getCategoryId() {
         return categoryId;
@@ -36,14 +38,13 @@ public class StoreWiseCategories implements Parcelable {
         this.categoryName = categoryName;
     }
 
-    public Product getProduct() {
-        return product;
+    public List<Product> getProducts() {
+        return products;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
-
 
     @Override
     public int describeContents() {
@@ -54,7 +55,7 @@ public class StoreWiseCategories implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.categoryId);
         dest.writeString(this.categoryName);
-        dest.writeParcelable(this.product, flags);
+        dest.writeTypedList(this.products);
     }
 
     public StoreWiseCategories() {
@@ -63,7 +64,7 @@ public class StoreWiseCategories implements Parcelable {
     protected StoreWiseCategories(Parcel in) {
         this.categoryId = in.readInt();
         this.categoryName = in.readString();
-        this.product = in.readParcelable(Product.class.getClassLoader());
+        this.products = in.createTypedArrayList(Product.CREATOR);
     }
 
     public static final Creator<StoreWiseCategories> CREATOR = new Creator<StoreWiseCategories>() {
