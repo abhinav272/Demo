@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/app_bar_store_detail"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btn_scan"
+        android:layout_below="@+id/toolbar">
+
+        <include
+            android:id="@+id/tl_tab"
+            layout="@layout/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar" />
+    </android.support.v4.view.ViewPager>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_above="@+id/btn_scan"
+        android:background="@drawable/shadow" />
+
+    <FrameLayout
+        android:id="@+id/btn_scan"
+        style="?attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorDarkGrey">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:background="@null"
+            android:drawableLeft="@drawable/ic_barcode"
+            android:drawablePadding="20dp"
+            android:drawableTint="@color/colorWhite"
+            android:text="SCAN &amp; ADD TO BAG"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp" />
+
+    </FrameLayout>
+
+
+</RelativeLayout>
