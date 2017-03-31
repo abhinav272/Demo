@@ -23,10 +23,13 @@ public class Product implements Parcelable {
     private String imageUrl;
     @SerializedName("price_after_discount")
     @Expose
-    private double priceAfterDiscount;
+    private String priceAfterDiscount;
     @SerializedName("price_before_discount")
     @Expose
-    private double priceBeforeDiscount;
+    private String priceBeforeDiscount;
+    @SerializedName("discount")
+    @Expose
+    private String discount;
     @SerializedName("units")
     @Expose
     private int units;
@@ -55,20 +58,28 @@ public class Product implements Parcelable {
         this.imageUrl = imageUrl;
     }
 
-    public double getPriceAfterDiscount() {
+    public String getPriceAfterDiscount() {
         return priceAfterDiscount;
     }
 
-    public void setPriceAfterDiscount(double priceAfterDiscount) {
+    public void setPriceAfterDiscount(String priceAfterDiscount) {
         this.priceAfterDiscount = priceAfterDiscount;
     }
 
-    public double getPriceBeforeDiscount() {
+    public String getPriceBeforeDiscount() {
         return priceBeforeDiscount;
     }
 
-    public void setPriceBeforeDiscount(double priceBeforeDiscount) {
+    public void setPriceBeforeDiscount(String priceBeforeDiscount) {
         this.priceBeforeDiscount = priceBeforeDiscount;
+    }
+
+    public String getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(String discount) {
+        this.discount = discount;
     }
 
     public int getUnits() {
@@ -90,8 +101,9 @@ public class Product implements Parcelable {
         dest.writeInt(this.productId);
         dest.writeString(this.productName);
         dest.writeString(this.imageUrl);
-        dest.writeDouble(this.priceAfterDiscount);
-        dest.writeDouble(this.priceBeforeDiscount);
+        dest.writeString(this.priceAfterDiscount);
+        dest.writeString(this.priceBeforeDiscount);
+        dest.writeString(this.discount);
         dest.writeInt(this.units);
     }
 
@@ -102,8 +114,9 @@ public class Product implements Parcelable {
         this.productId = in.readInt();
         this.productName = in.readString();
         this.imageUrl = in.readString();
-        this.priceAfterDiscount = in.readDouble();
-        this.priceBeforeDiscount = in.readDouble();
+        this.priceAfterDiscount = in.readString();
+        this.priceBeforeDiscount = in.readString();
+        this.discount = in.readString();
         this.units = in.readInt();
     }
 
