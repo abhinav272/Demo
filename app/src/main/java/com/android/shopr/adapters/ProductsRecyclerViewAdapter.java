@@ -11,10 +11,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.android.shopr.R;
+import com.android.shopr.adapters.viewholders.ProductImageViewHolder;
 import com.android.shopr.adapters.viewholders.SingleImageAndTextViewHolder;
 import com.android.shopr.model.Category;
 import com.android.shopr.model.CategoryWiseProducts;
 import com.android.shopr.model.Product;
+import com.android.shopr.model.StoreWiseCategories;
 import com.android.shopr.utils.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -24,46 +26,47 @@ import java.util.List;
  * Created by abhinav.sharma on 21/01/17.
  */
 
-public class ProductsRecyclerViewAdapter extends RecyclerView.Adapter<SingleImageAndTextViewHolder> {
+public class ProductsRecyclerViewAdapter extends RecyclerView.Adapter<ProductImageViewHolder> {
 
     private Context mContext;
     private DelegateEvent delegateEvent;
-    private CategoryWiseProducts mCategoryWiseProducts;
-    private List<Product> mProducts;
+    private StoreWiseCategories mStoreWiseCategories;
 
-    public ProductsRecyclerViewAdapter(Context mContext, DelegateEvent delegateEvent, CategoryWiseProducts mCategoryWiseProducts) {
+    public ProductsRecyclerViewAdapter(Context mContext, StoreWiseCategories mStoreWiseCategories, DelegateEvent delegateEvent) {
         this.mContext = mContext;
         this.delegateEvent = delegateEvent;
-        this.mCategoryWiseProducts = mCategoryWiseProducts;
-        mProducts = mCategoryWiseProducts.getProducts();
+        this.mStoreWiseCategories = mStoreWiseCategories;
     }
 
     public interface DelegateEvent {
-        void delegateToHost(int storeId, int categoryId, Product product);
+        void delegateToHost(int categoryId, Product product);
     }
 
     @Override
-    public void onViewDetachedFromWindow(SingleImageAndTextViewHolder holder) {
+    public void onViewDetachedFromWindow(ProductImageViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
         holder.mImageView.clearAnimation();
-        holder.mTextView.clearAnimation();
+//        holder.mTextView.clearAnimation();
     }
 
     @Override
-    public SingleImageAndTextViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View layoutView = LayoutInflater.from(mContext).inflate(R.layout.two_image_and_text, parent, false);
-        return new SingleImageAndTextViewHolder(layoutView);
+    public ProductImageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View layoutView = LayoutInflater.from(mContext).inflate(R.layout.product_image_and_description, parent, false);
+        return new ProductImageViewHolder(layoutView);
     }
 
     @Override
-    public void onBindViewHolder(SingleImageAndTextViewHolder holder, final int position) {
+    public void onBindViewHolder(ProductImageViewHolder holder, final int position) {
         Picasso.with(mContext).load(getItem(position).getImageUrl())
                 .placeholder(new ColorDrawable(Utils.getRandomBackgroundColor())).into(holder.mImageView);
-        holder.mTextView.setText(getItem(position).getProductName());
+        holder.productName.setText(getItem(position).getProductName());
+        holder.originalPrice.setText(getItem(position).getPriceBeforeDiscount());
+        holder.productDiscount.setText(getItem(position).getDiscount());
+        holder.priceAfterDiscount.setText(getItem(position).getPriceAfterDiscount());
         holder.mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                delegateEvent.delegateToHost(mCategoryWiseProducts.getStoreId(), mCategoryWiseProducts.getCategoryId(), getItem(position));
+                delegateEvent.delegateToHost(mStoreWiseCategories.getCategoryId(), getItem(position));
             }
         });
 //        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.up_from_bottom);
@@ -73,10 +76,10 @@ public class ProductsRecyclerViewAdapter extends RecyclerView.Adapter<SingleImag
 
     @Override
     public int getItemCount() {
-        return mProducts.size();
+        return mStoreWiseCategories.getProducts().size();
     }
 
     private Product getItem(int position) {
-        return mProducts.get(position);
+        return mStoreWiseCategories.getProducts().get(position);
     }
 }
