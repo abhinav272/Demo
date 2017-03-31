@@ -4,86 +4,79 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.shopr.HomeActivity;
 import com.android.shopr.R;
 import com.android.shopr.adapters.ProductsRecyclerViewAdapter;
-import com.android.shopr.api.ShoprAPIClient;
+import com.android.shopr.adapters.animators.SlideInUpAnimator;
 import com.android.shopr.model.CategoryWiseProducts;
+import com.android.shopr.model.PlaceWiseStores;
 import com.android.shopr.model.Product;
-import com.android.shopr.utils.ExecutorSupplier;
+import com.android.shopr.model.StoreWiseCategories;
 import com.android.shopr.utils.ShoprConstants;
 
-import retrofit2.Call;
+import java.util.List;
+
 import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by abhinav.sharma on 21/01/17.
  */
 
-public class ProductsFragment extends BaseFragment implements Callback<CategoryWiseProducts>,ProductsRecyclerViewAdapter.DelegateEvent {
+public class ProductsFragment extends BaseFragment implements ProductsRecyclerViewAdapter.DelegateEvent {
 
     private static final String TAG = "ProductsFragment";
     private RecyclerView mRecyclerView;
     private int categoryId = -1, storeId = -1;
-    private CategoryWiseProducts mCategoryWiseProducts;
+    private StoreWiseCategories mStoreWiseCategories;
     private ProductsRecyclerViewAdapter mProductsRecyclerViewAdapter;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Bundle bundle = getArguments();
-        storeId = bundle.getInt(ShoprConstants.STORE_ID, -1);
-        categoryId = bundle.getInt(ShoprConstants.CATEGORY_ID, -1);
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        mRecyclerView.setLayoutManager(getLayoutManager());
-        ((HomeActivity) getActivity()).showFAB();
-        getCategoryWiseProducts(storeId, categoryId);
-    }
-
-    private void getCategoryWiseProducts(final int storeId, final int categoryId) {
-        ExecutorSupplier.getInstance().getWorkerThreadExecutor().execute(new Runnable() {
+        view.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void run() {
-                ShoprAPIClient.getApiInterface().getCategorySpecificProducts(storeId, categoryId).enqueue(ProductsFragment.this);
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
             }
         });
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        mRecyclerView.setLayoutManager(getLayoutManager());
+//        mRecyclerView.setItemAnimator(getItemAnimator());
+        getAllStores();
     }
 
-    private GridLayoutManager getLayoutManager() {
+    private RecyclerView.ItemAnimator getItemAnimator() {
+        return new SlideInUpAnimator();
+    }
+
+    private void getAllStores() {
+        mStoreWiseCategories = getArguments().getParcelable(ShoprConstants.STORE_CATEGORY_WISE_PRODUCTS);
+        setupUI(mStoreWiseCategories);
+    }
+
+    private void setupUI(StoreWiseCategories mStoreWiseCategories) {
+        mProductsRecyclerViewAdapter = new ProductsRecyclerViewAdapter(getActivity(), mStoreWiseCategories, this);
+        mRecyclerView.setAdapter(mProductsRecyclerViewAdapter);
+    }
+
+    private GridLayoutManager getLayoutManager(){
         return new GridLayoutManager(getActivity(), 2);
     }
 
     @Override
-    public void onResponse(Call<CategoryWiseProducts> call, Response<CategoryWiseProducts> response) {
-        Log.e(TAG, "onResponse: ");
-        if (response.isSuccessful() && response.code() == 200) {
-            mCategoryWiseProducts = response.body();
-            mProductsRecyclerViewAdapter = new ProductsRecyclerViewAdapter(getActivity(), this, mCategoryWiseProducts);
-            mRecyclerView.setAdapter(mProductsRecyclerViewAdapter);
-            ((HomeActivity) getActivity()).pushTitleStack(mCategoryWiseProducts.getCategoryName());
-        }
-    }
+    public void delegateToHost(int categoryId, Product product) {
 
-    @Override
-    public void onFailure(Call<CategoryWiseProducts> call, Throwable t) {
-        Log.e(TAG, "onFailure: ", t);
-    }
-
-    @Override
-    public void delegateToHost(int storeId, int categoryId, Product product) {
-        ((HomeActivity) getActivity()).showProductDetailFragment(storeId, categoryId, product);
     }
 }
