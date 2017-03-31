@@ -18,7 +18,7 @@ public class StoreWiseCategories implements Parcelable {
     @SerializedName("category_name")
     @Expose
     private String categoryName;
-    @SerializedName("product")
+    @SerializedName("products")
     @Expose
     private List<Product> products;
 
