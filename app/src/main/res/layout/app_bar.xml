@@ -4,6 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="?android:attr/actionBarSize"
     android:background="@color/colorPrimary"
+    app:contentInsetEnd="0dp"
+    app:contentInsetLeft="0dp"
+    app:contentInsetRight="0dp"
+    app:contentInsetStart="0dp"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
     app:theme="@style/ThemeOverlay.AppCompat.Dark">
 
@@ -24,11 +28,11 @@
 
         <LinearLayout
             android:id="@+id/ll_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/tv_page_type"
             android:layout_marginTop="4dp"
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:orientation="horizontal">
 
             <com.android.shopr.views.ShoprTextView
                 android:id="@+id/tv_location_name"
@@ -47,30 +51,6 @@
                 android:layout_marginLeft="5dp"
                 app:srcCompat="@drawable/ic_dropdown" />
         </LinearLayout>
-
-
-        <!--<com.android.shopr.views.ShoprEditText-->
-        <!--android:id="@+id/et_search_field"-->
-        <!--android:drawableLeft="@drawable/ic_search"-->
-        <!--android:drawableTint="@color/colorLightWhite"-->
-        <!--android:drawablePadding="10dp"-->
-        <!--android:text="ZZARA"-->
-        <!--android:textSize="18sp"-->
-        <!--android:textColor="@color/colorWhite"-->
-        <!--android:gravity="center_vertical"-->
-        <!--android:visibility="gone"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent" />-->
-
-        <!--<ImageView-->
-        <!--android:id="@+id/iv_cancel_search"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_marginRight="5dp"-->
-        <!--android:visibility="gone"-->
-        <!--app:srcCompat="@drawable/ic_cross"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="match_parent" />-->
-
 
     </RelativeLayout>
 
