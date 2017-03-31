@@ -79,7 +79,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     private View mHeaderView;
     private FragmentManager mFragmentManager;
     private Stack<String> mTitleStack;
-    private FloatingActionButton floatingActionButton;
     private Result qrResult;
     private static final int CAM_PERMISSION_REQ_CODE = 27;
     public static final int PLACE_PICKER_REQUEST = 1;
@@ -89,6 +88,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     private TextView mPageType, mLocationName;
     private GoogleApiClient mGoogleApiClient;
     private ImageView mManuallySelectPlace;
+    private PlaceWiseCategoriesStores placeWiseCategoriesStores;
 
 
     @Override
@@ -155,7 +155,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     private void setUpViews() {
         mTitleStack = new Stack<>();
         mFragmentManager = getSupportFragmentManager();
-        floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
         navigationView = (NavigationView) findViewById(R.id.nvView);
         mTitle = getTitle();
         mTitleStack.push((String) mTitle);
@@ -189,7 +188,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         });
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         mHeaderView = getHeaderView(navigationView);
-        floatingActionButton.setOnClickListener(this);
         ExecutorSupplier.getInstance().getWorkerThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -321,9 +319,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     public void onBackPressed() {
         super.onBackPressed();
         popTitleStack();
-        if (mTitleStack != null && !mTitleStack.empty() && mTitleStack.peek().equalsIgnoreCase(getString(R.string.app_name))) {
-            hideFAB();
-        }
 
     }
 
@@ -336,9 +331,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.fab:
-                showQRFragment();
-                break;
             case R.id.ll_location:
                 manuallySelectLocation();
                 break;
@@ -419,14 +411,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
 
     }
 
-    public void hideFAB() {
-        floatingActionButton.hide();
-    }
-
-    public void showFAB() {
-        floatingActionButton.show();
-    }
-
     public void hideBNV() {
         mBottomNavigationView.setVisibility(View.GONE);
     }
@@ -460,7 +444,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public void onResponse(Call<PlaceWiseCategoriesStores> call, Response<PlaceWiseCategoriesStores> response) {
         if (response.isSuccessful() && response.code() == 200){
-            PlaceWiseCategoriesStores placeWiseCategoriesStores = response.body();
+            placeWiseCategoriesStores = response.body();
             setupCategoriesAndStores(placeWiseCategoriesStores);
         } else {
             showShortToast("No Stores available at this Location");
@@ -477,7 +461,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         Log.e(TAG, "onFailure: ", t);
     }
 
-    public void showStoresDetailFragment(int position) {
-
+    public void showStoresDetailActivity(int position) {
+        Intent intent = new Intent(HomeActivity.this, StoresDetailActivity.class);
+        intent.putExtra(ShoprConstants.STORE_POJO, placeWiseCategoriesStores.getStores().get(position));
+        startActivity(intent);
     }
 }
