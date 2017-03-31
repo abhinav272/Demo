@@ -33,18 +33,6 @@
                 />
         </android.support.v4.view.ViewPager>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:scaleType="center"
-            app:srcCompat="@drawable/ic_barcode"
-            android:layout_above="@+id/bottom_navigation"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="24dp"
-            android:layout_marginBottom="24dp"
-            app:elevation="10dp"
-            android:layout_width="48dp"
-            android:layout_height="48dp" />
-
         <View
             android:layout_width="match_parent"
             android:layout_height="4dp"
