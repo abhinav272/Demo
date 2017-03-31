@@ -461,9 +461,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         Log.e(TAG, "onFailure: ", t);
     }
 
-    public void showStoresDetailActivity(int position) {
+    public void showStoresDetailActivity(int storeId) {
         Intent intent = new Intent(HomeActivity.this, StoresDetailActivity.class);
-        intent.putExtra(ShoprConstants.STORE_POJO, placeWiseCategoriesStores.getStores().get(position));
+        intent.putExtra(ShoprConstants.STORE_POJO, placeWiseCategoriesStores.getStoreById(storeId));
         startActivity(intent);
     }
 }
