@@ -31,4 +31,12 @@ public class PlaceWiseCategoriesStores {
     public void setStores(List<PlaceWiseStores> stores) {
         this.stores = stores;
     }
+
+    public PlaceWiseStores getStoreById(int storeId) {
+        for (PlaceWiseStores store : stores) {
+            if (store.getStoreId() == storeId)
+                return store;
+        }
+        return null;
+    }
 }
