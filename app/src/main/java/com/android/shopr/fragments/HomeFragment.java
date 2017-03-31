@@ -4,28 +4,19 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.OvershootInterpolator;
 
 import com.android.shopr.HomeActivity;
 import com.android.shopr.R;
 import com.android.shopr.adapters.StoresRecyclerViewAdapter;
 import com.android.shopr.adapters.animators.SlideInUpAnimator;
-import com.android.shopr.api.ShoprAPIClient;
 import com.android.shopr.model.PlaceWiseStores;
-import com.android.shopr.model.Store;
-import com.android.shopr.utils.ExecutorSupplier;
 import com.android.shopr.utils.ShoprConstants;
 
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by abhinav.sharma on 1/8/2017.
@@ -55,7 +46,6 @@ public class HomeFragment extends BaseFragment implements StoresRecyclerViewAdap
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(getLayoutManager());
 //        mRecyclerView.setItemAnimator(getItemAnimator());
-        ((HomeActivity) getActivity()).hideFAB();
         getAllStores();
     }
 
@@ -78,8 +68,8 @@ public class HomeFragment extends BaseFragment implements StoresRecyclerViewAdap
     }
 
     @Override
-    public void delegateToHost(int position) {
+    public void delegateToHost(int storeId) {
 //        ((HomeActivity) getActivity()).showCategoriesFragment(position);
-        ((HomeActivity) getActivity()).showStoresDetailFragment(position);
+        ((HomeActivity) getActivity()).showStoresDetailActivity(storeId);
     }
 }
