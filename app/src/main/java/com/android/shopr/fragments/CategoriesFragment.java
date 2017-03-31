@@ -52,7 +52,6 @@ public class CategoriesFragment extends BaseFragment implements Callback<StoreWi
         });
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(getLayoutManager());
-        ((HomeActivity) getActivity()).showFAB();
         getStoreWiseCategories(storeId);
     }
 
