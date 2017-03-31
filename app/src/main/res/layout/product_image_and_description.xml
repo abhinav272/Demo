@@ -20,7 +20,7 @@
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
             android:layout_marginLeft="4dp"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:text="Orange Dress"
             app:fontFile="Roboto-Regular.ttf"
             android:layout_width="wrap_content"
@@ -33,7 +33,7 @@
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
             android:layout_marginLeft="2dp"
-            android:textSize="10sp"
+            android:textSize="12sp"
             android:text="Rs. 899"
             app:fontFile="Roboto-BoldItalic.ttf"
             android:layout_width="wrap_content"
@@ -47,7 +47,7 @@
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
             android:layout_marginLeft="4dp"
-            android:textSize="10sp"
+            android:textSize="12sp"
             android:text="Rs. 1799"
             app:fontFile="Roboto-BoldItalic.ttf"
             android:layout_width="wrap_content"
@@ -61,13 +61,23 @@
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
             android:layout_marginLeft="4dp"
-            android:textSize="10sp"
+            android:textSize="12sp"
             android:text="50% OFF"
             android:textColor="@color/colorRed"
             app:fontFile="Roboto-BoldItalic.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center" />
+
+        <ImageView
+            android:id="@+id/iv_watch_product"
+            app:srcCompat="@drawable/ic_watch"
+            android:layout_below="@+id/iv_image"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="5dp"
+            android:layout_alignParentRight="true"
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
 
 
     </RelativeLayout>
