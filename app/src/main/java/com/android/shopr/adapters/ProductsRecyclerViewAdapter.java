@@ -4,11 +4,13 @@ import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 
 import com.android.shopr.R;
 import com.android.shopr.adapters.viewholders.ProductImageViewHolder;
@@ -28,6 +30,7 @@ import java.util.List;
 
 public class ProductsRecyclerViewAdapter extends RecyclerView.Adapter<ProductImageViewHolder> {
 
+    private static final String TAG = ProductsRecyclerViewAdapter.class.getSimpleName();
     private Context mContext;
     private DelegateEvent delegateEvent;
     private StoreWiseCategories mStoreWiseCategories;
@@ -60,9 +63,16 @@ public class ProductsRecyclerViewAdapter extends RecyclerView.Adapter<ProductIma
         Picasso.with(mContext).load(getItem(position).getImageUrl()).fit().centerCrop()
                 .placeholder(new ColorDrawable(Utils.getRandomBackgroundColor())).into(holder.mImageView);
         holder.productName.setText(getItem(position).getProductName());
-        holder.originalPrice.setText(getItem(position).getPriceBeforeDiscount());
-        holder.productDiscount.setText(getItem(position).getDiscount());
-        holder.priceAfterDiscount.setText(getItem(position).getPriceAfterDiscount());
+        holder.originalPrice.setText(mContext.getString(R.string.ruppee_symbol)+getItem(position).getPriceBeforeDiscount());
+        holder.productDiscount.setText(getItem(position).getDiscount() + " OFF");
+        holder.priceAfterDiscount.setText(mContext.getString(R.string.ruppee_symbol)+getItem(position).getPriceAfterDiscount());
+        holder.mWatchThis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e(TAG, "onClick: watch this product " + getItem(position).getProductName());
+                Toast.makeText(mContext, "Watch product : " + getItem(position).getProductName(), Toast.LENGTH_SHORT).show();
+            }
+        });
         holder.mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
