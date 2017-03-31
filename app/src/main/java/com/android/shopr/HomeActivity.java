@@ -354,7 +354,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this);
-                setLocationName(place.getName()+"");
+                setLocationName(place.getName() + "");
                 fetchCategoriesAndStores(place);
             }
         }
@@ -365,7 +365,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == CAM_PERMISSION_REQ_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             showQRFragment();
-        } else if(requestCode == LOCATION_PERMISSION_REQ_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        } else if (requestCode == LOCATION_PERMISSION_REQ_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             getPlaces();
         }
     }
@@ -443,7 +443,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void onResponse(Call<PlaceWiseCategoriesStores> call, Response<PlaceWiseCategoriesStores> response) {
-        if (response.isSuccessful() && response.code() == 200){
+        if (response.isSuccessful() && response.code() == 200) {
             placeWiseCategoriesStores = response.body();
             setupCategoriesAndStores(placeWiseCategoriesStores);
         } else {
@@ -452,6 +452,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void setupCategoriesAndStores(PlaceWiseCategoriesStores placeWiseCategoriesStores) {
+        if (placeWiseCategoriesStores.getCategories().size() < 4) {
+            mTabLayout.setTabMode(TabLayout.MODE_FIXED);
+        }
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), placeWiseCategoriesStores);
         mViewPager.setAdapter(adapter);
     }

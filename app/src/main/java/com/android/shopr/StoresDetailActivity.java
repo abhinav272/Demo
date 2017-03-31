@@ -34,6 +34,9 @@ public class StoresDetailActivity extends BaseActivity {
     }
 
     private void setupCategoriesAndProducts(PlaceWiseStores placeWiseStores) {
+        if (placeWiseStores.getCategories().size() < 4) {
+            mTabLayout.setTabMode(TabLayout.MODE_FIXED);
+        }
         StoresDetailAdapter adapter = new StoresDetailAdapter(getSupportFragmentManager(), placeWiseStores);
         viewPager.setAdapter(adapter);
     }
