@@ -57,7 +57,7 @@ public class ProductsRecyclerViewAdapter extends RecyclerView.Adapter<ProductIma
 
     @Override
     public void onBindViewHolder(ProductImageViewHolder holder, final int position) {
-        Picasso.with(mContext).load(getItem(position).getImageUrl())
+        Picasso.with(mContext).load(getItem(position).getImageUrl()).fit().centerCrop()
                 .placeholder(new ColorDrawable(Utils.getRandomBackgroundColor())).into(holder.mImageView);
         holder.productName.setText(getItem(position).getProductName());
         holder.originalPrice.setText(getItem(position).getPriceBeforeDiscount());
