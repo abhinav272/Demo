@@ -467,6 +467,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     public void showStoresDetailActivity(int storeId) {
         Intent intent = new Intent(HomeActivity.this, StoresDetailActivity.class);
         intent.putExtra(ShoprConstants.STORE_POJO, placeWiseCategoriesStores.getStoreById(storeId));
+        intent.putExtra(ShoprConstants.STORE_LOCATION, mLocationName.getText() + "");
         startActivity(intent);
     }
 }
