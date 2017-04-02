@@ -28,6 +28,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".StoresDetailActivity"/>
+        <activity android:name=".CartActivity"/>
+        <activity android:name=".ProductDetailActivity"/>
     </application>
 
 </manifest>
