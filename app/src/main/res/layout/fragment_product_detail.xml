@@ -1,68 +1,245 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/colorWhite"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/iv_product_image"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="450dp" />
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-    <com.android.shopr.views.ShoprTextView
-        android:id="@+id/tv_product_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/iv_product_image"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="10dp"
-        android:text="Henley Brown Jacket"
-        android:textColor="@color/colorBlack"
-        android:textSize="16sp"
-        app:fontFile="Roboto-Regular.ttf" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:paddingBottom="20dp">
 
-    <com.android.shopr.views.ShoprTextView
-        android:id="@+id/tv_product_price_after_discount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_product_name"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:text="Rs. 899"
-        android:textColor="@color/colorBlack"
-        android:textSize="16sp"
-        app:fontFile="Roboto-Bold.ttf" />
+            <ImageView
+                android:id="@+id/iv_product_image"
+                android:layout_width="match_parent"
+                android:layout_height="450dp" />
 
-    <com.android.shopr.views.ShoprTextView
-        android:id="@+id/tv_product_price_original"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_product_name"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="8dp"
-        android:layout_toRightOf="@+id/tv_product_price_after_discount"
-        android:background="@drawable/bg_strikethrough"
-        android:paddingLeft="1dp"
-        android:paddingRight="1dp"
-        android:text="Rs. 899"
-        android:textColor="@color/colorBlack"
-        android:textSize="16sp"
-        app:fontFile="Roboto-Bold.ttf" />
+            <com.android.shopr.views.ShoprTextView
+                android:id="@+id/tv_product_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv_product_image"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="10dp"
+                android:text="Henley Brown Jacket"
+                android:textColor="@color/colorBlack"
+                android:textSize="19sp"
+                app:fontFile="Roboto-Regular.ttf" />
 
-    <com.android.shopr.views.ShoprTextView
-        android:id="@+id/tv_product_discount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_product_name"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="8dp"
-        android:layout_toRightOf="@+id/tv_product_price_original"
-        android:paddingLeft="1dp"
-        android:paddingRight="1dp"
-        android:text="50% OFF"
-        android:textColor="@color/colorRed"
-        android:textSize="16sp"
-        app:fontFile="Roboto-Bold.ttf" />
+            <com.android.shopr.views.ShoprTextView
+                android:id="@+id/tv_product_price_after_discount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/iv_product_image"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="10dp"
+                android:text="Rs. 899"
+                android:textColor="@color/colorBlack"
+                android:textSize="16sp"
+                app:fontFile="Roboto-Medium.ttf" />
 
-</RelativeLayout>
+            <com.android.shopr.views.ShoprTextView
+                android:id="@+id/tv_product_price_original"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/tv_product_price_after_discount"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/bg_strikethrough"
+                android:paddingLeft="1dp"
+                android:paddingRight="1dp"
+                android:text="Rs. 899"
+                android:textColor="@color/colorBlack"
+                android:textSize="16sp"
+                app:fontFile="Roboto-Regular.ttf" />
+
+            <com.android.shopr.views.ShoprTextView
+                android:id="@+id/tv_product_discount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/tv_product_price_original"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="4dp"
+                android:paddingLeft="1dp"
+                android:paddingRight="1dp"
+                android:text="50% OFF"
+                android:textColor="@color/colorRed"
+                android:textSize="12sp"
+                app:fontFile="Roboto-Regular.ttf" />
+
+            <View
+                android:id="@+id/divider1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/tv_product_discount"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/colorGray" />
+
+            <com.android.shopr.views.ShoprTextView
+                android:id="@+id/tv_available_sizes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divider1"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="10dp"
+                android:text="Available Sizes"
+                android:textSize="14sp"
+                app:fontFile="Roboto-Light.ttf" />
+
+            <com.android.shopr.views.ShoprTextView
+                android:id="@+id/tv_size_chart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/divider1"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="5dp"
+                android:padding="5dp"
+                android:text="SIZE CHART"
+                android:textAllCaps="true"
+                android:textColor="@color/colorAccent"
+                android:textSize="12sp"
+                app:fontFile="Roboto-Medium.ttf" />
+
+            <LinearLayout
+                android:id="@+id/ll_sizes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_available_sizes"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <com.android.shopr.views.ShoprTextView
+                    android:id="@+id/tv_size_s"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/bg_circular"
+                    android:gravity="center"
+                    android:text="S"
+                    android:textSize="12sp" />
+
+                <com.android.shopr.views.ShoprTextView
+                    android:id="@+id/tv_size_m"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/bg_circular"
+                    android:gravity="center"
+                    android:text="M"
+                    android:textSize="12sp" />
+
+                <com.android.shopr.views.ShoprTextView
+                    android:id="@+id/tv_size_l"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/bg_circular"
+                    android:gravity="center"
+                    android:text="L"
+                    android:textSize="12sp" />
+
+                <com.android.shopr.views.ShoprTextView
+                    android:id="@+id/tv_size_xl"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/bg_circular"
+                    android:gravity="center"
+                    android:text="XL"
+                    android:textSize="12sp" />
+
+                <com.android.shopr.views.ShoprTextView
+                    android:id="@+id/tv_size_xxl"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/bg_circular"
+                    android:gravity="center"
+                    android:text="XXL"
+                    android:textSize="12sp" />
+
+                <com.android.shopr.views.ShoprTextView
+                    android:id="@+id/tv_size_xxxl"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/bg_circular"
+                    android:gravity="center"
+                    android:text="XXXL"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/ll_sizes"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/colorGray" />
+
+            <com.android.shopr.views.ShoprTextView
+                android:id="@+id/tv_out_of_stock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/divider2"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="10dp"
+                android:text="Size Out Of Stock?"
+                android:textSize="14sp"
+                app:fontFile="Roboto-Light.ttf" />
+
+            <ImageView
+                android:id="@+id/iv_store_image"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_below="@+id/tv_out_of_stock"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="10dp"
+                app:srcCompat="@drawable/ic_barcode" />
+
+            <com.android.shopr.views.ShoprTextView
+                android:id="@+id/tv_store_with_stock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_out_of_stock"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/iv_store_image"
+                android:text="ZARA"
+                android:textColor="@color/colorAccent"
+                android:textSize="15sp"
+                app:fontFile="Roboto-Regular.ttf" />
+
+            <com.android.shopr.views.ShoprTextView
+                android:id="@+id/tv_store_with_stock_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_store_with_stock"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="2dp"
+                android:layout_toRightOf="@+id/iv_store_image"
+                android:text="Ambience Mall, Gurgaon"
+                android:textColor="@color/colorGray"
+                android:textSize="13sp"
+                app:fontFile="Roboto-Regular.ttf" />
+
+        </RelativeLayout>
+    </ScrollView>
+</LinearLayout>
