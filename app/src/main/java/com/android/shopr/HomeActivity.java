@@ -33,6 +33,7 @@ import android.widget.TextView;
 
 import com.android.shopr.adapters.ViewPagerAdapter;
 import com.android.shopr.api.ShoprAPIClient;
+import com.android.shopr.fragments.CartFragment;
 import com.android.shopr.fragments.CategoriesFragment;
 import com.android.shopr.fragments.HomeFragment;
 import com.android.shopr.fragments.ProductDetailFragment;
@@ -227,10 +228,14 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
                 // TODO: 09/03/17 Add Search activity or similar feature
                 break;
             case R.id.action_cart:
-                showShortToast("Cart");
+                showCartActivity();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showCartActivity() {
+        startActivity(new Intent(this, CartActivity.class));
     }
 
     @Override
