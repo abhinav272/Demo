@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.android.shopr.HomeActivity;
 import com.android.shopr.R;
+import com.android.shopr.StoresDetailActivity;
 import com.android.shopr.adapters.ProductsRecyclerViewAdapter;
 import com.android.shopr.adapters.animators.SlideInUpAnimator;
 import com.android.shopr.model.CategoryWiseProducts;
@@ -77,6 +78,6 @@ public class ProductsFragment extends BaseFragment implements ProductsRecyclerVi
 
     @Override
     public void delegateToHost(int categoryId, Product product) {
-
+        ((StoresDetailActivity) getActivity()).onProductSelected(categoryId, product);
     }
 }
