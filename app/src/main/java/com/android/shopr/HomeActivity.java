@@ -443,7 +443,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void onResponse(Call<PlaceWiseCategoriesStores> call, Response<PlaceWiseCategoriesStores> response) {
-        if (response.isSuccessful() && response.code() == 200) {
+        if (response.isSuccessful() && response.code() == 200
+                && ((PlaceWiseCategoriesStores) response.body()).getCategories()!=null
+                && ((PlaceWiseCategoriesStores) response.body()).getStores()!=null) {
             placeWiseCategoriesStores = response.body();
             setupCategoriesAndStores(placeWiseCategoriesStores);
         } else {
