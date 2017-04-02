@@ -1,16 +1,21 @@
 package com.android.shopr;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.shopr.adapters.StoresDetailAdapter;
 import com.android.shopr.model.PlaceWiseStores;
+import com.android.shopr.model.Product;
 import com.android.shopr.utils.ShoprConstants;
 
 /**
@@ -26,6 +31,14 @@ public class StoresDetailActivity extends BaseActivity implements View.OnClickLi
     private TextView tvStoreName, tvLocationName;
     private String locationName;
 
+    public TextView getTvStoreName() {
+        return tvStoreName;
+    }
+
+    public TextView getTvLocationName() {
+        return tvLocationName;
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,10 +49,36 @@ public class StoresDetailActivity extends BaseActivity implements View.OnClickLi
         setupCategoriesAndProducts(placeWiseStores);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.stores_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_watch_list:
+                // TODO: 09/03/17 Add Search activity or similar feature
+                break;
+            case R.id.action_cart:
+                showCartActivity();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showCartActivity() {
+        Intent intent = new Intent(StoresDetailActivity.this, CartActivity.class);
+        startActivity(intent);
+    }
+
     private void initView() {
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         mTabLayout = (TabLayout) findViewById(R.id.tl_tab);
         mToolBar = ((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar(mToolBar);
         ivBack = (ImageView) mToolBar.findViewById(R.id.iv_back);
         tvStoreName = (TextView) mToolBar.findViewById(R.id.tv_store_name);
         tvLocationName = (TextView) mToolBar.findViewById(R.id.tv_location_name);
@@ -65,5 +104,16 @@ public class StoresDetailActivity extends BaseActivity implements View.OnClickLi
                 finish();
                 break;
         }
+    }
+
+    public void onProductSelected(int categoryId, Product product) {
+        showProductDetailActivity(categoryId, product);
+    }
+
+    private void showProductDetailActivity(int categoryId, Product product) {
+        Intent intent = new Intent(StoresDetailActivity.this, ProductDetailActivity.class);
+        intent.putExtra(ShoprConstants.CATEGORY_ID, categoryId);
+        intent.putExtra(ShoprConstants.PRODUCT_OBJ, product);
+        startActivity(intent);
     }
 }
