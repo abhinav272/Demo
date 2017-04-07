@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.android.shopr.R;
 import com.android.shopr.adapters.viewholders.CartItemViewHolder;
 import com.android.shopr.adapters.viewholders.OptionsItemViewHolder;
+import com.android.shopr.fragments.CartFragment;
 import com.android.shopr.model.Cart;
 import com.android.shopr.model.CartItem;
 import com.android.shopr.utils.Utils;
@@ -27,12 +28,18 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     private Cart cart;
     private LayoutInflater inflater;
     private Context context;
+    private RemoveProductListener removeProductListener;
+
+    public interface RemoveProductListener {
+        void removeThisProduct(int productId);
+    }
+
+    public void setRemoveProductListener(RemoveProductListener removeProductListener) {
+        this.removeProductListener = removeProductListener;
+    }
 
     public CartRecyclerViewAdapter(Context context, Cart cart) {
         this.cart = cart;
-        List<CartItem> cartItems = cart.getCartItems();
-        cartItems.add(null);
-        cart.setCartItems(cartItems);
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -40,20 +47,20 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
-        switch (viewType){
+        switch (viewType) {
             case CART_ITEM_LAYOUT:
                 view = LayoutInflater.from(context).inflate(R.layout.layout_cart_item, parent, false);
                 return new CartItemViewHolder(view);
             case OPTIONS_AND_PRICE_LAYOUT:
                 view = LayoutInflater.from(context).inflate(R.layout.layout_cart_options, parent, false);
-                return  new OptionsItemViewHolder(view);
+                return new OptionsItemViewHolder(view);
         }
         return null;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (position == cart.getCartItems().size() - 1){
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        if (position == cart.getCartItems().size()) {
             OptionsItemViewHolder optionsItemViewHolder = (OptionsItemViewHolder) holder;
             optionsItemViewHolder.tvBagTotalBeforeDiscount.setText("INR " + String.valueOf(cart.getCartTotalBeforeDiscount()));
             optionsItemViewHolder.tvBagTotalAfterDiscount.setText("INR " + String.valueOf(cart.getCartTotal()));
@@ -71,21 +78,29 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
             cartItemViewHolder.productDiscount.setText(getItem(position).getDiscount() + "Off");
             cartItemViewHolder.productQuantity.setText("Qty: " + getItem(position).getProductQuantity());
             cartItemViewHolder.productName.setText(getItem(position).getProductName());
+            cartItemViewHolder.removeProduct.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    removeProductListener.removeThisProduct(getItem(position).getProductId());
+                }
+            });
         }
     }
 
     @Override
     public int getItemCount() {
-        return cart.getCartItems().size();
+        return cart.getCartItems().size() + 1;
     }
 
     private CartItem getItem(int position) {
+        if (position == cart.getCartItems().size())
+            return null;
         return cart.getCartItems().get(position);
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (position == cart.getCartItems().size() - 1)
+        if (position == cart.getCartItems().size())
             return OPTIONS_AND_PRICE_LAYOUT;
         else return CART_ITEM_LAYOUT;
     }
