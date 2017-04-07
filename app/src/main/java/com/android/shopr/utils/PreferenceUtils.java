@@ -4,8 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.android.shopr.model.Cart;
+import com.android.shopr.model.CartItem;
 import com.android.shopr.model.UserProfile;
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
 
 /**
  * Created by abhinav.sharma on 11/29/2016.
@@ -23,7 +27,7 @@ public class PreferenceUtils {
     }
 
     public static PreferenceUtils getInstance(Context context) {
-        if (preferenceUtils == null){
+        if (preferenceUtils == null) {
             preferenceUtils = new PreferenceUtils();
             sharedPreferences = getSharedPreferences(context);
         }
@@ -52,4 +56,20 @@ public class PreferenceUtils {
         return gson.fromJson(string, UserProfile.class);
     }
 
+    public Cart getUserCart() {
+        String string = sharedPreferences.getString(ShoprConstants.CART, null);
+        Gson gson = new Gson();
+        Cart cart = gson.fromJson(string, Cart.class);
+        if (cart == null) {
+            cart = new Cart();
+            cart.setCartItems(new ArrayList<CartItem>());
+        }
+        return cart;
+    }
+
+    public void saveUserCart(Cart cart) {
+        Gson gson = new Gson();
+        String json = gson.toJson(cart);
+        sharedPreferences.edit().putString(ShoprConstants.CART, json).apply();
+    }
 }
