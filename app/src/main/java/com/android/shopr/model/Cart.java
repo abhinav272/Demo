@@ -43,4 +43,14 @@ public class Cart {
                 iterator.remove();
         }
     }
+
+    public double getCartTotalBeforeDiscount() {
+        double total = 0.0;
+        for (CartItem c : cartItems) {
+            if (c != null) {
+                total += c.getProductPriceBeforeDiscount();
+            }
+        }
+        return total;
+    }
 }
