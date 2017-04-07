@@ -18,4 +18,6 @@ public class ShoprConstants {
     public static final String STORE_POJO = "store_pojo";
     public static final String STORE_CATEGORY_WISE_PRODUCTS = "store_wise_products";
     public static final String STORE_LOCATION = "store_location";
+    public static final String CART = "cart";
+    public static final String STORE_NAME = "store_name";
 }
