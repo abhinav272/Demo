@@ -31,12 +31,12 @@ public class StoresDetailActivity extends BaseActivity implements View.OnClickLi
     private TextView tvStoreName, tvLocationName;
     private String locationName;
 
-    public TextView getTvStoreName() {
-        return tvStoreName;
+    public String getTvStoreName() {
+        return tvStoreName.getText().toString();
     }
 
-    public TextView getTvLocationName() {
-        return tvLocationName;
+    public String getTvLocationName() {
+        return tvLocationName.getText().toString();
     }
 
     @Override
@@ -112,7 +112,10 @@ public class StoresDetailActivity extends BaseActivity implements View.OnClickLi
 
     private void showProductDetailActivity(int categoryId, Product product) {
         Intent intent = new Intent(StoresDetailActivity.this, ProductDetailActivity.class);
+        intent.putExtra(ShoprConstants.STORE_LOCATION, getTvLocationName());
+        intent.putExtra(ShoprConstants.STORE_NAME, getTvStoreName());
         intent.putExtra(ShoprConstants.CATEGORY_ID, categoryId);
+        intent.putExtra(ShoprConstants.STORE_ID, placeWiseStores.getStoreId());
         intent.putExtra(ShoprConstants.PRODUCT_OBJ, product);
         startActivity(intent);
     }
