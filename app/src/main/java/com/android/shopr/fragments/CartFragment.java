@@ -14,11 +14,12 @@ import com.android.shopr.CartActivity;
 import com.android.shopr.R;
 import com.android.shopr.adapters.CartRecyclerViewAdapter;
 import com.android.shopr.model.Cart;
+import com.android.shopr.utils.PreferenceUtils;
 
 /**
  * Created by Abhinav on 02/04/17.
  */
-public class CartFragment extends BaseFragment implements View.OnClickListener {
+public class CartFragment extends BaseFragment implements View.OnClickListener, CartRecyclerViewAdapter.RemoveProductListener {
 
     private ImageView ivBack;
     private Cart cart;
@@ -43,15 +44,20 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         tvCartTotal = (TextView) view.findViewById(R.id.tv_cart_total);
         ivBack.setOnClickListener(this);
         setupCart();
+        setupRecyclerView();
     }
 
     private void setupCart() {
         tvStoreNameAndLocation.setText(cart.getStoreNameAndAddress());
         tvCartTotal.setText("INR " + cart.getCartTotal());
         tvTotalItems.setText("ITEMS(" + cart.getCartItems().size() + ")");
+    }
+
+    private void setupRecyclerView() {
         recyclerView.setLayoutManager(getLayoutManager());
         cartRecyclerViewAdapter = new CartRecyclerViewAdapter(getActivity(), cart);
         recyclerView.setAdapter(cartRecyclerViewAdapter);
+        cartRecyclerViewAdapter.setRemoveProductListener(this);
     }
 
     private LinearLayoutManager getLayoutManager() {
@@ -61,5 +67,13 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         getActivity().finish();
+    }
+
+    @Override
+    public void removeThisProduct(int productId) {
+        cart.removeProductById(productId);
+        PreferenceUtils.getInstance(getActivity()).saveUserCart(cart);
+        setupCart();
+        cartRecyclerViewAdapter.notifyDataSetChanged();
     }
 }
