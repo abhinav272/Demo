@@ -37,11 +37,22 @@ public class Cart {
     }
 
     public void removeProductById(int productId) {
-        for (Iterator<CartItem> iterator = cartItems.iterator(); iterator.hasNext();){
+        Iterator<CartItem> iterator = cartItems.iterator();
+        while (iterator.hasNext()) {
             CartItem cartItem = iterator.next();
-            if (cartItem.getProductId() == productId)
+            if (cartItem != null && cartItem.getProductId() == productId) {
                 iterator.remove();
+                updateCartTotal();
+            }
         }
+    }
+
+    private void updateCartTotal() {
+        double total = 0.0;
+        for (CartItem cartItem : cartItems) {
+            total += cartItem.getProductPriceAfterDiscount();
+        }
+        cartTotal = total;
     }
 
     public double getCartTotalBeforeDiscount() {
