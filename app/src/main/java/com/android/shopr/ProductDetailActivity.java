@@ -13,9 +13,26 @@ import com.android.shopr.utils.ShoprConstants;
  */
 public class ProductDetailActivity extends BaseActivity {
 
-    private int categoryId;
+    private int categoryId, storeId;
     private Product product;
     private FragmentManager mFragmentManager;
+    private String storeName, locationName;
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public String getLocationName() {
+        return locationName;
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public int getStoreId() {
+        return storeId;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -23,6 +40,9 @@ public class ProductDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_product_detail);
         categoryId = getIntent().getIntExtra(ShoprConstants.CATEGORY_ID, -1);
         product = getIntent().getParcelableExtra(ShoprConstants.PRODUCT_OBJ);
+        storeName = getIntent().getStringExtra(ShoprConstants.STORE_NAME);
+        locationName = getIntent().getStringExtra(ShoprConstants.STORE_LOCATION);
+        storeId = getIntent().getIntExtra(ShoprConstants.STORE_ID, -1);
         mFragmentManager = getSupportFragmentManager();
         showProductDetailFragment();
     }
