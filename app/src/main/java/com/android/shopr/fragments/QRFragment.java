@@ -4,11 +4,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.shopr.HomeActivity;
 import com.android.shopr.R;
+import com.android.shopr.StoresDetailActivity;
 import com.google.zxing.Result;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
@@ -32,11 +34,15 @@ public class QRFragment extends BaseFragment implements ZXingScannerView.ResultH
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((HomeActivity) getActivity()).pushTitleStack("Start Scanning");
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
         mScannerView = (ZXingScannerView) view.findViewById(R.id.scanner_view);
         mScannerView.setResultHandler(this);
         mScannerView.startCamera();
-        ((HomeActivity) getActivity()).hideBNV();
     }
 
     @Override
@@ -53,9 +59,9 @@ public class QRFragment extends BaseFragment implements ZXingScannerView.ResultH
         if (mScannerView != null) {
             mScannerView.stopCamera();
         }
-        ((HomeActivity) getActivity()).setQRResult(result);
+        ((StoresDetailActivity) getActivity()).setQRResult(result);
         getActivity().getSupportFragmentManager().popBackStack();
-        ((HomeActivity) getActivity()).showBNV();
+//        ((HomeActivity) getActivity()).showBNV();
 
     }
 
