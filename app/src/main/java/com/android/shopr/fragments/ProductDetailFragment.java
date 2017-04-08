@@ -96,51 +96,10 @@ public class ProductDetailFragment extends BaseFragment implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fl_scan_and_add_to_cart:
-                addProductToCart();
+                Utils.addProductToCart(getActivity(), storeId, categoryId, storeName, storeLocation, product);
                 break;
             case R.id.fl_watch_product:
                 break;
         }
-    }
-
-    private void addProductToCart() {
-        CartItem cartItem = getCartItemFromProduct();
-        cart = PreferenceUtils.getInstance(getActivity()).getUserCart();
-        if (cart != null) {
-            List<CartItem> cartItems = cart.getCartItems();
-            cartItems.add(cartItem);
-            cart.setCartItems(cartItems);
-            double total = cart.getCartTotal();
-            total += Double.valueOf(product.getPriceAfterDiscount());
-            cart.setCartTotal(total);
-        } else {
-            cart = new Cart();
-            cart.setStoreNameAndAddress(storeName + ", " + storeLocation);
-            cart.setCartTotal(Double.valueOf(product.getPriceAfterDiscount()));
-            List<CartItem> cartItems = new ArrayList<>();
-            cartItems.add(cartItem);
-            cart.setCartItems(cartItems);
-        }
-        saveCart(cart);
-    }
-
-    @NonNull
-    private CartItem getCartItemFromProduct() {
-        CartItem cartItem = new CartItem();
-        cartItem.setStoreId(storeId);
-        cartItem.setCategoryId(categoryId);
-        cartItem.setProductId(product.getProductId());
-        cartItem.setProductName(product.getProductName());
-        cartItem.setImgUrl(product.getImageUrl());
-        cartItem.setDiscount(product.getDiscount());
-        cartItem.setProductPriceAfterDiscount(Double.valueOf(product.getPriceAfterDiscount()));
-        cartItem.setProductPriceBeforeDiscount(Double.valueOf(product.getPriceBeforeDiscount()));
-        cartItem.setProductQuantity(1);
-        return cartItem;
-    }
-
-    private void saveCart(Cart cart) {
-        PreferenceUtils.getInstance(getActivity()).saveUserCart(cart);
-        Toast.makeText(getActivity(), "Added to cart", Toast.LENGTH_SHORT).show();
     }
 }
