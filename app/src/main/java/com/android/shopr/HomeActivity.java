@@ -507,7 +507,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         if (s.length() == 0) {
             hideSearchBarWithAnimation();
         }
-            sendTermToHomeFragment(s.toString().toLowerCase());
+        sendTermToHomeFragment(s.toString().toLowerCase());
 
     }
 
