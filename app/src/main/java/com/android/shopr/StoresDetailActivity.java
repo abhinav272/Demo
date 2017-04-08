@@ -33,6 +33,7 @@ import com.android.shopr.model.Product;
 import com.android.shopr.model.ProductFromBarcode;
 import com.android.shopr.utils.ExecutorSupplier;
 import com.android.shopr.utils.ShoprConstants;
+import com.android.shopr.utils.Utils;
 import com.google.zxing.Result;
 
 import retrofit2.Call;
@@ -203,7 +204,7 @@ public class StoresDetailActivity extends BaseActivity implements View.OnClickLi
         if (response.isSuccessful() && response.body() != null) {
             ProductFromBarcode productFromBarcode = response.body();
             tvStoreName.setText(productFromBarcode.getStoreName());
-            showProductDetailActivity(productFromBarcode.getCategoryId(), productFromBarcode.getProduct());
+            Utils.addProductToCart(this, productFromBarcode);
         }
     }
 
