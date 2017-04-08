@@ -1,9 +1,15 @@
 package com.android.shopr.utils;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.shopr.R;
+import com.android.shopr.model.Cart;
+import com.android.shopr.model.CartItem;
+import com.android.shopr.model.Product;
+import com.android.shopr.model.ProductFromBarcode;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,5 +50,49 @@ public class Utils {
         int color = bgColors.get(0);
         Log.d(TAG, "getRandomBackgroundColor: "+color);
         return color;
+    }
+
+    public static void addProductToCart(Context context, int storeId, int categoryId, String storeName, String storeLocation, Product product) {
+        Cart cart = PreferenceUtils.getInstance(context).getUserCart();
+        CartItem cartItem = getCartItemFromProduct(storeId, categoryId, storeName, storeLocation, product);
+        if (cart != null) {
+            List<CartItem> cartItems = cart.getCartItems();
+            cartItems.add(cartItem);
+            cart.setCartItems(cartItems);
+            double total = cart.getCartTotal();
+            total += Double.valueOf(cartItem.getProductPriceAfterDiscount());
+            cart.setCartTotal(total);
+        } else {
+            cart = new Cart();
+            cart.setStoreNameAndAddress(cartItem.getStoreName() + ", " + cartItem.getLocationName());
+            cart.setCartTotal(Double.valueOf(cartItem.getProductPriceAfterDiscount()));
+            List<CartItem> cartItems = new ArrayList<>();
+            cartItems.add(cartItem);
+            cart.setCartItems(cartItems);
+        }
+        PreferenceUtils.getInstance(context).saveUserCart(cart);
+        Toast.makeText(context, "Product added to cart", Toast.LENGTH_SHORT).show();
+    }
+
+    public static void addProductToCart(Context context, ProductFromBarcode productFromBarcode){
+        addProductToCart(context, productFromBarcode.getStoreId(), productFromBarcode.getCategoryId(),
+                productFromBarcode.getStoreName(), "", productFromBarcode.getProduct());
+    }
+
+    @NonNull
+    private static CartItem getCartItemFromProduct(int storeId, int categoryId, String storeName, String storeLocation, Product product) {
+        CartItem cartItem = new CartItem();
+        cartItem.setStoreId(storeId);
+        cartItem.setCategoryId(categoryId);
+        cartItem.setProductId(product.getProductId());
+        cartItem.setProductName(product.getProductName());
+        cartItem.setImgUrl(product.getImageUrl());
+        cartItem.setDiscount(product.getDiscount());
+        cartItem.setProductPriceAfterDiscount(Double.valueOf(product.getPriceAfterDiscount()));
+        cartItem.setProductPriceBeforeDiscount(Double.valueOf(product.getPriceBeforeDiscount()));
+        cartItem.setProductQuantity(1);
+        cartItem.setStoreName(storeName);
+        cartItem.setLocationName(storeLocation);
+        return cartItem;
     }
 }
