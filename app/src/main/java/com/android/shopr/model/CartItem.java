@@ -14,6 +14,8 @@ public class CartItem {
     private String productName;
     private String discount;
     private String imgUrl;
+    private String storeName;
+    private String locationName;
 
     public int getStoreId() {
         return storeId;
@@ -85,5 +87,21 @@ public class CartItem {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    public String getLocationName() {
+        return locationName;
+    }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
     }
 }
