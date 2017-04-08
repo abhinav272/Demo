@@ -1,6 +1,8 @@
 package com.android.shopr;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -23,12 +25,17 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.shopr.adapters.ViewPagerAdapter;
@@ -68,7 +75,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeActivity extends BaseActivity implements View.OnClickListener, BottomNavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener, Callback<PlaceWiseCategoriesStores> {
+public class HomeActivity extends BaseActivity implements View.OnClickListener, BottomNavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener, Callback<PlaceWiseCategoriesStores>, TextWatcher {
 
     private static final String TAG = "HomeActivity";
     private static final int LOCATION_PERMISSION_REQ_CODE = 72;
@@ -88,6 +95,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     private GoogleApiClient mGoogleApiClient;
     private ImageView mManuallySelectPlace;
     private PlaceWiseCategoriesStores placeWiseCategoriesStores;
+    private EditText edSearchStore;
+    private RelativeLayout rlContainer;
 
 
     @Override
@@ -185,6 +194,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
                 mDrawerLayout.openDrawer(GravityCompat.START);
             }
         });
+        edSearchStore = (EditText) toolbar.findViewById(R.id.ed_search_store);
+        edSearchStore.addTextChangedListener(this);
+        edSearchStore.setVisibility(View.INVISIBLE);
+        rlContainer = (RelativeLayout) toolbar.findViewById(R.id.rl_container);
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         mHeaderView = getHeaderView(navigationView);
         ExecutorSupplier.getInstance().getWorkerThreadExecutor().execute(new Runnable() {
@@ -223,13 +236,51 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_search:
-                // TODO: 09/03/17 Add Search activity or similar feature
+                showSearchBarWithAnimation();
                 break;
             case R.id.action_cart:
                 showCartActivity();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showSearchBarWithAnimation() {
+        View myView = edSearchStore;
+        int cx = myView.getWidth();
+        int cy = myView.getHeight() / 2;
+
+        Animator anim = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            anim = ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, cx);
+        }
+
+        myView.setVisibility(View.VISIBLE);
+        rlContainer.setVisibility(View.GONE);
+        anim.start();
+        edSearchStore.requestFocus();
+    }
+
+    private void hideSearchBarWithAnimation() {
+        final View myView = edSearchStore;
+
+        int cx = myView.getWidth();
+        int cy = myView.getHeight() / 2;
+
+        Animator anim = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            anim = ViewAnimationUtils.createCircularReveal(myView, cx, cy, cx, 0);
+        }
+
+        anim.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                myView.setVisibility(View.INVISIBLE);
+            }
+        });
+        anim.start();
+        rlContainer.setVisibility(View.VISIBLE);
     }
 
     private void showCartActivity() {
@@ -412,8 +463,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public void onResponse(Call<PlaceWiseCategoriesStores> call, Response<PlaceWiseCategoriesStores> response) {
         if (response.isSuccessful() && response.code() == 200
-                && ((PlaceWiseCategoriesStores) response.body()).getCategories()!=null
-                && ((PlaceWiseCategoriesStores) response.body()).getStores()!=null) {
+                && ((PlaceWiseCategoriesStores) response.body()).getCategories() != null
+                && ((PlaceWiseCategoriesStores) response.body()).getStores() != null) {
             placeWiseCategoriesStores = response.body();
             setupCategoriesAndStores(placeWiseCategoriesStores);
         } else {
@@ -439,5 +490,29 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         intent.putExtra(ShoprConstants.STORE_POJO, placeWiseCategoriesStores.getStoreById(storeId));
         intent.putExtra(ShoprConstants.STORE_LOCATION, mLocationName.getText() + "");
         startActivity(intent);
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        if (s.length() == 0) {
+            hideSearchBarWithAnimation();
+        }
+            sendTermToHomeFragment(s.toString().toLowerCase());
+
+    }
+
+    private void sendTermToHomeFragment(String s) {
+        HomeFragment fragment = (HomeFragment) mFragmentManager.findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + mViewPager.getCurrentItem());
+        fragment.searchWithTerm(s);
     }
 }
