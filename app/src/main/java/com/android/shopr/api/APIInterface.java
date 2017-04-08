@@ -3,6 +3,7 @@ package com.android.shopr.api;
 import com.android.shopr.model.CategoryWiseProducts;
 import com.android.shopr.model.GenericResponse;
 import com.android.shopr.model.PlaceWiseCategoriesStores;
+import com.android.shopr.model.ProductFromBarcode;
 import com.android.shopr.model.Store;
 import com.android.shopr.model.StoreWiseCategory;
 
@@ -70,6 +71,13 @@ public interface APIInterface {
     @FormUrlEncoded
     @POST("stores/storesByPlace")
     Call<PlaceWiseCategoriesStores> getPlaceWiseCategoriesStores(@Field("googleId") String googlePlaceId);
+
+    @Headers({
+            "Content-Type: application/x-www-form-urlencoded",
+    })
+    @FormUrlEncoded
+    @POST("products/barcode")
+    Call<ProductFromBarcode> getProductFromBarcode(@Field("barcode") String barcodeId);
 
 
 }
