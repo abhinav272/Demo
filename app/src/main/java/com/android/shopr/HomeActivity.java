@@ -80,8 +80,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     private View mHeaderView;
     private FragmentManager mFragmentManager;
     private Stack<String> mTitleStack;
-    private Result qrResult;
-    private static final int CAM_PERMISSION_REQ_CODE = 27;
     public static final int PLACE_PICKER_REQUEST = 1;
     private BottomNavigationView mBottomNavigationView;
     private TabLayout mTabLayout;
@@ -368,27 +366,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == CAM_PERMISSION_REQ_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            showQRFragment();
-        } else if (requestCode == LOCATION_PERMISSION_REQ_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == LOCATION_PERMISSION_REQ_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             getPlaces();
-        }
-    }
-
-    private void showQRFragment() {
-        requestCameraPermission();
-        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.frame_container, new QRFragment(), QRFragment.class.getSimpleName());
-        fragmentTransaction.addToBackStack(QRFragment.class.getSimpleName());
-        fragmentTransaction.commit();
-
-    }
-
-    private void requestCameraPermission() {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAM_PERMISSION_REQ_CODE);
-            }
         }
     }
 
@@ -398,22 +377,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     LOCATION_PERMISSION_REQ_CODE);
         }
-    }
-
-    public void setQRResult(Result result) {
-        if (result != null) {
-            qrResult = result;
-            popTitleStack();
-            showResult(result);
-        }
-    }
-
-    private void showResult(Result result) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(result.getBarcodeFormat().toString());
-        builder.setMessage(result.getText());
-        builder.create().show();
-
     }
 
     public void hideBNV() {
