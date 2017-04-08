@@ -37,7 +37,6 @@ public class ProductDetailFragment extends BaseFragment implements View.OnClickL
     private Bundle argBundle;
     private Product product;
     private FrameLayout flScanAndAddToBag, flWatchProduct;
-    private Cart cart;
     private int storeId, categoryId;
     private String storeName, storeLocation;
 
