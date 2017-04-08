@@ -33,6 +33,9 @@ public class Product implements Parcelable {
     @SerializedName("units")
     @Expose
     private int units;
+    @SerializedName("barcode")
+    @Expose
+    private String barcode;
 
     public int getProductId() {
         return productId;
@@ -90,6 +93,14 @@ public class Product implements Parcelable {
         this.units = units;
     }
 
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+
 
     @Override
     public int describeContents() {
@@ -105,6 +116,7 @@ public class Product implements Parcelable {
         dest.writeString(this.priceBeforeDiscount);
         dest.writeString(this.discount);
         dest.writeInt(this.units);
+        dest.writeString(this.barcode);
     }
 
     public Product() {
@@ -118,6 +130,7 @@ public class Product implements Parcelable {
         this.priceBeforeDiscount = in.readString();
         this.discount = in.readString();
         this.units = in.readInt();
+        this.barcode = in.readString();
     }
 
     public static final Creator<Product> CREATOR = new Creator<Product>() {
