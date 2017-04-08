@@ -113,6 +113,12 @@ public class StoresDetailActivity extends BaseActivity implements View.OnClickLi
         tvLocationName = (TextView) mToolBar.findViewById(R.id.tv_location_name);
         flScanProducts = (FrameLayout) findViewById(R.id.btn_scan);
         flScanProducts.setOnClickListener(this);
+        findViewById(R.id.btn_scan2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                flScanProducts.performClick();
+            }
+        });
         ivBack.setOnClickListener(this);
         mTabLayout.setupWithViewPager(viewPager);
     }
