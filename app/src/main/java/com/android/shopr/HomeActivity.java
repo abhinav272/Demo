@@ -338,18 +338,18 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         fragmentTransaction.commit();
     }
 
-    public void showProductDetailFragment(int storeId, int categoryId, Product product) {
-        ProductDetailFragment productDetailFragment = new ProductDetailFragment();
-        Bundle argBundle = new Bundle();
-        argBundle.putInt(ShoprConstants.STORE_ID, storeId);
-        argBundle.putInt(ShoprConstants.CATEGORY_ID, categoryId);
-        argBundle.putParcelable(ShoprConstants.PRODUCT_OBJ, product);
-        productDetailFragment.setArguments(argBundle);
-        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.frame_container, productDetailFragment, ProductDetailFragment.class.getSimpleName());
-        fragmentTransaction.addToBackStack(ProductDetailFragment.class.getSimpleName());
-        fragmentTransaction.commit();
-    }
+//    public void showProductDetailFragment(int storeId, int categoryId, Product product) {
+//        ProductDetailFragment productDetailFragment = new ProductDetailFragment();
+//        Bundle argBundle = new Bundle();
+//        argBundle.putInt(ShoprConstants.STORE_ID, storeId);
+//        argBundle.putInt(ShoprConstants.CATEGORY_ID, categoryId);
+//        argBundle.putParcelable(ShoprConstants.PRODUCT_OBJ, product);
+//        productDetailFragment.setArguments(argBundle);
+//        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+//        fragmentTransaction.add(R.id.frame_container, productDetailFragment, ProductDetailFragment.class.getSimpleName());
+//        fragmentTransaction.addToBackStack(ProductDetailFragment.class.getSimpleName());
+//        fragmentTransaction.commit();
+//    }
 
     private void setActionBarTitle() {
 //        mTitle = title;
