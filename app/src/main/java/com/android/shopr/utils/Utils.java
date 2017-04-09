@@ -61,7 +61,7 @@ public class Utils {
             cartItems.add(cartItem);
             cart.setCartItems(cartItems);
             double total = cart.getCartTotal();
-            total += Double.valueOf(cartItem.getProductPriceAfterDiscount());
+            total += ((cartItem.getProductPriceAfterDiscount())*cartItem.getProductQuantity());
             cart.setCartTotal(total);
         } else {
             cart = new Cart();
