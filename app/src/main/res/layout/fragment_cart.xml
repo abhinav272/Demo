@@ -1,84 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/colorLightWhite"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorLightWhite">
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/app_bar_cart"
+    <RelativeLayout
+        android:id="@+id/rl_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent">
 
-    <com.android.shopr.views.ShoprTextView
-        android:id="@+id/tv_store_and_location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:text="ZARA - Ambience Mall, Gurgaon"
-        android:textColor="@color/colorAccent"
-        app:fontFile="Roboto-Bold.ttf" />
 
-    <com.android.shopr.views.ShoprTextView
-        android:id="@+id/tv_items_placeholder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_store_and_location"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        android:text="Items (3)"
-        app:fontFile="Roboto-Medium.ttf" />
-
-    <com.android.shopr.views.ShoprTextView
-        android:id="@+id/tv_total_placeholder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_store_and_location"
-        android:layout_marginTop="5dp"
-        android:layout_toLeftOf="@+id/tv_cart_total"
-        android:text="TOTAL: "
-        app:fontFile="Roboto-Medium.ttf" />
-
-    <com.android.shopr.views.ShoprTextView
-        android:id="@+id/tv_cart_total"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/tv_store_and_location"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
-        android:text="INR 2786"
-        app:fontFile="Roboto-Bold.ttf" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/tv_items_placeholder"
-        android:layout_marginTop="10dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp" />
-
-    <FrameLayout
-        android:id="@+id/fl_checkout"
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:background="@color/colorDarkGrey"
-        android:padding="10dp"
-        android:layout_height="60dp">
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/app_bar_cart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <com.android.shopr.views.ShoprTextView
-            android:text="CHECKOUT"
-            android:gravity="center"
-            android:textSize="18sp"
-            android:textColor="@color/colorWhite"
-            android:background="@color/colorAccent"
+            android:id="@+id/tv_store_and_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="ZARA - Ambience Mall, Gurgaon"
+            android:textColor="@color/colorAccent"
+            app:fontFile="Roboto-Bold.ttf" />
+
+        <com.android.shopr.views.ShoprTextView
+            android:id="@+id/tv_items_placeholder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_store_and_location"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:text="Items (3)"
+            app:fontFile="Roboto-Medium.ttf" />
+
+        <com.android.shopr.views.ShoprTextView
+            android:id="@+id/tv_total_placeholder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_store_and_location"
+            android:layout_marginTop="5dp"
+            android:layout_toLeftOf="@+id/tv_cart_total"
+            android:text="TOTAL: "
+            app:fontFile="Roboto-Medium.ttf" />
+
+        <com.android.shopr.views.ShoprTextView
+            android:id="@+id/tv_cart_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tv_store_and_location"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:text="INR 2786"
+            app:fontFile="Roboto-Bold.ttf" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:fontFile="Roboto-Medium.ttf"/>
-    </FrameLayout>
+            android:layout_below="@+id/tv_items_placeholder"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp" />
+
+        <FrameLayout
+            android:id="@+id/fl_checkout"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorDarkGrey"
+            android:padding="10dp">
+
+            <com.android.shopr.views.ShoprTextView
+                android:id="@+id/tv_checkout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorAccent"
+                android:gravity="center"
+                android:text="CHECKOUT"
+                android:textColor="@color/colorWhite"
+                android:textSize="18sp"
+                app:fontFile="Roboto-Medium.ttf" />
+        </FrameLayout>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_cart_qr"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:layout_width="250dp"
+        android:layout_height="250dp" />
 
 </RelativeLayout>
