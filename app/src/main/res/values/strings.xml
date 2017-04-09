@@ -12,4 +12,12 @@
     <string name="text_cart">Cart</string>
     <string name="text_search">Search</string>
     <string name="ruppee_symbol">₹</string>
+    <string-array name="size_array">
+        <item>S</item>
+        <item>M</item>
+        <item>L</item>
+        <item>XL</item>
+        <item>XXL</item>
+        <item>XXXL</item>
+    </string-array>
 </resources>
