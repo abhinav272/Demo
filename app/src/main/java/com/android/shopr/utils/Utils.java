@@ -56,6 +56,7 @@ public class Utils {
         Cart cart = PreferenceUtils.getInstance(context).getUserCart();
         CartItem cartItem = getCartItemFromProduct(storeId, categoryId, storeName, storeLocation, product);
         if (cart != null) {
+            cart.setStoreNameAndAddress(cartItem.getStoreName() + ", " + cartItem.getLocationName());
             List<CartItem> cartItems = cart.getCartItems();
             cartItems.add(cartItem);
             cart.setCartItems(cartItems);
