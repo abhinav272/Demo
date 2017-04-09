@@ -68,7 +68,7 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
             optionsItemViewHolder.tvBagDiscount.setText("(-)INR " + discount);
             optionsItemViewHolder.tvAmountPayable.setText("INR " + String.valueOf(cart.getCartTotal()));
         } else {
-            CartItemViewHolder cartItemViewHolder = (CartItemViewHolder) holder;
+            final CartItemViewHolder cartItemViewHolder = (CartItemViewHolder) holder;
             Picasso.with(context).load(getItem(position).getImgUrl())
                     .placeholder(new ColorDrawable(Utils.getRandomBackgroundColor())).fit().centerCrop().into(cartItemViewHolder.ivProductImage);
             cartItemViewHolder.productPriceBeforeDiscount.setText(context.getResources().getString(R.string.ruppee_symbol)
@@ -82,6 +82,26 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                 @Override
                 public void onClick(View v) {
                     removeProductListener.removeThisProduct(getItem(position).getProductId());
+                }
+            });
+            cartItemViewHolder.increaseQty.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int quant = getItem(position).getProductQuantity();
+                    quant += 1;
+                    getItem(position).setProductQuantity(quant);
+                    cartItemViewHolder.productQuantity.setText("Qty: " + getItem(position).getProductQuantity());
+                }
+            });
+            cartItemViewHolder.decreseQty.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int quant = getItem(position).getProductQuantity();
+                    if (quant>1){
+                        quant -= 1;
+                        getItem(position).setProductQuantity(quant);
+                        cartItemViewHolder.productQuantity.setText("Qty: " + getItem(position).getProductQuantity());
+                    }
                 }
             });
         }
