@@ -70,6 +70,9 @@
             android:hint="Search Store"
             android:textColorHint="@color/colorLightWhite"
             android:textColor="@color/colorWhite"
+            android:imeOptions="actionSearch"
+            android:maxLines="1"
+            android:singleLine="true"
             app:fontFile="Roboto-Medium.ttf" />
     </RelativeLayout>
 
