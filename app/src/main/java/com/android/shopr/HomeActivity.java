@@ -388,6 +388,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onStop() {
         super.onStop();
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
 
     @Override
