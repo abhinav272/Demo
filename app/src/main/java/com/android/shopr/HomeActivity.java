@@ -438,14 +438,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         }
     }
 
-    public void hideBNV() {
-        mBottomNavigationView.setVisibility(View.GONE);
-    }
-
-    public void showBNV() {
-        mBottomNavigationView.setVisibility(View.VISIBLE);
-    }
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
