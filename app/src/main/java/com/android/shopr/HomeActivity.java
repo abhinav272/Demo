@@ -3,6 +3,7 @@ package com.android.shopr;
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -33,6 +34,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -97,12 +99,14 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     private PlaceWiseCategoriesStores placeWiseCategoriesStores;
     private EditText edSearchStore;
     private RelativeLayout rlContainer;
+    private InputMethodManager inputMethodManager;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         setUpViews();
         connectToGoogleClient();
         getPlaces();
@@ -259,6 +263,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         rlContainer.setVisibility(View.GONE);
         anim.start();
         edSearchStore.requestFocus();
+
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
 
     private void hideSearchBarWithAnimation() {
@@ -281,6 +287,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         });
         anim.start();
         rlContainer.setVisibility(View.VISIBLE);
+
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
 
     private void showCartActivity() {
