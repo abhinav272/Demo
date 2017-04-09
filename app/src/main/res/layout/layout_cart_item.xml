@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp"
     android:layout_width="match_parent"
@@ -27,31 +28,43 @@
             android:textColor="@color/colorDarkGrey"
             app:fontFile="Roboto-MediumItalic.ttf" />
 
-        <com.android.shopr.views.ShoprTextView
-            android:id="@+id/tv_size_place_holder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            android:id="@+id/ll_size_container"
             android:layout_below="@+id/tv_product_name"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/iv_product_image"
-            android:text="Size: "
-            android:textColor="@color/colorDarkGrey"
-            app:fontFile="Roboto-Regular.ttf" />
-
-        <android.support.v7.widget.AppCompatSpinner
-            android:id="@+id/spinner_sizes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_product_name"
+            android:orientation="horizontal"
             android:layout_marginTop="10dp"
-            android:layout_toRightOf="@+id/tv_size_place_holder" />
+            android:layout_marginLeft="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.android.shopr.views.ShoprTextView
+                android:id="@+id/tv_size_place_holder"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Size: "
+                android:gravity="center"
+                android:textColor="@color/colorDarkGrey"
+                app:fontFile="Roboto-Regular.ttf" />
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/spinner_sizes"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:spinnerMode="dropdown"
+                android:pointerIcon="hand"
+                android:entries="@array/size_array"
+                android:layout_toRightOf="@+id/tv_size_place_holder" />
+
+        </LinearLayout>
+
 
         <com.android.shopr.views.ShoprTextView
             android:id="@+id/tv_product_quantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_size_place_holder"
+            android:layout_below="@+id/ll_size_container"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/iv_product_image"
@@ -63,7 +76,7 @@
             android:id="@+id/iv_decrease_qty"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_below="@+id/tv_size_place_holder"
+            android:layout_below="@+id/ll_size_container"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/tv_product_quantity"
@@ -73,7 +86,7 @@
             android:id="@+id/iv_increase_qty"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_below="@+id/tv_size_place_holder"
+            android:layout_below="@+id/ll_size_container"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/iv_decrease_qty"
