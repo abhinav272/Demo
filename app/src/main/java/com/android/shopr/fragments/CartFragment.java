@@ -16,17 +16,26 @@ import android.widget.TextView;
 import com.android.shopr.CartActivity;
 import com.android.shopr.R;
 import com.android.shopr.adapters.CartRecyclerViewAdapter;
+import com.android.shopr.api.ShoprAPIClient;
+import com.android.shopr.model.AddedCartResponse;
 import com.android.shopr.model.Cart;
+import com.android.shopr.model.UserCart;
+import com.android.shopr.utils.ExecutorSupplier;
 import com.android.shopr.utils.PreferenceUtils;
 import com.google.gson.Gson;
 
 import net.glxn.qrgen.android.QRCode;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 /**
  * Created by Abhinav on 02/04/17.
  */
-public class CartFragment extends BaseFragment implements View.OnClickListener, CartRecyclerViewAdapter.RemoveProductListener {
+public class CartFragment extends BaseFragment implements View.OnClickListener, CartRecyclerViewAdapter.RemoveProductListener, Callback<AddedCartResponse> {
 
+    private static final String TAG = "CartFragment";
     private ImageView ivBack, ivCartQr;
     private Cart cart;
     private RecyclerView recyclerView;
@@ -89,12 +98,22 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
 
     private void generateCheckoutCart() {
         Cart cart = PreferenceUtils.getInstance(getActivity()).getUserCart();
-        String cartJson = new Gson().toJson(cart);
-        Log.e("generateCheckoutCart: ", cartJson);
-        Bitmap qrBitmap = QRCode.from(cartJson).bitmap();
-        rlContainer.setVisibility(View.INVISIBLE);
-        ivCartQr.setVisibility(View.VISIBLE);
-        ivCartQr.setImageBitmap(qrBitmap);
+        final UserCart userCart = new UserCart();
+        userCart.setCart(cart);
+        userCart.setAccessToken(PreferenceUtils.getInstance(getActivity()).getUserProfile().getAccessToken());
+//        String cartJson = new Gson().toJson(cart);
+//        Log.e("generateCheckoutCart: ", cartJson);
+//        Bitmap qrBitmap = QRCode.from(cartJson).bitmap();
+//        rlContainer.setVisibility(View.INVISIBLE);
+//        ivCartQr.setVisibility(View.VISIBLE);
+//        ivCartQr.setImageBitmap(qrBitmap);
+        ExecutorSupplier.getInstance().getWorkerThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                Call<AddedCartResponse> c  = ShoprAPIClient.getApiInterface().sendCartForVerification(userCart);
+                c.enqueue(CartFragment.this);
+            }
+        });
     }
 
     @Override
@@ -103,5 +122,20 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
         PreferenceUtils.getInstance(getActivity()).saveUserCart(cart);
         setupCart();
         cartRecyclerViewAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onResponse(Call<AddedCartResponse> call, Response<AddedCartResponse> response) {
+        if (response.isSuccessful()) {
+            Bitmap qrBitmap = QRCode.from(response.body().getCartId()).bitmap();
+            rlContainer.setVisibility(View.INVISIBLE);
+            ivCartQr.setVisibility(View.VISIBLE);
+            ivCartQr.setImageBitmap(qrBitmap);
+        }
+    }
+
+    @Override
+    public void onFailure(Call<AddedCartResponse> call, Throwable t) {
+        Log.e(TAG, "onFailure: ", t);
     }
 }
