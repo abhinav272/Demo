@@ -56,6 +56,7 @@ import com.android.shopr.model.UserProfile;
 import com.android.shopr.utils.ExecutorSupplier;
 import com.android.shopr.utils.PreferenceUtils;
 import com.android.shopr.utils.ShoprConstants;
+import com.android.shopr.utils.Utils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -264,7 +265,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         anim.start();
         edSearchStore.requestFocus();
 
-        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        Utils.showKeyboard(this);
     }
 
     private void hideSearchBarWithAnimation() {
@@ -288,7 +289,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         anim.start();
         rlContainer.setVisibility(View.VISIBLE);
 
-        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        Utils.hideKeyboard(this);
     }
 
     private void showCartActivity() {
@@ -382,13 +383,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         super.onBackPressed();
         popTitleStack();
 
-    }
-
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
 
     @Override
@@ -515,5 +509,11 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     private void sendTermToHomeFragment(String s) {
         HomeFragment fragment = (HomeFragment) mFragmentManager.findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + mViewPager.getCurrentItem());
         fragment.searchWithTerm(s);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Utils.hideKeyboard(this);
     }
 }
