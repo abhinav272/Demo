@@ -40,7 +40,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
     private Cart cart;
     private RecyclerView recyclerView;
     private CartRecyclerViewAdapter cartRecyclerViewAdapter;
-    private TextView tvStoreNameAndLocation, tvTotalItems, tvCartTotal, tvCheckout;
+    private TextView tvStoreNameAndLocation, tvTotalItems, tvCartTotal, tvCheckout, tvQRBanner;
     private RelativeLayout rlContainer;
 
     @Nullable
@@ -54,6 +54,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ivCartQr = (ImageView) view.findViewById(R.id.iv_cart_qr);
+        tvQRBanner = (TextView) view.findViewById(R.id.tv_qr_banner);
         rlContainer = (RelativeLayout) view.findViewById(R.id.rl_container);
         ivBack = (ImageView) view.findViewById(R.id.iv_back);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
@@ -130,6 +131,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
             Bitmap qrBitmap = QRCode.from(response.body().getCartId()).bitmap();
             rlContainer.setVisibility(View.INVISIBLE);
             ivCartQr.setVisibility(View.VISIBLE);
+            tvQRBanner.setVisibility(View.VISIBLE);
             ivCartQr.setImageBitmap(qrBitmap);
         }
     }

@@ -89,6 +89,18 @@
         </FrameLayout>
     </RelativeLayout>
 
+    <com.android.shopr.views.ShoprTextView
+        android:id="@+id/tv_qr_banner"
+        android:layout_above="@+id/iv_cart_qr"
+        android:layout_marginBottom="20dp"
+        android:text="Get this scan at the verification counter"
+        android:textColor="@color/colorDarkGrey"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <ImageView
         android:id="@+id/iv_cart_qr"
         android:visibility="gone"
