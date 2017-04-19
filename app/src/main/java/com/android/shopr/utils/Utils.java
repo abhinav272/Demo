@@ -1,8 +1,10 @@
 package com.android.shopr.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.android.shopr.R;
@@ -95,5 +97,24 @@ public class Utils {
         cartItem.setStoreName(storeName);
         cartItem.setLocationName(storeLocation);
         return cartItem;
+    }
+
+    public static void showKeyboard(Activity activity){
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, InputMethodManager.HIDE_IMPLICIT_ONLY); // show
+    }
+
+    public static void hideKeyboard(Activity activity){
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(activity.getWindow().getCurrentFocus().getWindowToken(), 0);
+    }
+
+    public static void toggleKeyboard(Activity activity){
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        if (imm.isActive()){
+            hideKeyboard(activity);
+        } else {
+            showKeyboard(activity);
+        }
     }
 }
