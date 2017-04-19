@@ -1,13 +1,16 @@
 package com.android.shopr.api;
 
+import com.android.shopr.model.AddedCartResponse;
 import com.android.shopr.model.CategoryWiseProducts;
 import com.android.shopr.model.GenericResponse;
 import com.android.shopr.model.PlaceWiseCategoriesStores;
 import com.android.shopr.model.ProductFromBarcode;
+import com.android.shopr.model.UserCart;
 import com.android.shopr.model.Store;
 import com.android.shopr.model.StoreWiseCategory;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Headers;
@@ -78,6 +81,14 @@ public interface APIInterface {
     @FormUrlEncoded
     @POST("products/barcode")
     Call<ProductFromBarcode> getProductFromBarcode(@Field("barcode") String barcodeId);
+
+    @Headers({
+            "Content-Type: application/json",
+    })
+    @POST("cart/cartAdd")
+    Call<AddedCartResponse> sendCartForVerification(@Body UserCart userCart);
+
+
 
 
 }
