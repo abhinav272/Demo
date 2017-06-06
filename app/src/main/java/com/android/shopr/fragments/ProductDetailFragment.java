@@ -4,6 +4,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -39,6 +40,105 @@ public class ProductDetailFragment extends BaseFragment implements View.OnClickL
     private FrameLayout flScanAndAddToBag, flWatchProduct;
     private int storeId, categoryId;
     private String storeName, storeLocation;
+    int size = -1;
+    private View.OnClickListener sizeListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()){
+                case R.id.tv_size_s:
+                    tvSizeS.setBackgroundResource(R.drawable.bg_circular_selected);
+                    tvSizeS.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                    tvSizeM.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeM.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    tvSizeL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    tvSizeXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    tvSizeXXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    tvSizeXXXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXXXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    size = 0;
+                    break;
+                case R.id.tv_size_m:
+                    tvSizeS.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeS.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    tvSizeM.setBackgroundResource(R.drawable.bg_circular_selected);
+                    tvSizeM.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                    tvSizeL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    tvSizeXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    tvSizeXXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    tvSizeXXXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXXXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    size = 1;
+                    break;
+                case R.id.tv_size_l:
+                    tvSizeS.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeS.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    tvSizeM.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeM.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    tvSizeL.setBackgroundResource(R.drawable.bg_circular_selected);
+                    tvSizeL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                    tvSizeXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    tvSizeXXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    tvSizeXXXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXXXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    size = 2;
+                    break;
+                case R.id.tv_size_xl:
+                    tvSizeS.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeS.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    tvSizeM.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeM.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    tvSizeL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    tvSizeXL.setBackgroundResource(R.drawable.bg_circular_selected);
+                    tvSizeXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                    tvSizeXXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    tvSizeXXXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXXXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    size = 3;
+                    break;
+                case R.id.tv_size_xxl:
+                    tvSizeS.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeS.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    tvSizeM.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeM.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    tvSizeL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    tvSizeXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    tvSizeXXL.setBackgroundResource(R.drawable.bg_circular_selected);
+                    tvSizeXXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                    tvSizeXXXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXXXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    size = 4;
+                    break;
+                case R.id.tv_size_xxxl:
+                    tvSizeS.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeS.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    tvSizeM.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeM.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    tvSizeL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    tvSizeXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    tvSizeXXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
+                    tvSizeXXXL.setBackgroundResource(R.drawable.bg_circular_selected);
+                    tvSizeXXXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                    size = 5;
+                    break;
+
+            }
+        }
+    };
 
     @Nullable
     @Override
@@ -79,6 +179,13 @@ public class ProductDetailFragment extends BaseFragment implements View.OnClickL
         flWatchProduct.setOnClickListener(this);
         flScanAndAddToBag.setOnClickListener(this);
 
+        tvSizeS.setOnClickListener(sizeListener);
+        tvSizeM.setOnClickListener(sizeListener);
+        tvSizeL.setOnClickListener(sizeListener);
+        tvSizeXL.setOnClickListener(sizeListener);
+        tvSizeXXL.setOnClickListener(sizeListener);
+        tvSizeXXXL.setOnClickListener(sizeListener);
+
         setUpViews();
     }
 
@@ -95,7 +202,7 @@ public class ProductDetailFragment extends BaseFragment implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fl_scan_and_add_to_cart:
-                Utils.addProductToCart(getActivity(), storeId, categoryId, storeName, storeLocation, product);
+                Utils.addProductToCart(getActivity(), storeId, categoryId, storeName, storeLocation, product, size);
                 break;
             case R.id.fl_watch_product:
                 break;

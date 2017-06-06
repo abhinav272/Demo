@@ -130,6 +130,7 @@
                     android:background="@drawable/bg_circular"
                     android:gravity="center"
                     android:text="S"
+                    android:textColor="@color/colorDarkGrey"
                     android:textSize="12sp" />
 
                 <com.android.shopr.views.ShoprTextView
@@ -140,6 +141,7 @@
                     android:background="@drawable/bg_circular"
                     android:gravity="center"
                     android:text="M"
+                    android:textColor="@color/colorDarkGrey"
                     android:textSize="12sp" />
 
                 <com.android.shopr.views.ShoprTextView
@@ -150,6 +152,7 @@
                     android:background="@drawable/bg_circular"
                     android:gravity="center"
                     android:text="L"
+                    android:textColor="@color/colorDarkGrey"
                     android:textSize="12sp" />
 
                 <com.android.shopr.views.ShoprTextView
@@ -160,6 +163,7 @@
                     android:background="@drawable/bg_circular"
                     android:gravity="center"
                     android:text="XL"
+                    android:textColor="@color/colorDarkGrey"
                     android:textSize="12sp" />
 
                 <com.android.shopr.views.ShoprTextView
@@ -170,6 +174,7 @@
                     android:background="@drawable/bg_circular"
                     android:gravity="center"
                     android:text="XXL"
+                    android:textColor="@color/colorDarkGrey"
                     android:textSize="12sp" />
 
                 <com.android.shopr.views.ShoprTextView
@@ -180,6 +185,7 @@
                     android:background="@drawable/bg_circular"
                     android:gravity="center"
                     android:text="XXXL"
+                    android:textColor="@color/colorDarkGrey"
                     android:textSize="12sp" />
 
             </LinearLayout>

@@ -62,11 +62,11 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (position == cart.getCartItems().size()) {
             OptionsItemViewHolder optionsItemViewHolder = (OptionsItemViewHolder) holder;
-            optionsItemViewHolder.tvBagTotalBeforeDiscount.setText("INR " + String.valueOf(cart.getCartTotalBeforeDiscount()));
-            optionsItemViewHolder.tvBagTotalAfterDiscount.setText("INR " + String.valueOf(cart.getCartTotal()));
+            optionsItemViewHolder.tvBagTotalBeforeDiscount.setText("INR " + String.format("%.2f", cart.getCartTotalBeforeDiscount()));
+            optionsItemViewHolder.tvBagTotalAfterDiscount.setText("INR " + String.format("%.2f",cart.getCartTotal()));
             String discount = String.format("%.2f", cart.getCartTotalBeforeDiscount() - cart.getCartTotal());
             optionsItemViewHolder.tvBagDiscount.setText("(-)INR " + discount);
-            optionsItemViewHolder.tvAmountPayable.setText("INR " + String.valueOf(cart.getCartTotal()));
+            optionsItemViewHolder.tvAmountPayable.setText("INR " + String.format("%.2f",cart.getCartTotal()));
         } else {
             final CartItemViewHolder cartItemViewHolder = (CartItemViewHolder) holder;
             Picasso.with(context).load(getItem(position).getImgUrl())
@@ -97,13 +97,14 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                 @Override
                 public void onClick(View v) {
                     int quant = getItem(position).getProductQuantity();
-                    if (quant>1){
+                    if (quant > 1) {
                         quant -= 1;
                         getItem(position).setProductQuantity(quant);
                         cartItemViewHolder.productQuantity.setText("Qty: " + getItem(position).getProductQuantity());
                     }
                 }
             });
+            cartItemViewHolder.spinnerSize.setSelection(getItem(position).getSize() + 1);
         }
     }
 

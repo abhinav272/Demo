@@ -16,6 +16,7 @@ public class CartItem {
     private String imgUrl;
     private String storeName;
     private String locationName;
+    private int size;
 
     public int getStoreId() {
         return storeId;
@@ -103,5 +104,13 @@ public class CartItem {
 
     public void setLocationName(String locationName) {
         this.locationName = locationName;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 }

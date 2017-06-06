@@ -13,6 +13,7 @@
     <string name="text_search">Search</string>
     <string name="ruppee_symbol">₹</string>
     <string-array name="size_array">
+        <item>--</item>
         <item>S</item>
         <item>M</item>
         <item>L</item>

@@ -70,7 +70,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
 
     private void setupCart() {
         tvStoreNameAndLocation.setText(cart.getStoreNameAndAddress());
-        tvCartTotal.setText("INR " + cart.getCartTotal());
+        tvCartTotal.setText("INR " + String.format("%.2f",cart.getCartTotal()));
         tvTotalItems.setText("ITEMS(" + cart.getCartItems().size() + ")");
     }
 

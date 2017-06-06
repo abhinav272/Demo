@@ -50,20 +50,20 @@ public class Utils {
 //        List bgColors = Arrays.asList(context.getResources().getStringArray(R.array.bg_colors));
         Collections.shuffle(bgColors);
         int color = bgColors.get(0);
-        Log.d(TAG, "getRandomBackgroundColor: "+color);
+        Log.d(TAG, "getRandomBackgroundColor: " + color);
         return color;
     }
 
-    public static void addProductToCart(Context context, int storeId, int categoryId, String storeName, String storeLocation, Product product) {
+    public static void addProductToCart(Context context, int storeId, int categoryId, String storeName, String storeLocation, Product product, int size) {
         Cart cart = PreferenceUtils.getInstance(context).getUserCart();
-        CartItem cartItem = getCartItemFromProduct(storeId, categoryId, storeName, storeLocation, product);
+        CartItem cartItem = getCartItemFromProduct(storeId, categoryId, storeName, storeLocation, product, size);
         if (cart != null) {
             cart.setStoreNameAndAddress(cartItem.getStoreName() + ", " + cartItem.getLocationName());
             List<CartItem> cartItems = cart.getCartItems();
             cartItems.add(cartItem);
             cart.setCartItems(cartItems);
             double total = cart.getCartTotal();
-            total += ((cartItem.getProductPriceAfterDiscount())*cartItem.getProductQuantity());
+            total += ((cartItem.getProductPriceAfterDiscount()) * cartItem.getProductQuantity());
             cart.setCartTotal(total);
         } else {
             cart = new Cart();
@@ -77,13 +77,13 @@ public class Utils {
         Toast.makeText(context, "Product added to cart", Toast.LENGTH_SHORT).show();
     }
 
-    public static void addProductToCart(Context context, ProductFromBarcode productFromBarcode){
+    public static void addProductToCart(Context context, ProductFromBarcode productFromBarcode) {
         addProductToCart(context, productFromBarcode.getStoreId(), productFromBarcode.getCategoryId(),
-                productFromBarcode.getStoreName(), "", productFromBarcode.getProduct());
+                productFromBarcode.getStoreName(), "", productFromBarcode.getProduct(), -1);
     }
 
     @NonNull
-    private static CartItem getCartItemFromProduct(int storeId, int categoryId, String storeName, String storeLocation, Product product) {
+    private static CartItem getCartItemFromProduct(int storeId, int categoryId, String storeName, String storeLocation, Product product, int size) {
         CartItem cartItem = new CartItem();
         cartItem.setStoreId(storeId);
         cartItem.setCategoryId(categoryId);
@@ -96,22 +96,27 @@ public class Utils {
         cartItem.setProductQuantity(1);
         cartItem.setStoreName(storeName);
         cartItem.setLocationName(storeLocation);
+        cartItem.setSize(size);
         return cartItem;
     }
 
-    public static void showKeyboard(Activity activity){
+    public static void showKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(0, InputMethodManager.HIDE_IMPLICIT_ONLY); // show
     }
 
-    public static void hideKeyboard(Activity activity){
+    public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(activity.getWindow().getCurrentFocus().getWindowToken(), 0);
+        try {
+            imm.hideSoftInputFromWindow(activity.getWindow().getCurrentFocus().getWindowToken(), 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public static void toggleKeyboard(Activity activity){
+    public static void toggleKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        if (imm.isActive()){
+        if (imm.isActive()) {
             hideKeyboard(activity);
         } else {
             showKeyboard(activity);
