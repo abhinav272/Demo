@@ -13,6 +13,8 @@ import com.android.shopr.adapters.viewholders.OptionsItemViewHolder;
 import com.android.shopr.fragments.CartFragment;
 import com.android.shopr.model.Cart;
 import com.android.shopr.model.CartItem;
+import com.android.shopr.utils.ExecutorSupplier;
+import com.android.shopr.utils.PreferenceUtils;
 import com.android.shopr.utils.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -28,14 +30,15 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     private Cart cart;
     private LayoutInflater inflater;
     private Context context;
-    private RemoveProductListener removeProductListener;
+    private ProductListener productListener;
 
-    public interface RemoveProductListener {
+    public interface ProductListener {
         void removeThisProduct(int productId);
+        void updateCartOnUI();
     }
 
-    public void setRemoveProductListener(RemoveProductListener removeProductListener) {
-        this.removeProductListener = removeProductListener;
+    public void setProductListener(ProductListener productListener) {
+        this.productListener = productListener;
     }
 
     public CartRecyclerViewAdapter(Context context, Cart cart) {
@@ -63,25 +66,21 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         if (position == cart.getCartItems().size()) {
             OptionsItemViewHolder optionsItemViewHolder = (OptionsItemViewHolder) holder;
             optionsItemViewHolder.tvBagTotalBeforeDiscount.setText("INR " + String.format("%.2f", cart.getCartTotalBeforeDiscount()));
-            optionsItemViewHolder.tvBagTotalAfterDiscount.setText("INR " + String.format("%.2f",cart.getCartTotal()));
+            optionsItemViewHolder.tvBagTotalAfterDiscount.setText("INR " + String.format("%.2f", cart.getCartTotal()));
             String discount = String.format("%.2f", cart.getCartTotalBeforeDiscount() - cart.getCartTotal());
             optionsItemViewHolder.tvBagDiscount.setText("(-)INR " + discount);
-            optionsItemViewHolder.tvAmountPayable.setText("INR " + String.format("%.2f",cart.getCartTotal()));
+            optionsItemViewHolder.tvAmountPayable.setText("INR " + String.format("%.2f", cart.getCartTotal()));
         } else {
             final CartItemViewHolder cartItemViewHolder = (CartItemViewHolder) holder;
             Picasso.with(context).load(getItem(position).getImgUrl())
                     .placeholder(new ColorDrawable(Utils.getRandomBackgroundColor())).fit().centerCrop().into(cartItemViewHolder.ivProductImage);
-            cartItemViewHolder.productPriceBeforeDiscount.setText(context.getResources().getString(R.string.ruppee_symbol)
-                    + getItem(position).getProductPriceBeforeDiscount());
-            cartItemViewHolder.productPriceAfterDiscount.setText(context.getResources().getString(R.string.ruppee_symbol)
-                    + getItem(position).getProductPriceAfterDiscount());
+            setProductPrice(position, cartItemViewHolder);
             cartItemViewHolder.productDiscount.setText(getItem(position).getDiscount() + "Off");
-            cartItemViewHolder.productQuantity.setText("Qty: " + getItem(position).getProductQuantity());
             cartItemViewHolder.productName.setText(getItem(position).getProductName());
             cartItemViewHolder.removeProduct.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    removeProductListener.removeThisProduct(getItem(position).getProductId());
+                    productListener.removeThisProduct(getItem(position).getProductId());
                 }
             });
             cartItemViewHolder.increaseQty.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +89,8 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                     int quant = getItem(position).getProductQuantity();
                     quant += 1;
                     getItem(position).setProductQuantity(quant);
+                    updatePrice();
+                    setProductPrice(position, cartItemViewHolder);
                     cartItemViewHolder.productQuantity.setText("Qty: " + getItem(position).getProductQuantity());
                 }
             });
@@ -100,12 +101,41 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                     if (quant > 1) {
                         quant -= 1;
                         getItem(position).setProductQuantity(quant);
+                        updatePrice();
+                        setProductPrice(position, cartItemViewHolder);
                         cartItemViewHolder.productQuantity.setText("Qty: " + getItem(position).getProductQuantity());
                     }
                 }
             });
             cartItemViewHolder.spinnerSize.setSelection(getItem(position).getSize() + 1);
         }
+    }
+
+    private void setProductPrice(int position, CartItemViewHolder cartItemViewHolder) {
+        cartItemViewHolder.productPriceBeforeDiscount.setText(context.getResources().getString(R.string.ruppee_symbol)
+                + String.format("%.2f", getItem(position).getProductPriceBeforeDiscount() * getItem(position).getProductQuantity()));
+        cartItemViewHolder.productPriceAfterDiscount.setText(context.getResources().getString(R.string.ruppee_symbol)
+                + String.format("%.2f", getItem(position).getProductPriceAfterDiscount() * getItem(position).getProductQuantity()));
+        cartItemViewHolder.productQuantity.setText("Qty: " + getItem(position).getProductQuantity());
+    }
+
+    private void updatePrice() {
+        double totalAfterDiscount = 0.0f;
+        int items = 0;
+        for (CartItem item : cart.getCartItems()) {
+            totalAfterDiscount += item.getProductPriceAfterDiscount() * item.getProductQuantity();
+            items += item.getProductQuantity();
+        }
+        cart.setCartTotal(totalAfterDiscount);
+        cart.updateCartTotal();
+        ExecutorSupplier.getInstance().getWorkerThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                PreferenceUtils.getInstance(context).saveUserCart(cart);
+            }
+        });
+        notifyDataSetChanged();
+        productListener.updateCartOnUI();
     }
 
     @Override

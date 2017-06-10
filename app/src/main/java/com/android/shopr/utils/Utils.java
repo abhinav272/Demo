@@ -68,7 +68,7 @@ public class Utils {
         } else {
             cart = new Cart();
             cart.setStoreNameAndAddress(cartItem.getStoreName() + ", " + cartItem.getLocationName());
-            cart.setCartTotal(Double.valueOf(cartItem.getProductPriceAfterDiscount()));
+            cart.setCartTotal(cartItem.getProductPriceAfterDiscount() * cartItem.getProductQuantity());
             List<CartItem> cartItems = new ArrayList<>();
             cartItems.add(cartItem);
             cart.setCartItems(cartItems);

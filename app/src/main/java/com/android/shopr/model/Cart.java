@@ -47,10 +47,10 @@ public class Cart {
         }
     }
 
-    private void updateCartTotal() {
+    public void updateCartTotal() {
         double total = 0.0;
         for (CartItem cartItem : cartItems) {
-            total += cartItem.getProductPriceAfterDiscount();
+            total += cartItem.getProductPriceAfterDiscount() * cartItem.getProductQuantity();
         }
         cartTotal = total;
     }
@@ -59,7 +59,7 @@ public class Cart {
         double total = 0.0;
         for (CartItem c : cartItems) {
             if (c != null) {
-                total += c.getProductPriceBeforeDiscount();
+                total += c.getProductPriceBeforeDiscount() * c.getProductQuantity();
             }
         }
         return total;

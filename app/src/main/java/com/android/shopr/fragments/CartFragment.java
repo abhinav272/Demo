@@ -19,6 +19,7 @@ import com.android.shopr.adapters.CartRecyclerViewAdapter;
 import com.android.shopr.api.ShoprAPIClient;
 import com.android.shopr.model.AddedCartResponse;
 import com.android.shopr.model.Cart;
+import com.android.shopr.model.CartItem;
 import com.android.shopr.model.UserCart;
 import com.android.shopr.utils.ExecutorSupplier;
 import com.android.shopr.utils.PreferenceUtils;
@@ -33,7 +34,7 @@ import retrofit2.Response;
 /**
  * Created by Abhinav on 02/04/17.
  */
-public class CartFragment extends BaseFragment implements View.OnClickListener, CartRecyclerViewAdapter.RemoveProductListener, Callback<AddedCartResponse> {
+public class CartFragment extends BaseFragment implements View.OnClickListener, CartRecyclerViewAdapter.ProductListener, Callback<AddedCartResponse> {
 
     private static final String TAG = "CartFragment";
     private ImageView ivBack, ivCartQr;
@@ -71,14 +72,22 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
     private void setupCart() {
         tvStoreNameAndLocation.setText(cart.getStoreNameAndAddress());
         tvCartTotal.setText("INR " + String.format("%.2f",cart.getCartTotal()));
-        tvTotalItems.setText("ITEMS(" + cart.getCartItems().size() + ")");
+        tvTotalItems.setText("ITEMS(" + getTotalItems() + ")");
+    }
+
+    private String getTotalItems() {
+        int items = 0;
+        for (CartItem item : cart.getCartItems()) {
+            items+= item.getProductQuantity();
+        }
+        return String.valueOf(items);
     }
 
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(getLayoutManager());
         cartRecyclerViewAdapter = new CartRecyclerViewAdapter(getActivity(), cart);
         recyclerView.setAdapter(cartRecyclerViewAdapter);
-        cartRecyclerViewAdapter.setRemoveProductListener(this);
+        cartRecyclerViewAdapter.setProductListener(this);
     }
 
     private LinearLayoutManager getLayoutManager() {
@@ -123,6 +132,11 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
         PreferenceUtils.getInstance(getActivity()).saveUserCart(cart);
         setupCart();
         cartRecyclerViewAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void updateCartOnUI() {
+        setupCart();
     }
 
     @Override
