@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MotionEventCompat;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +42,7 @@ public class ProductDetailFragment extends BaseFragment implements View.OnClickL
     private FrameLayout flScanAndAddToBag, flWatchProduct;
     private int storeId, categoryId;
     private String storeName, storeLocation;
+    private ScrollView scrollView;
     int size = -1;
     private View.OnClickListener sizeListener = new View.OnClickListener() {
         @Override
@@ -175,6 +178,7 @@ public class ProductDetailFragment extends BaseFragment implements View.OnClickL
         tvSizeXXXL = (TextView) view.findViewById(R.id.tv_size_xxxl);
         flWatchProduct = (FrameLayout) view.findViewById(R.id.fl_watch_product);
         flScanAndAddToBag = (FrameLayout) view.findViewById(R.id.fl_scan_and_add_to_cart);
+        scrollView = (ScrollView) view.findViewById(R.id.scrollView);
 
         flWatchProduct.setOnClickListener(this);
         flScanAndAddToBag.setOnClickListener(this);
@@ -196,6 +200,42 @@ public class ProductDetailFragment extends BaseFragment implements View.OnClickL
         tvProductOriginalPrice.setText(getResources().getString(R.string.ruppee_symbol) + product.getPriceBeforeDiscount());
         tvProductPriceAfterDiscount.setText(getResources().getString(R.string.ruppee_symbol) + product.getPriceAfterDiscount());
         tvProductDiscount.setText(product.getDiscount() + "Off");
+        scrollView.setOnTouchListener(new View.OnTouchListener() {
+            float initialY, finalY;
+            boolean isScrollingUp;
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                int action = MotionEventCompat.getActionMasked(motionEvent);
+
+                switch(action) {
+                    case (MotionEvent.ACTION_DOWN):
+                        initialY = motionEvent.getY();
+                    case (MotionEvent.ACTION_UP):
+                        finalY = motionEvent.getY();
+
+                        if (initialY < finalY) {
+                            isScrollingUp = true;
+                        } else if (initialY > finalY) {
+                            isScrollingUp = false;
+                        }
+                    default:
+                }
+
+                updateFooter(isScrollingUp);
+
+                return false;
+            }
+        });
+    }
+
+    private void updateFooter(boolean flag) {
+        if (!flag){
+            flWatchProduct.setVisibility(View.GONE);
+            flScanAndAddToBag.setVisibility(View.GONE);
+        } else {
+            flWatchProduct.setVisibility(View.VISIBLE);
+            flScanAndAddToBag.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
