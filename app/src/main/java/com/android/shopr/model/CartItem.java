@@ -113,4 +113,16 @@ public class CartItem {
     public void setSize(int size) {
         this.size = size;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (obj instanceof CartItem){
+            if (productId == ((CartItem) obj).productId
+                    && categoryId == ((CartItem) obj).categoryId
+                    && storeId == ((CartItem) obj).storeId && size == ((CartItem) obj).size)
+                return true;
+        }
+        return false;
+    }
 }

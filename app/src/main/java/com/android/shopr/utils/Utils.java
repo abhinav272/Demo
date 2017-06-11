@@ -58,9 +58,20 @@ public class Utils {
         Cart cart = PreferenceUtils.getInstance(context).getUserCart();
         CartItem cartItem = getCartItemFromProduct(storeId, categoryId, storeName, storeLocation, product, size);
         if (cart != null) {
-            cart.setStoreNameAndAddress(cartItem.getStoreName() + ", " + cartItem.getLocationName());
             List<CartItem> cartItems = cart.getCartItems();
-            cartItems.add(cartItem);
+            cart.setStoreNameAndAddress(cartItem.getStoreName() + ", " + cartItem.getLocationName());
+            if (!cartItems.contains(cartItem)) {
+                cartItems.add(cartItem);
+            } else {
+                int position = cartItems.indexOf(cartItem);
+                CartItem cartItem1 = cartItems.get(position);
+                cartItem.setProductQuantity(cartItem1.getProductQuantity() + 1);
+                cartItems.set(position, cartItem);
+                double total = cart.getCartTotal();
+                total -= cartItem1.getProductPriceAfterDiscount() * cartItem1.getProductQuantity();
+                cart.setCartTotal(total);
+
+            }
             cart.setCartItems(cartItems);
             double total = cart.getCartTotal();
             total += ((cartItem.getProductPriceAfterDiscount()) * cartItem.getProductQuantity());

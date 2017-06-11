@@ -127,8 +127,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     @Override
-    public void removeThisProduct(int productId) {
-        cart.removeProductById(productId);
+    public void removeThisProduct(CartItem cartItem) {
+        cart.removeCartItem(cartItem);
         PreferenceUtils.getInstance(getActivity()).saveUserCart(cart);
         setupCart();
         cartRecyclerViewAdapter.notifyDataSetChanged();

@@ -33,7 +33,7 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     private ProductListener productListener;
 
     public interface ProductListener {
-        void removeThisProduct(int productId);
+        void removeThisProduct(CartItem cartItem);
         void updateCartOnUI();
     }
 
@@ -80,7 +80,7 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
             cartItemViewHolder.removeProduct.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    productListener.removeThisProduct(getItem(position).getProductId());
+                    productListener.removeThisProduct(getItem(position));
                 }
             });
             cartItemViewHolder.increaseQty.setOnClickListener(new View.OnClickListener() {
