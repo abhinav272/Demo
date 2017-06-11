@@ -47,7 +47,7 @@ public class ProductDetailFragment extends BaseFragment implements View.OnClickL
     private View.OnClickListener sizeListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            switch (view.getId()){
+            switch (view.getId()) {
                 case R.id.tv_size_s:
                     tvSizeS.setBackgroundResource(R.drawable.bg_circular_selected);
                     tvSizeS.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
@@ -203,11 +203,12 @@ public class ProductDetailFragment extends BaseFragment implements View.OnClickL
         scrollView.setOnTouchListener(new View.OnTouchListener() {
             float initialY, finalY;
             boolean isScrollingUp;
+
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 int action = MotionEventCompat.getActionMasked(motionEvent);
 
-                switch(action) {
+                switch (action) {
                     case (MotionEvent.ACTION_DOWN):
                         initialY = motionEvent.getY();
                     case (MotionEvent.ACTION_UP):
@@ -229,7 +230,7 @@ public class ProductDetailFragment extends BaseFragment implements View.OnClickL
     }
 
     private void updateFooter(boolean flag) {
-        if (!flag){
+        if (!flag) {
             flWatchProduct.setVisibility(View.GONE);
             flScanAndAddToBag.setVisibility(View.GONE);
         } else {
@@ -242,7 +243,10 @@ public class ProductDetailFragment extends BaseFragment implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fl_scan_and_add_to_cart:
-                Utils.addProductToCart(getActivity(), storeId, categoryId, storeName, storeLocation, product, size);
+                if (size == -1) {
+                    showShortToast("Please select the Size");
+                } else
+                    Utils.addProductToCart(getActivity(), storeId, categoryId, storeName, storeLocation, product, size);
                 break;
             case R.id.fl_watch_product:
                 break;
