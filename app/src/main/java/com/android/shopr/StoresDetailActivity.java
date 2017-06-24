@@ -4,6 +4,7 @@ import android.*;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,8 +15,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -35,6 +38,7 @@ import com.android.shopr.utils.ExecutorSupplier;
 import com.android.shopr.utils.ShoprConstants;
 import com.android.shopr.utils.Utils;
 import com.google.zxing.Result;
+import com.squareup.picasso.Picasso;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -57,6 +61,7 @@ public class StoresDetailActivity extends BaseActivity implements View.OnClickLi
     private static final int CAM_PERMISSION_REQ_CODE = 27;
     private FragmentManager mFragmentManager;
     private Result qrResult;
+    private AlertDialog alertDialog;
 
     public String getTvStoreName() {
         return tvStoreName.getText().toString();
@@ -210,12 +215,203 @@ public class StoresDetailActivity extends BaseActivity implements View.OnClickLi
         if (response.isSuccessful() && response.body() != null) {
             ProductFromBarcode productFromBarcode = response.body();
             tvStoreName.setText(productFromBarcode.getStoreName());
-            Utils.addProductToCart(this, productFromBarcode);
+            showDialogForScannedProduct(productFromBarcode);
         }
+    }
+
+    private void showDialogForScannedProduct(ProductFromBarcode productFromBarcode) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.layout_scan_popup, null);
+        dialogBuilder.setView(dialogView);
+        setupUI(dialogView, productFromBarcode);
+        alertDialog = dialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void setupUI(View dialogView, final ProductFromBarcode productFromBarcode) {
+        ImageView dProductImage = ((ImageView) dialogView.findViewById(R.id.iv_product_image));
+        Picasso.with(this).load(productFromBarcode.getProduct().getImageUrl()).centerCrop().fit()
+                .placeholder(new ColorDrawable(Utils.getRandomBackgroundColor())).into(dProductImage);
+        TextView dProductName = (TextView) dialogView.findViewById(R.id.tv_product_name);
+        TextView dProductPriceAfterDiscount = (TextView) dialogView.findViewById(R.id.tv_product_price_after_discount);
+        TextView dProductPriceOriginal = (TextView) dialogView.findViewById(R.id.tv_product_price_original);
+        TextView dProductDiscount = (TextView) dialogView.findViewById(R.id.tv_product_discount);
+        final TextView dProductQuantity = (TextView) dialogView.findViewById(R.id.tv_product_quantity);
+        ImageView dIncreaseQuantity = (ImageView) dialogView.findViewById(R.id.iv_increase_qty);
+        ImageView dDecreaseQuantity = (ImageView) dialogView.findViewById(R.id.iv_decrease_qty);
+        FrameLayout dAddToCart = (FrameLayout) dialogView.findViewById(R.id.fl_scan_and_add_to_cart);
+        FrameLayout dAddToWatchlist = (FrameLayout) dialogView.findViewById(R.id.fl_watch_product);
+
+        tvSizeS = (TextView) dialogView.findViewById(R.id.tv_size_s);
+        tvSizeM = (TextView) dialogView.findViewById(R.id.tv_size_m);
+        tvSizeL = (TextView) dialogView.findViewById(R.id.tv_size_l);
+        tvSizeXL = (TextView) dialogView.findViewById(R.id.tv_size_xl);
+        tvSizeXXL = (TextView) dialogView.findViewById(R.id.tv_size_xxl);
+        tvSizeXXXL = (TextView) dialogView.findViewById(R.id.tv_size_xxxl);
+
+        tvSizeS.setOnClickListener(sizeListener);
+        tvSizeM.setOnClickListener(sizeListener);
+        tvSizeL.setOnClickListener(sizeListener);
+        tvSizeXL.setOnClickListener(sizeListener);
+        tvSizeXXL.setOnClickListener(sizeListener);
+        tvSizeXXXL.setOnClickListener(sizeListener);
+        dAddToCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (size > -1){
+                    Utils.addProductToCart(StoresDetailActivity.this, productFromBarcode, size,
+                            Integer.parseInt(dProductQuantity.getText().toString()));
+                    alertDialog.dismiss();
+                } else {
+                    showShortToast("Please select Size");
+                }
+
+            }
+        });
+        dAddToWatchlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+
+        dProductQuantity.setText("1");
+        dIncreaseQuantity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int quant = Integer.parseInt(dProductQuantity.getText().toString());
+                quant += 1;
+                dProductQuantity.setText(String.valueOf(quant));
+            }
+        });
+        dDecreaseQuantity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int quant = Integer.parseInt(dProductQuantity.getText().toString());
+                if (quant > 1)
+                    dProductQuantity.setText(String.valueOf(quant - 1));
+            }
+        });
+
+        dProductName.setText(productFromBarcode.getProduct().getProductName());
+        dProductDiscount.setText(String.format("%s %S", productFromBarcode.getProduct().getDiscount(), "OFF"));
+        dProductPriceAfterDiscount.setText(String.format("%s%s", getString(R.string.ruppee_symbol) ,
+                productFromBarcode.getProduct().getPriceAfterDiscount()));
+        dProductPriceOriginal.setText(String.format("%s%s", getString(R.string.ruppee_symbol) ,
+                productFromBarcode.getProduct().getPriceBeforeDiscount()));
+
+
     }
 
     @Override
     public void onFailure(Call<ProductFromBarcode> call, Throwable t) {
 
     }
+
+    private TextView tvSizeS;
+    private TextView tvSizeM;
+    private TextView tvSizeL;
+    private TextView tvSizeXL;
+    private TextView tvSizeXXL;
+    private TextView tvSizeXXXL;
+    private int size = -1;
+    private View.OnClickListener sizeListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.tv_size_s:
+                    tvSizeS.setBackgroundResource(R.drawable.bg_circular_selected);
+                    tvSizeS.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorAccent));
+                    tvSizeM.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeM.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    tvSizeL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    tvSizeXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    tvSizeXXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    tvSizeXXXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXXXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    size = 0;
+                    break;
+                case R.id.tv_size_m:
+                    tvSizeS.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeS.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    tvSizeM.setBackgroundResource(R.drawable.bg_circular_selected);
+                    tvSizeM.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorAccent));
+                    tvSizeL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    tvSizeXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    tvSizeXXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    tvSizeXXXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXXXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    size = 1;
+                    break;
+                case R.id.tv_size_l:
+                    tvSizeS.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeS.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    tvSizeM.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeM.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    tvSizeL.setBackgroundResource(R.drawable.bg_circular_selected);
+                    tvSizeL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorAccent));
+                    tvSizeXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    tvSizeXXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    tvSizeXXXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXXXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    size = 2;
+                    break;
+                case R.id.tv_size_xl:
+                    tvSizeS.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeS.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    tvSizeM.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeM.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    tvSizeL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    tvSizeXL.setBackgroundResource(R.drawable.bg_circular_selected);
+                    tvSizeXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorAccent));
+                    tvSizeXXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    tvSizeXXXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXXXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    size = 3;
+                    break;
+                case R.id.tv_size_xxl:
+                    tvSizeS.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeS.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    tvSizeM.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeM.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    tvSizeL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    tvSizeXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    tvSizeXXL.setBackgroundResource(R.drawable.bg_circular_selected);
+                    tvSizeXXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorAccent));
+                    tvSizeXXXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXXXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    size = 4;
+                    break;
+                case R.id.tv_size_xxxl:
+                    tvSizeS.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeS.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    tvSizeM.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeM.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    tvSizeL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    tvSizeXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    tvSizeXXL.setBackgroundResource(R.drawable.bg_circular);
+                    tvSizeXXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
+                    tvSizeXXXL.setBackgroundResource(R.drawable.bg_circular_selected);
+                    tvSizeXXXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorAccent));
+                    size = 5;
+                    break;
+
+            }
+        }
+    };
 }
