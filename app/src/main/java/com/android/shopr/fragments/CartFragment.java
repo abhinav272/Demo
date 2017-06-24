@@ -72,15 +72,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
     private void setupCart() {
         tvStoreNameAndLocation.setText(cart.getStoreNameAndAddress());
         tvCartTotal.setText("INR " + String.format("%.2f",cart.getCartTotal()));
-        tvTotalItems.setText("ITEMS(" + getTotalItems() + ")");
-    }
-
-    private String getTotalItems() {
-        int items = 0;
-        for (CartItem item : cart.getCartItems()) {
-            items+= item.getProductQuantity();
-        }
-        return String.valueOf(items);
+        tvTotalItems.setText("ITEMS(" + cart.getTotalItems() + ")");
     }
 
     private void setupRecyclerView() {
