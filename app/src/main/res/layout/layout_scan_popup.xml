@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_product_image"
+        android:layout_width="match_parent"
+        android:layout_height="280dp" />
+
+    <com.android.shopr.views.ShoprTextView
+        android:id="@+id/tv_product_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/iv_product_image"
+        android:layout_marginLeft="10dp"
+        android:maxWidth="300dp"
+        android:text="Tropical Orange Dress OffShoulder"
+        android:textColor="@color/colorBlack"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <com.android.shopr.views.ShoprTextView
+        android:id="@+id/tv_product_price_after_discount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/iv_product_image"
+        android:layout_marginRight="10dp"
+        android:text="899"
+        android:textColor="@color/colorBlack"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <com.android.shopr.views.ShoprTextView
+        android:id="@+id/tv_product_price_original"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tv_product_price_after_discount"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/bg_strikethrough"
+        android:text="1099"
+        android:textSize="16sp" />
+
+    <com.android.shopr.views.ShoprTextView
+        android:id="@+id/tv_product_discount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tv_product_price_original"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="2dp"
+        android:text="50% Off"
+        android:textColor="@color/colorRed"
+        android:textSize="16sp" />
+
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/tv_product_discount"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/colorLightWhite" />
+
+    <com.android.shopr.views.ShoprTextView
+        android:id="@+id/tv_quantity_placeholder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/divider1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="Quantity"
+        android:textColor="@color/colorBlack"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/ll_quantity_container"
+        android:layout_width="120dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/tv_quantity_placeholder"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_rounded_square"
+        android:backgroundTint="@color/colorDarkGrey"
+        android:orientation="horizontal"
+        android:weightSum="10">
+
+        <ImageView
+            android:id="@+id/iv_decrease_qty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_remove" />
+
+        <com.android.shopr.views.ShoprTextView
+            android:id="@+id/tv_product_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="8"
+            android:gravity="center"
+            android:text="1"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/iv_increase_qty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_add" />
+    </LinearLayout>
+
+    <com.android.shopr.views.ShoprTextView
+        android:id="@+id/tv_size_placeholder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_quantity_container"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:text="Choose Size"
+        android:textColor="@color/colorBlack"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/ll_sizes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_size_placeholder"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <com.android.shopr.views.ShoprTextView
+            android:id="@+id/tv_size_s"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/bg_circular"
+            android:gravity="center"
+            android:text="S"
+            android:textColor="@color/colorDarkGrey"
+            android:textSize="12sp" />
+
+        <com.android.shopr.views.ShoprTextView
+            android:id="@+id/tv_size_m"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/bg_circular"
+            android:gravity="center"
+            android:text="M"
+            android:textColor="@color/colorDarkGrey"
+            android:textSize="12sp" />
+
+        <com.android.shopr.views.ShoprTextView
+            android:id="@+id/tv_size_l"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/bg_circular"
+            android:gravity="center"
+            android:text="L"
+            android:textColor="@color/colorDarkGrey"
+            android:textSize="12sp" />
+
+        <com.android.shopr.views.ShoprTextView
+            android:id="@+id/tv_size_xl"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/bg_circular"
+            android:gravity="center"
+            android:text="XL"
+            android:textColor="@color/colorDarkGrey"
+            android:textSize="12sp" />
+
+        <com.android.shopr.views.ShoprTextView
+            android:id="@+id/tv_size_xxl"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/bg_circular"
+            android:gravity="center"
+            android:text="XXL"
+            android:textColor="@color/colorDarkGrey"
+            android:textSize="12sp" />
+
+        <com.android.shopr.views.ShoprTextView
+            android:id="@+id/tv_size_xxxl"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/bg_circular"
+            android:gravity="center"
+            android:text="XXXL"
+            android:textColor="@color/colorDarkGrey"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_scan_and_add_to_cart"
+        android:layout_width="220dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/ll_sizes"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorDarkGrey">
+
+        <com.android.shopr.views.ShoprTextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:drawableLeft="@drawable/ic_barcode"
+            android:drawablePadding="10dp"
+            android:drawableTint="@color/colorWhite"
+            android:gravity="center"
+            android:text="ADD TO BAG"
+            android:textAllCaps="true"
+            android:textColor="@color/colorWhite"
+            android:textSize="12sp"
+            app:fontFile="Roboto-Medium.ttf" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_watch_product"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/ll_sizes"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/fl_scan_and_add_to_cart"
+        android:background="@color/colorAccent">
+
+        <com.android.shopr.views.ShoprTextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:drawableLeft="@drawable/ic_watch_white"
+            android:drawablePadding="10dp"
+            android:gravity="center"
+            android:text="WATCH"
+            android:textAllCaps="true"
+            android:textColor="@color/colorWhite"
+            android:textSize="12sp"
+            app:fontFile="Roboto-Medium.ttf" />
+    </FrameLayout>
+
+
+</RelativeLayout>
