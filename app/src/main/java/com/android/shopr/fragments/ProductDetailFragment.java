@@ -246,7 +246,7 @@ public class ProductDetailFragment extends BaseFragment implements View.OnClickL
                 if (size == -1) {
                     showShortToast("Please select the Size");
                 } else
-                    Utils.addProductToCart(getActivity(), storeId, categoryId, storeName, storeLocation, product, size);
+                    Utils.addProductToCart(getActivity(), storeId, categoryId, storeName, storeLocation, product, size, 1);
                 break;
             case R.id.fl_watch_product:
                 break;
