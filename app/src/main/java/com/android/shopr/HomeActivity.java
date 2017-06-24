@@ -48,6 +48,7 @@ import com.android.shopr.fragments.HomeFragment;
 import com.android.shopr.fragments.ProductDetailFragment;
 import com.android.shopr.fragments.ProductsFragment;
 import com.android.shopr.fragments.QRFragment;
+import com.android.shopr.model.Cart;
 import com.android.shopr.model.PlaceWiseCategories;
 import com.android.shopr.model.PlaceWiseCategoriesStores;
 import com.android.shopr.model.Product;
@@ -112,6 +113,12 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         connectToGoogleClient();
         getPlaces();
 //        setUpHomeFragment();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        supportInvalidateOptionsMenu();
     }
 
     private void connectToGoogleClient() {
@@ -313,6 +320,26 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        Log.e(TAG, "onPrepareOptionsMenu: ");
+        MenuItem item = menu.findItem(R.id.action_cart);
+        RelativeLayout rootView = (RelativeLayout) item.getActionView();
+        TextView tv = (TextView) rootView.findViewById(R.id.tv_total_items);
+        if (PreferenceUtils.getInstance(this).getUserCart().getCartItems().size() > 0){
+            tv.setText(String.valueOf(PreferenceUtils.getInstance(this).getUserCart().getTotalItems()));
+        } else tv.setVisibility(View.GONE);
+
+        rootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showCartActivity();
+            }
+        });
+
         return true;
     }
 

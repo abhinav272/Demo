@@ -35,6 +35,7 @@ import com.android.shopr.model.PlaceWiseStores;
 import com.android.shopr.model.Product;
 import com.android.shopr.model.ProductFromBarcode;
 import com.android.shopr.utils.ExecutorSupplier;
+import com.android.shopr.utils.PreferenceUtils;
 import com.android.shopr.utils.ShoprConstants;
 import com.android.shopr.utils.Utils;
 import com.google.zxing.Result;
@@ -49,6 +50,7 @@ import retrofit2.Response;
  */
 public class StoresDetailActivity extends BaseActivity implements View.OnClickListener, Callback<ProductFromBarcode> {
 
+    private static final String TAG = "StoresDetailActivity";
     private PlaceWiseStores placeWiseStores;
     private ViewPager viewPager;
     private TabLayout mTabLayout;
@@ -86,6 +88,32 @@ public class StoresDetailActivity extends BaseActivity implements View.OnClickLi
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.stores_menu, menu);
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        Log.e(TAG, "onPrepareOptionsMenu: ");
+        MenuItem item = menu.findItem(R.id.action_cart);
+        RelativeLayout rootView = (RelativeLayout) item.getActionView();
+        TextView tv = (TextView) rootView.findViewById(R.id.tv_total_items);
+        if (PreferenceUtils.getInstance(this).getUserCart().getCartItems().size() > 0){
+            tv.setText(String.valueOf(PreferenceUtils.getInstance(this).getUserCart().getTotalItems()));
+        } else tv.setVisibility(View.GONE);
+
+        rootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showCartActivity();
+            }
+        });
+
+        return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        supportInvalidateOptionsMenu();
     }
 
     @Override
@@ -263,6 +291,7 @@ public class StoresDetailActivity extends BaseActivity implements View.OnClickLi
                     Utils.addProductToCart(StoresDetailActivity.this, productFromBarcode, size,
                             Integer.parseInt(dProductQuantity.getText().toString()));
                     alertDialog.dismiss();
+                    supportInvalidateOptionsMenu();
                 } else {
                     showShortToast("Please select Size");
                 }
