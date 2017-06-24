@@ -54,9 +54,9 @@ public class Utils {
         return color;
     }
 
-    public static void addProductToCart(Context context, int storeId, int categoryId, String storeName, String storeLocation, Product product, int size) {
+    public static void addProductToCart(Context context, int storeId, int categoryId, String storeName, String storeLocation, Product product, int size, int quantity) {
         Cart cart = PreferenceUtils.getInstance(context).getUserCart();
-        CartItem cartItem = getCartItemFromProduct(storeId, categoryId, storeName, storeLocation, product, size);
+        CartItem cartItem = getCartItemFromProduct(storeId, categoryId, storeName, storeLocation, product, size, quantity);
         if (cart != null) {
             List<CartItem> cartItems = cart.getCartItems();
             cart.setStoreNameAndAddress(cartItem.getStoreName() + ", " + cartItem.getLocationName());
@@ -88,13 +88,13 @@ public class Utils {
         Toast.makeText(context, "Product added to cart", Toast.LENGTH_SHORT).show();
     }
 
-    public static void addProductToCart(Context context, ProductFromBarcode productFromBarcode) {
+    public static void addProductToCart(Context context, ProductFromBarcode productFromBarcode, int size, int quantity) {
         addProductToCart(context, productFromBarcode.getStoreId(), productFromBarcode.getCategoryId(),
-                productFromBarcode.getStoreName(), "", productFromBarcode.getProduct(), -1);
+                productFromBarcode.getStoreName(), "", productFromBarcode.getProduct(), size, quantity);
     }
 
     @NonNull
-    private static CartItem getCartItemFromProduct(int storeId, int categoryId, String storeName, String storeLocation, Product product, int size) {
+    private static CartItem getCartItemFromProduct(int storeId, int categoryId, String storeName, String storeLocation, Product product, int size, int quantity) {
         CartItem cartItem = new CartItem();
         cartItem.setStoreId(storeId);
         cartItem.setCategoryId(categoryId);
@@ -104,7 +104,7 @@ public class Utils {
         cartItem.setDiscount(product.getDiscount());
         cartItem.setProductPriceAfterDiscount(Double.valueOf(product.getPriceAfterDiscount()));
         cartItem.setProductPriceBeforeDiscount(Double.valueOf(product.getPriceBeforeDiscount()));
-        cartItem.setProductQuantity(1);
+        cartItem.setProductQuantity(quantity);
         cartItem.setStoreName(storeName);
         cartItem.setLocationName(storeLocation);
         cartItem.setSize(size);
