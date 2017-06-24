@@ -508,7 +508,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
 
     private void sendTermToHomeFragment(String s) {
         HomeFragment fragment = (HomeFragment) mFragmentManager.findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + mViewPager.getCurrentItem());
-        fragment.searchWithTerm(s);
+        if (fragment != null) {
+            fragment.searchWithTerm(s);
+        }
     }
 
     @Override
