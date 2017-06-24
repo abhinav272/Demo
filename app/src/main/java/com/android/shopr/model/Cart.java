@@ -47,6 +47,15 @@ public class Cart {
         }
     }
 
+    public int getTotalItems() {
+        int total = 0;
+        for (CartItem cartItem :
+                cartItems) {
+            total += cartItem.getProductQuantity();
+        }
+        return total;
+    }
+
     public void removeCartItem(CartItem cartItem) {
         cartItems.remove(cartItem);
         updateCartTotal();
