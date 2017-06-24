@@ -11,7 +11,7 @@
     <item
         android:id="@+id/action_cart"
         android:enabled="true"
-        android:icon="@drawable/ic_cart"
+        app:actionLayout="@layout/layout_cart_menu_item"
         android:title="@string/text_cart"
         app:showAsAction="always" />
 </menu>

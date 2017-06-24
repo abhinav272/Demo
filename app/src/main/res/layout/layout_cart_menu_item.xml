@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_width="40dp"
+    android:layout_height="40dp">
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/iv"
+        app:srcCompat="@drawable/ic_cart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_total_items"
+        android:textSize="8sp"
+        android:textColor="@color/colorWhite"
+        android:text="10"
+        android:textStyle="bold"
+        android:layout_marginTop="-6dp"
+        android:layout_toRightOf="@+id/iv"
+        android:layout_marginLeft="-10dp"
+        android:background="@drawable/bg_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+         />
+
+
+</RelativeLayout>
