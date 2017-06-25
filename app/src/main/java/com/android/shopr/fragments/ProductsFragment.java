@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,6 +21,8 @@ import com.android.shopr.model.Product;
 import com.android.shopr.model.StoreWiseCategories;
 import com.android.shopr.utils.ShoprConstants;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import retrofit2.Callback;
@@ -72,12 +75,43 @@ public class ProductsFragment extends BaseFragment implements ProductsRecyclerVi
         mRecyclerView.setAdapter(mProductsRecyclerViewAdapter);
     }
 
-    private GridLayoutManager getLayoutManager(){
+    private GridLayoutManager getLayoutManager() {
         return new GridLayoutManager(getActivity(), 2);
     }
 
     @Override
     public void delegateToHost(int categoryId, Product product) {
         ((StoresDetailActivity) getActivity()).onProductSelected(categoryId, product);
+    }
+
+    public void sortProducts(boolean asc) {
+        if (asc) {
+            Collections.sort(mStoreWiseCategories.getProducts(), new Comparator<Product>() {
+                @Override
+                public int compare(Product p1, Product p2) {
+                    double v1 = Double.parseDouble(p1.getPriceAfterDiscount());
+                    double v2 = Double.parseDouble(p2.getPriceAfterDiscount());
+                    Log.e(TAG, "compare: P1 : " + p1.getProductName() + "  Rs." + p1.getPriceAfterDiscount());
+                    Log.e(TAG, "compare: P2 : " + p2.getProductName() + "  Rs." + p2.getPriceAfterDiscount());
+                    Log.e(TAG, "compare: " + (v1 - v2));
+                    if (v1 - v2 > 0) return 1;
+                    else return -1;
+                }
+            });
+        } else {
+            Collections.sort(mStoreWiseCategories.getProducts(), new Comparator<Product>() {
+                @Override
+                public int compare(Product p1, Product p2) {
+                    double v1 = Double.parseDouble(p1.getPriceAfterDiscount());
+                    double v2 = Double.parseDouble(p2.getPriceAfterDiscount());
+                    Log.e(TAG, "compare: P1 : " + p1.getProductName() + "  Rs." + p1.getPriceAfterDiscount());
+                    Log.e(TAG, "compare: P2 : " + p2.getProductName() + "  Rs." + p2.getPriceAfterDiscount());
+                    Log.e(TAG, "compare: " + (v2 - v1));
+                    if (v2 - v1 > 0) return 1;
+                    else return -1;
+                }
+            });
+        }
+        mProductsRecyclerViewAdapter.notifyDataSetChanged();
     }
 }

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:focusableInTouchMode="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <include
+        android:id="@+id/tl_tab"
+        layout="@layout/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.android.shopr.views.ShoprEditText
+        android:id="@+id/et_search_product"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/tl_tab"
+        android:layout_toLeftOf="@+id/iv_filter"
+        android:paddingLeft="5dp"
+        android:background="@android:color/transparent"
+        android:drawablePadding="10dp"
+        android:drawableTint="@color/colorGray"
+        android:hint="Type here to Search"
+        android:textColorHint="@color/colorGray"
+        android:textSize="16sp"
+        android:drawableLeft="@drawable/ic_search" />
+
+
+    <ImageView
+        android:id="@+id/iv_filter"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:paddingRight="10dp"
+        android:layout_below="@+id/tl_tab"
+        app:srcCompat="@drawable/ic_filter"
+        android:layout_alignParentRight="true" />
+</RelativeLayout>

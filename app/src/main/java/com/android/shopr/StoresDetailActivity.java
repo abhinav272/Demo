@@ -2,9 +2,12 @@ package com.android.shopr;
 
 import android.*;
 import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,29 +20,39 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.shopr.adapters.StoresDetailAdapter;
 import com.android.shopr.api.ShoprAPIClient;
+import com.android.shopr.fragments.ProductsFragment;
 import com.android.shopr.fragments.QRFragment;
 import com.android.shopr.model.PlaceWiseStores;
 import com.android.shopr.model.Product;
 import com.android.shopr.model.ProductFromBarcode;
+import com.android.shopr.model.StoreWiseCategories;
 import com.android.shopr.utils.ExecutorSupplier;
 import com.android.shopr.utils.PreferenceUtils;
 import com.android.shopr.utils.ShoprConstants;
 import com.android.shopr.utils.Utils;
 import com.google.zxing.Result;
 import com.squareup.picasso.Picasso;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,13 +61,13 @@ import retrofit2.Response;
 /**
  * Created by Abhinav on 30/03/17.
  */
-public class StoresDetailActivity extends BaseActivity implements View.OnClickListener, Callback<ProductFromBarcode> {
+public class StoresDetailActivity extends BaseActivity implements View.OnClickListener, Callback<ProductFromBarcode>, TextWatcher {
 
     private static final String TAG = "StoresDetailActivity";
     private PlaceWiseStores placeWiseStores;
     private ViewPager viewPager;
     private TabLayout mTabLayout;
-    private ImageView ivBack;
+    private ImageView ivBack, ivFilter;
     private Toolbar mToolBar;
     private TextView tvStoreName, tvLocationName;
     private String locationName;
@@ -63,7 +76,10 @@ public class StoresDetailActivity extends BaseActivity implements View.OnClickLi
     private static final int CAM_PERMISSION_REQ_CODE = 27;
     private FragmentManager mFragmentManager;
     private Result qrResult;
-    private AlertDialog alertDialog;
+    private AlertDialog alertDialog, filterDialog;
+    private EditText etSearch;
+    private RelativeLayout rlTabContainer;
+    private StoresDetailAdapter storesDetailAdapter;
 
     public String getTvStoreName() {
         return tvStoreName.getText().toString();
@@ -96,7 +112,7 @@ public class StoresDetailActivity extends BaseActivity implements View.OnClickLi
         MenuItem item = menu.findItem(R.id.action_cart);
         RelativeLayout rootView = (RelativeLayout) item.getActionView();
         TextView tv = (TextView) rootView.findViewById(R.id.tv_total_items);
-        if (PreferenceUtils.getInstance(this).getUserCart().getCartItems().size() > 0){
+        if (PreferenceUtils.getInstance(this).getUserCart().getCartItems().size() > 0) {
             tv.setText(String.valueOf(PreferenceUtils.getInstance(this).getUserCart().getTotalItems()));
         } else tv.setVisibility(View.GONE);
 
@@ -138,7 +154,8 @@ public class StoresDetailActivity extends BaseActivity implements View.OnClickLi
         mFragmentManager = getSupportFragmentManager();
         rlContainer = (RelativeLayout) findViewById(R.id.rl_container);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
-        mTabLayout = (TabLayout) findViewById(R.id.tl_tab);
+        rlTabContainer = (RelativeLayout) findViewById(R.id.tl_tab_container);
+        mTabLayout = (TabLayout) rlTabContainer.findViewById(R.id.tl_tab);
         mToolBar = ((Toolbar) findViewById(R.id.toolbar));
         setSupportActionBar(mToolBar);
         ivBack = (ImageView) mToolBar.findViewById(R.id.iv_back);
@@ -154,14 +171,18 @@ public class StoresDetailActivity extends BaseActivity implements View.OnClickLi
         });
         ivBack.setOnClickListener(this);
         mTabLayout.setupWithViewPager(viewPager);
+        ivFilter = (ImageView) rlTabContainer.findViewById(R.id.iv_filter);
+        etSearch = (EditText) rlTabContainer.findViewById(R.id.et_search_product);
+        etSearch.addTextChangedListener(this);
+        ivFilter.setOnClickListener(this);
     }
 
     private void setupCategoriesAndProducts(PlaceWiseStores placeWiseStores) {
         if (placeWiseStores.getCategories().size() < 4) {
             mTabLayout.setTabMode(TabLayout.MODE_FIXED);
         }
-        StoresDetailAdapter adapter = new StoresDetailAdapter(getSupportFragmentManager(), placeWiseStores);
-        viewPager.setAdapter(adapter);
+        storesDetailAdapter = new StoresDetailAdapter(getSupportFragmentManager(), placeWiseStores);
+        viewPager.setAdapter(storesDetailAdapter);
 
         tvStoreName.setText(placeWiseStores.getStoreName());
         tvLocationName.setText(locationName);
@@ -176,7 +197,46 @@ public class StoresDetailActivity extends BaseActivity implements View.OnClickLi
             case R.id.btn_scan:
                 showQRFragment();
                 break;
+            case R.id.iv_filter:
+                showFilterDialog();
+                break;
         }
+    }
+
+    private void showFilterDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.layout_filter_dialog, null);
+        dialogBuilder.setView(dialogView);
+
+        RadioButton rbLowToHigh = (RadioButton) dialogView.findViewById(R.id.rb_low_to_high);
+        RadioButton rbHighToLow = (RadioButton) dialogView.findViewById(R.id.rb_high_to_low);
+
+        rbLowToHigh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterDialog.dismiss();
+                ProductsFragment productFragment = (ProductsFragment) mFragmentManager.
+                        findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + viewPager.getCurrentItem());
+                if (productFragment!=null){
+                    productFragment.sortProducts(true);
+                }
+            }
+        });
+        rbHighToLow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterDialog.dismiss();
+                ProductsFragment productFragment = (ProductsFragment) mFragmentManager.
+                        findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + viewPager.getCurrentItem());
+                if (productFragment!=null){
+                    productFragment.sortProducts(false);
+                }
+            }
+        });
+
+        filterDialog = dialogBuilder.create();
+        filterDialog.show();
     }
 
     private void showQRFragment() {
@@ -287,7 +347,7 @@ public class StoresDetailActivity extends BaseActivity implements View.OnClickLi
         dAddToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (size > -1){
+                if (size > -1) {
                     Utils.addProductToCart(StoresDetailActivity.this, productFromBarcode, size,
                             Integer.parseInt(dProductQuantity.getText().toString()));
                     alertDialog.dismiss();
@@ -325,9 +385,9 @@ public class StoresDetailActivity extends BaseActivity implements View.OnClickLi
 
         dProductName.setText(productFromBarcode.getProduct().getProductName());
         dProductDiscount.setText(String.format("%s %S", productFromBarcode.getProduct().getDiscount(), "OFF"));
-        dProductPriceAfterDiscount.setText(String.format("%s%s", getString(R.string.ruppee_symbol) ,
+        dProductPriceAfterDiscount.setText(String.format("%s%s", getString(R.string.ruppee_symbol),
                 productFromBarcode.getProduct().getPriceAfterDiscount()));
-        dProductPriceOriginal.setText(String.format("%s%s", getString(R.string.ruppee_symbol) ,
+        dProductPriceOriginal.setText(String.format("%s%s", getString(R.string.ruppee_symbol),
                 productFromBarcode.getProduct().getPriceBeforeDiscount()));
 
 
@@ -443,4 +503,19 @@ public class StoresDetailActivity extends BaseActivity implements View.OnClickLi
             }
         }
     };
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+
+    }
 }
