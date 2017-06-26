@@ -11,4 +11,5 @@
     <color name="colorDarkGrey">#26272C</color>
     <color name="colorGray">#696969</color>
     <color name="colorLightWhite">#D5D8DC</color>
+    <color name="colorLocationBg">#B7B7B7</color>
 </resources>
