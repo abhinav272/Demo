@@ -7,10 +7,13 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.android.shopr.HomeActivity;
 import com.android.shopr.R;
 import com.android.shopr.StoresDetailActivity;
+import com.android.shopr.utils.Utils;
 import com.google.zxing.Result;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
@@ -19,10 +22,12 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
  * Created by abhinav.sharma on 12/30/2016.
  */
 
-public class QRFragment extends BaseFragment implements ZXingScannerView.ResultHandler {
+public class QRFragment extends BaseFragment implements ZXingScannerView.ResultHandler, View.OnClickListener {
 
     private static final String TAG = "QRFragment";
     ZXingScannerView mScannerView;
+    ImageView ivSearchByBarcode;
+    EditText etBarcode;
 
     @Nullable
     @Override
@@ -40,7 +45,10 @@ public class QRFragment extends BaseFragment implements ZXingScannerView.ResultH
                 return true;
             }
         });
+        ivSearchByBarcode = (ImageView) view.findViewById(R.id.iv_search_product_by_barcode);
+        etBarcode = (EditText) view.findViewById(R.id.et_search_product);
         mScannerView = (ZXingScannerView) view.findViewById(R.id.scanner_view);
+        ivSearchByBarcode.setOnClickListener(this);
         mScannerView.setResultHandler(this);
         mScannerView.startCamera();
     }
@@ -48,7 +56,7 @@ public class QRFragment extends BaseFragment implements ZXingScannerView.ResultH
     @Override
     public void onPause() {
         super.onPause();
-        deflateScannerFragment(null);
+        deflateScannerFragment("pause");
     }
 
     private void inflateScannerView() {
@@ -65,6 +73,16 @@ public class QRFragment extends BaseFragment implements ZXingScannerView.ResultH
 
     }
 
+    private void deflateScannerFragment(String barcode) {
+        if (mScannerView != null) {
+            mScannerView.stopCamera();
+        }
+        if (!barcode.equals("pause")){
+            ((StoresDetailActivity) getActivity()).setQRResult(barcode);
+        }
+        getActivity().getSupportFragmentManager().popBackStack();
+    }
+
     @Override
     public void handleResult(Result result) {
 
@@ -75,4 +93,15 @@ public class QRFragment extends BaseFragment implements ZXingScannerView.ResultH
 //        scanText.setText(result.getText() + " ## " + result.getBarcodeFormat());
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_search_product_by_barcode:
+                if (etBarcode.getText().toString().trim().length() > 1) {
+                    Utils.hideKeyboard(getActivity());
+                    deflateScannerFragment(etBarcode.getText().toString().trim());
+                }
+                break;
+        }
+    }
 }
