@@ -49,6 +49,7 @@ import com.android.shopr.fragments.ProductDetailFragment;
 import com.android.shopr.fragments.ProductsFragment;
 import com.android.shopr.fragments.QRFragment;
 import com.android.shopr.model.Cart;
+import com.android.shopr.model.LikelyPlaces;
 import com.android.shopr.model.PlaceWiseCategories;
 import com.android.shopr.model.PlaceWiseCategoriesStores;
 import com.android.shopr.model.Product;
@@ -64,11 +65,14 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceLikelihood;
 import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
 import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.zxing.Result;
 import com.squareup.picasso.Picasso;
 
@@ -152,12 +156,16 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         });
     }
 
-    private void fetchCategoriesAndStores(final Place place) {
+    private void fetchCategoriesAndStores(Place place) {
         Log.d(TAG, "fetchCategoriesAndStores: " + place.getName());
+        fetchCategoriesAndStores(place.getId());
+    }
+
+    private void fetchCategoriesAndStores(final String placeId) {
         ExecutorSupplier.getInstance().getWorkerThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
-                Call<PlaceWiseCategoriesStores> call = ShoprAPIClient.getApiInterface().getPlaceWiseCategoriesStores(place.getId());
+                Call<PlaceWiseCategoriesStores> call = ShoprAPIClient.getApiInterface().getPlaceWiseCategoriesStores(placeId);
                 call.enqueue(HomeActivity.this);
             }
         });
@@ -269,7 +277,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
 
         myView.setVisibility(View.VISIBLE);
         rlContainer.setVisibility(View.GONE);
-        anim.start();
+        if (anim != null) {
+            anim.start();
+        }
         edSearchStore.requestFocus();
 
         Utils.showKeyboard(this);
@@ -286,14 +296,18 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
             anim = ViewAnimationUtils.createCircularReveal(myView, cx, cy, cx, 0);
         }
 
-        anim.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                myView.setVisibility(View.INVISIBLE);
-            }
-        });
-        anim.start();
+        if (anim != null) {
+            anim.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    myView.setVisibility(View.INVISIBLE);
+                }
+            });
+
+            anim.start();
+        }
+
         rlContainer.setVisibility(View.VISIBLE);
 
         Utils.hideKeyboard(this);
@@ -422,16 +436,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void manuallySelectLocation() {
-        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-        try {
-            startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
-        } catch (GooglePlayServicesRepairableException e) {
-            e.printStackTrace();
-
-        } catch (GooglePlayServicesNotAvailableException e) {
-            e.printStackTrace();
-
-        }
+        startActivityForResult(new Intent(HomeActivity.this, PlacesActivity.class), PlacesActivity.PLACE_SELECTED);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -440,6 +445,15 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
                 Place place = PlacePicker.getPlace(data, this);
                 setLocationName(place.getName() + "");
                 fetchCategoriesAndStores(place);
+            }
+        } else if (requestCode == PlacesActivity.PLACE_SELECTED ){
+            if (resultCode == RESULT_OK){
+                String placeName = data.getStringExtra(PlacesActivity.PLACE_NAME);
+                String placeId = data.getStringExtra(PlacesActivity.PLACE_ID);
+                setLocationName(placeName + "");
+                fetchCategoriesAndStores(placeId);
+            } else if (resultCode == RESULT_CANCELED){
+                getPlaces();
             }
         }
     }
@@ -490,16 +504,22 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
             placeWiseCategoriesStores = response.body();
             setupCategoriesAndStores(placeWiseCategoriesStores);
         } else {
+            setupCategoriesAndStores(null);
             showShortToast("No Stores available at this Location");
         }
     }
 
     private void setupCategoriesAndStores(PlaceWiseCategoriesStores placeWiseCategoriesStores) {
-        if (placeWiseCategoriesStores.getCategories().size() < 4) {
-            mTabLayout.setTabMode(TabLayout.MODE_FIXED);
+        if (placeWiseCategoriesStores == null){
+            mViewPager.setAdapter(null);
+            mViewPager.invalidate();
+        } else {
+            if (placeWiseCategoriesStores.getCategories().size() < 4) {
+                mTabLayout.setTabMode(TabLayout.MODE_FIXED);
+            }
+            ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), placeWiseCategoriesStores);
+            mViewPager.setAdapter(adapter);
         }
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), placeWiseCategoriesStores);
-        mViewPager.setAdapter(adapter);
     }
 
     @Override
@@ -544,5 +564,12 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     protected void onPause() {
         super.onPause();
         Utils.hideKeyboard(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected())
+            mGoogleApiClient.disconnect();
     }
 }
