@@ -259,11 +259,19 @@ public class StoresDetailActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
+    public void setQRResult(String barcode) {
+        getProductByBarcode(barcode);
+    }
+
     private void getProductByBarcode(final Result result) {
+        getProductByBarcode(result.getText());
+    }
+
+    private void getProductByBarcode(final String barcode) {
         ExecutorSupplier.getInstance().getWorkerThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
-                Call<ProductFromBarcode> call = ShoprAPIClient.getApiInterface().getProductFromBarcode(result.getText());
+                Call<ProductFromBarcode> call = ShoprAPIClient.getApiInterface().getProductFromBarcode(barcode);
                 call.enqueue(StoresDetailActivity.this);
             }
         });
