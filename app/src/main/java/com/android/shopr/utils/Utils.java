@@ -65,7 +65,8 @@ public class Utils {
             } else {
                 int position = cartItems.indexOf(cartItem);
                 CartItem cartItem1 = cartItems.get(position);
-                cartItem.setProductQuantity(cartItem1.getProductQuantity() + 1);
+                int qty = cartItem.getProductQuantity();
+                cartItem.setProductQuantity(cartItem1.getProductQuantity() + qty);
                 cartItems.set(position, cartItem);
                 double total = cart.getCartTotal();
                 total -= cartItem1.getProductPriceAfterDiscount() * cartItem1.getProductQuantity();
