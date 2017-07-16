@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="10dp"
+    android:background="@color/colorWhite"
+    android:layout_width="match_parent"
+    android:layout_height="120dp">
+
+    <ImageView
+        android:id="@+id/iv_product_image"
+        android:layout_width="70dp"
+        android:layout_height="100dp" />
+
+    <TextView
+        android:id="@+id/tv_product_name"
+        android:layout_toRightOf="@+id/iv_product_image"
+        android:layout_marginLeft="15dp"
+        android:text="Orange Shoulder Dress"
+        android:textColor="@color/colorBlack"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_size"
+        android:layout_toRightOf="@+id/iv_product_image"
+        android:layout_above="@+id/tv_qty"
+        android:layout_marginTop="2dp"
+        android:text="Size: L"
+        android:textColor="@color/colorBlack"
+        android:layout_marginLeft="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_qty"
+        android:layout_toRightOf="@+id/iv_product_image"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="10dp"
+        android:text="Qty: 2"
+        android:textColor="@color/colorBlack"
+        android:layout_marginLeft="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_total"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="5dp"
+        android:textColor="@color/colorBlack"
+        android:text="1 x 899 = 899"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
-                android:text="QUICK CHECKOUT"
+                android:text="Selected Location"
                 android:textAllCaps="true"
                 android:textColor="@color/colorWhite"
                 android:textSize="13sp"
@@ -63,17 +63,16 @@
             android:id="@+id/ed_search_store"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorPrimaryDark"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
+            android:background="@color/colorPrimary"
             android:paddingLeft="10dp"
-            android:hint="Search Store"
+            android:cursorVisible="true"
+            android:textCursorDrawable="@color/colorWhite"
             android:textColorHint="@color/colorLightWhite"
             android:textColor="@color/colorWhite"
             android:imeOptions="actionSearch"
             android:maxLines="1"
             android:singleLine="true"
-            app:fontFile="Roboto-Medium.ttf" />
+            app:fontFile="Roboto-Regular.ttf" />
     </RelativeLayout>
 
 </android.support.v7.widget.Toolbar>

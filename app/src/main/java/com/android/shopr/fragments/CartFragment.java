@@ -1,5 +1,6 @@
 package com.android.shopr.fragments;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,8 +13,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.shopr.CartActivity;
+import com.android.shopr.HomeActivity;
 import com.android.shopr.R;
 import com.android.shopr.adapters.CartRecyclerViewAdapter;
 import com.android.shopr.api.ShoprAPIClient;
@@ -34,15 +37,15 @@ import retrofit2.Response;
 /**
  * Created by Abhinav on 02/04/17.
  */
-public class CartFragment extends BaseFragment implements View.OnClickListener, CartRecyclerViewAdapter.ProductListener, Callback<AddedCartResponse> {
+public class CartFragment extends BaseFragment implements View.OnClickListener, CartRecyclerViewAdapter.ProductListener {
 
     private static final String TAG = "CartFragment";
-    private ImageView ivBack, ivCartQr;
+    private ImageView ivBack;
     private Cart cart;
     private RecyclerView recyclerView;
+    private RelativeLayout relativeLayout, rlEmptyCart;
     private CartRecyclerViewAdapter cartRecyclerViewAdapter;
-    private TextView tvStoreNameAndLocation, tvTotalItems, tvCartTotal, tvCheckout, tvQRBanner;
-    private RelativeLayout rlContainer;
+    private TextView tvStoreNameAndLocation, tvTotalItems, tvCartTotal, tvCheckout;
 
     @Nullable
     @Override
@@ -54,10 +57,9 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ivCartQr = (ImageView) view.findViewById(R.id.iv_cart_qr);
-        tvQRBanner = (TextView) view.findViewById(R.id.tv_qr_banner);
-        rlContainer = (RelativeLayout) view.findViewById(R.id.rl_container);
         ivBack = (ImageView) view.findViewById(R.id.iv_back);
+        relativeLayout = (RelativeLayout) view.findViewById(R.id.rl_container);
+        rlEmptyCart = (RelativeLayout) view.findViewById(R.id.rl_empty_cart_container);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         tvStoreNameAndLocation = (TextView) view.findViewById(R.id.tv_store_and_location);
         tvTotalItems = (TextView) view.findViewById(R.id.tv_items_placeholder);
@@ -65,14 +67,19 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
         tvCheckout = (TextView) view.findViewById(R.id.tv_checkout);
         tvCheckout.setOnClickListener(this);
         ivBack.setOnClickListener(this);
-        setupCart();
-        setupRecyclerView();
+        if (cart.getTotalItems() > 0){
+            setupCart();
+            setupRecyclerView();
+        } else {
+            relativeLayout.setVisibility(View.GONE);
+            rlEmptyCart.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setupCart() {
         tvStoreNameAndLocation.setText(cart.getStoreNameAndAddress());
         tvCartTotal.setText("INR " + String.format("%.2f",cart.getCartTotal()));
-        tvTotalItems.setText("ITEMS(" + cart.getTotalItems() + ")");
+        tvTotalItems.setText("ITEMS (" + cart.getTotalItems() + ")");
     }
 
     private void setupRecyclerView() {
@@ -90,7 +97,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_checkout:
-                generateCheckoutCart();
+                ((CartActivity) getActivity()).showConfirmationFragment();
                 break;
             case R.id.iv_back:
                 getActivity().finish();
@@ -98,25 +105,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
         }
     }
 
-    private void generateCheckoutCart() {
-        Cart cart = PreferenceUtils.getInstance(getActivity()).getUserCart();
-        final UserCart userCart = new UserCart();
-        userCart.setCart(cart);
-        userCart.setAccessToken(PreferenceUtils.getInstance(getActivity()).getUserProfile().getAccessToken());
-//        String cartJson = new Gson().toJson(cart);
-//        Log.e("generateCheckoutCart: ", cartJson);
-//        Bitmap qrBitmap = QRCode.from(cartJson).bitmap();
-//        rlContainer.setVisibility(View.INVISIBLE);
-//        ivCartQr.setVisibility(View.VISIBLE);
-//        ivCartQr.setImageBitmap(qrBitmap);
-        ExecutorSupplier.getInstance().getWorkerThreadExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                Call<AddedCartResponse> c  = ShoprAPIClient.getApiInterface().sendCartForVerification(userCart);
-                c.enqueue(CartFragment.this);
-            }
-        });
-    }
+
 
     @Override
     public void removeThisProduct(CartItem cartItem) {
@@ -129,21 +118,5 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void updateCartOnUI() {
         setupCart();
-    }
-
-    @Override
-    public void onResponse(Call<AddedCartResponse> call, Response<AddedCartResponse> response) {
-        if (response.isSuccessful()) {
-            Bitmap qrBitmap = QRCode.from(response.body().getCartId()).bitmap();
-            rlContainer.setVisibility(View.INVISIBLE);
-            ivCartQr.setVisibility(View.VISIBLE);
-            tvQRBanner.setVisibility(View.VISIBLE);
-            ivCartQr.setImageBitmap(qrBitmap);
-        }
-    }
-
-    @Override
-    public void onFailure(Call<AddedCartResponse> call, Throwable t) {
-        Log.e(TAG, "onFailure: ", t);
     }
 }

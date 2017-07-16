@@ -12,6 +12,7 @@ import com.android.shopr.R;
  */
 public class OptionsItemViewHolder extends RecyclerView.ViewHolder {
 
+    public final TextView tvTax;
     public TextView tvBagTotalBeforeDiscount, tvBagDiscount, tvBagTotalAfterDiscount, tvApplyDiscount, tvAmountPayable;
     public FrameLayout flApplyCoupon, flApplyLoyaltyCard;
 
@@ -25,5 +26,6 @@ public class OptionsItemViewHolder extends RecyclerView.ViewHolder {
         tvAmountPayable = (TextView) itemView.findViewById(R.id.tv_total_after_coupon);
         flApplyCoupon = (FrameLayout) itemView.findViewById(R.id.fl_apply_coupon);
         flApplyLoyaltyCard = (FrameLayout) itemView.findViewById(R.id.fl_apply_loyalty_card);
+        tvTax = (TextView) itemView.findViewById(R.id.tv_tax);
     }
 }

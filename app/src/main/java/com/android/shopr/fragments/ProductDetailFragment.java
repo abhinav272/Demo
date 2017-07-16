@@ -1,21 +1,29 @@
 package com.android.shopr.fragments;
 
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MotionEventCompat;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.shopr.CartActivity;
 import com.android.shopr.HomeActivity;
 import com.android.shopr.ProductDetailActivity;
 import com.android.shopr.R;
@@ -45,6 +53,8 @@ public class ProductDetailFragment extends BaseFragment implements View.OnClickL
     private int storeId, categoryId;
     private String storeName, storeLocation;
     private ScrollView scrollView;
+    private RelativeLayout rlSizeContanier;
+    private Toolbar toolbar;
     private List<TextView> sizes = Arrays.asList(tvSizeS, tvSizeM, tvSizeL, tvSizeXL, tvSizeXXL, tvSizeXXXL);
     int size = -1;
     private View.OnClickListener sizeListener = new View.OnClickListener() {
@@ -54,37 +64,37 @@ public class ProductDetailFragment extends BaseFragment implements View.OnClickL
                 case R.id.tv_size_s:
                     updateSizesView();
                     tvSizeS.setBackgroundResource(R.drawable.bg_circular_selected);
-                    tvSizeS.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                    tvSizeS.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorWhite));
                     size = 0;
                     break;
                 case R.id.tv_size_m:
                     updateSizesView();
                     tvSizeM.setBackgroundResource(R.drawable.bg_circular_selected);
-                    tvSizeM.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                    tvSizeM.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorWhite));
                     size = 1;
                     break;
                 case R.id.tv_size_l:
                     updateSizesView();
                     tvSizeL.setBackgroundResource(R.drawable.bg_circular_selected);
-                    tvSizeL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                    tvSizeL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorWhite));
                     size = 2;
                     break;
                 case R.id.tv_size_xl:
                     updateSizesView();
                     tvSizeXL.setBackgroundResource(R.drawable.bg_circular_selected);
-                    tvSizeXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                    tvSizeXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorWhite));
                     size = 3;
                     break;
                 case R.id.tv_size_xxl:
                     updateSizesView();
                     tvSizeXXL.setBackgroundResource(R.drawable.bg_circular_selected);
-                    tvSizeXXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                    tvSizeXXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorWhite));
                     size = 4;
                     break;
                 case R.id.tv_size_xxxl:
                     updateSizesView();
                     tvSizeXXXL.setBackgroundResource(R.drawable.bg_circular_selected);
-                    tvSizeXXXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                    tvSizeXXXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorWhite));
                     size = 5;
                     break;
 
@@ -101,6 +111,7 @@ public class ProductDetailFragment extends BaseFragment implements View.OnClickL
         categoryId = ((ProductDetailActivity) getActivity()).getCategoryId();
         storeName = ((ProductDetailActivity) getActivity()).getStoreName();
         storeLocation = ((ProductDetailActivity) getActivity()).getLocationName();
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_product_detail, container, false);
     }
 
@@ -128,13 +139,65 @@ public class ProductDetailFragment extends BaseFragment implements View.OnClickL
         flWatchProduct = (FrameLayout) view.findViewById(R.id.fl_watch_product);
         flScanAndAddToBag = (FrameLayout) view.findViewById(R.id.fl_scan_and_add_to_cart);
         scrollView = (ScrollView) view.findViewById(R.id.scrollView);
+        rlSizeContanier = (RelativeLayout) view.findViewById(R.id.rl_size_container);
+        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        toolbar.setTitle("");
+        ((ProductDetailActivity) getActivity()).setSupportActionBar(toolbar);
 
         flWatchProduct.setOnClickListener(this);
         flScanAndAddToBag.setOnClickListener(this);
 
-        updateSizesView();
+        if (product.getSizes().getApplicable().size() > 0)
+            updateSizesView();
+        else rlSizeContanier.setVisibility(View.GONE);
 
         setUpViews();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.stores_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_watch_list:
+
+                break;
+            case R.id.action_cart:
+                showCartActivity();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showCartActivity() {
+        startActivity(new Intent(getActivity(), CartActivity.class));
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(final Menu menu) {
+        MenuItem item = menu.findItem(R.id.action_cart);
+        RelativeLayout rootView = (RelativeLayout) item.getActionView();
+        TextView tv = (TextView) rootView.findViewById(R.id.tv_total_items);
+        if (PreferenceUtils.getInstance(getActivity()).getUserCart().getCartItems().size() > 0){
+            tv.setText(String.valueOf(PreferenceUtils.getInstance(getActivity()).getUserCart().getTotalItems()));
+        } else tv.setVisibility(View.GONE);
+
+        rootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showCartActivity();
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().supportInvalidateOptionsMenu();
     }
 
     private void updateSizesView() {
@@ -144,60 +207,54 @@ public class ProductDetailFragment extends BaseFragment implements View.OnClickL
     }
 
     private void updateSizesChart(String s) {
-        switch (s){
+        switch (s) {
             case "s":
             case "S":
-                if (product.getSizes().getAvailable().contains(s)){
+                if (product.getSizes().getAvailable().contains(s)) {
                     tvSizeS.setOnClickListener(sizeListener);
                     tvSizeS.setBackgroundResource(R.drawable.bg_circular);
                     tvSizeS.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
-                }
-                else tvSizeS.setBackgroundResource(R.drawable.bg_circular_striketrough);
+                } else tvSizeS.setBackgroundResource(R.drawable.bg_circular_striketrough);
                 break;
             case "m":
             case "M":
-                if (product.getSizes().getAvailable().contains(s)){
+                if (product.getSizes().getAvailable().contains(s)) {
                     tvSizeM.setOnClickListener(sizeListener);
                     tvSizeM.setBackgroundResource(R.drawable.bg_circular);
                     tvSizeM.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
-                }
-                else tvSizeM.setBackgroundResource(R.drawable.bg_circular_striketrough);
+                } else tvSizeM.setBackgroundResource(R.drawable.bg_circular_striketrough);
                 break;
             case "l":
             case "L":
-                if (product.getSizes().getAvailable().contains(s)){
+                if (product.getSizes().getAvailable().contains(s)) {
                     tvSizeL.setOnClickListener(sizeListener);
                     tvSizeL.setBackgroundResource(R.drawable.bg_circular);
                     tvSizeL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
-                }
-                else tvSizeL.setBackgroundResource(R.drawable.bg_circular_striketrough);
+                } else tvSizeL.setBackgroundResource(R.drawable.bg_circular_striketrough);
                 break;
             case "xl":
             case "XL":
-                if (product.getSizes().getAvailable().contains(s)){
+                if (product.getSizes().getAvailable().contains(s)) {
                     tvSizeXL.setOnClickListener(sizeListener);
                     tvSizeXL.setBackgroundResource(R.drawable.bg_circular);
                     tvSizeXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
-                }
-                else tvSizeXL.setBackgroundResource(R.drawable.bg_circular_striketrough);
+                } else tvSizeXL.setBackgroundResource(R.drawable.bg_circular_striketrough);
                 break;
             case "xxl":
             case "XXL":
-                if (product.getSizes().getAvailable().contains(s)){
+                if (product.getSizes().getAvailable().contains(s)) {
                     tvSizeXXL.setOnClickListener(sizeListener);
                     tvSizeXXL.setBackgroundResource(R.drawable.bg_circular);
                     tvSizeXXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
-                }
-                else tvSizeXXL.setBackgroundResource(R.drawable.bg_circular_striketrough);
+                } else tvSizeXXL.setBackgroundResource(R.drawable.bg_circular_striketrough);
                 break;
             case "xxxl":
             case "XXXL":
-                if (product.getSizes().getAvailable().contains(s)){
+                if (product.getSizes().getAvailable().contains(s)) {
                     tvSizeXXXL.setOnClickListener(sizeListener);
                     tvSizeXXXL.setBackgroundResource(R.drawable.bg_circular);
                     tvSizeXXXL.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorDarkGrey));
-                }
-                else tvSizeXXXL.setBackgroundResource(R.drawable.bg_circular_striketrough);
+                } else tvSizeXXXL.setBackgroundResource(R.drawable.bg_circular_striketrough);
                 break;
 
         }
@@ -253,10 +310,12 @@ public class ProductDetailFragment extends BaseFragment implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fl_scan_and_add_to_cart:
-                if (size == -1) {
+                if (product.getSizes().getApplicable().size() > 0 && size == -1) {
                     showShortToast("Please select the Size");
-                } else
+                } else{
                     Utils.addProductToCart(getActivity(), storeId, categoryId, storeName, storeLocation, product, size, 1);
+                    getActivity().supportInvalidateOptionsMenu();
+                }
                 break;
             case R.id.fl_watch_product:
                 break;

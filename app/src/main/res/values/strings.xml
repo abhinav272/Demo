@@ -6,14 +6,15 @@
     <string name="sign_in_with_fb">Sign in with facebook</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-    <string name="text_quick_checkout">Quick Checkout</string>
+    <string name="text_quick_checkout">Selected Location</string>
     <string name="text_shops">Shops</string>
     <string name="text_sale">Sale</string>
     <string name="text_cart">Cart</string>
     <string name="text_search">Search</string>
     <string name="ruppee_symbol">₹</string>
+    <string name="code_text">Please verify this QR code with the security\nstaff at the checkout kiosk of the store to\ncomplete the order.</string>
     <string-array name="size_array">
-        <item>--</item>
+        <item>N/A</item>
         <item>S</item>
         <item>M</item>
         <item>L</item>

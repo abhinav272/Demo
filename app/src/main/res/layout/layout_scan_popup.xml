@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/divider1"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:text="Quantity"
         android:textColor="@color/colorBlack"
         android:textSize="14sp"
@@ -119,139 +119,157 @@
             app:srcCompat="@drawable/ic_add" />
     </LinearLayout>
 
-    <com.android.shopr.views.ShoprTextView
-        android:id="@+id/tv_size_placeholder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <RelativeLayout
+        android:id="@+id/rl_size_container"
         android:layout_below="@+id/ll_quantity_container"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:text="Choose Size"
-        android:textColor="@color/colorBlack"
-        android:textSize="14sp"
-        android:textStyle="bold" />
-
-    <LinearLayout
-        android:id="@+id/ll_sizes"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_size_placeholder"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
         <com.android.shopr.views.ShoprTextView
-            android:id="@+id/tv_size_s"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/bg_circular"
-            android:gravity="center"
-            android:text="S"
-            android:textColor="@color/colorDarkGrey"
-            android:textSize="12sp" />
+            android:id="@+id/tv_size_placeholder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Choose Size"
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
-        <com.android.shopr.views.ShoprTextView
-            android:id="@+id/tv_size_m"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/bg_circular"
-            android:gravity="center"
-            android:text="M"
-            android:textColor="@color/colorDarkGrey"
-            android:textSize="12sp" />
+        <LinearLayout
+            android:id="@+id/ll_sizes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_size_placeholder"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
 
-        <com.android.shopr.views.ShoprTextView
-            android:id="@+id/tv_size_l"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/bg_circular"
-            android:gravity="center"
-            android:text="L"
-            android:textColor="@color/colorDarkGrey"
-            android:textSize="12sp" />
+            <com.android.shopr.views.ShoprTextView
+                android:id="@+id/tv_size_s"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/bg_circular"
+                android:gravity="center"
+                android:text="S"
+                android:textColor="@color/colorDarkGrey"
+                android:textSize="12sp" />
 
-        <com.android.shopr.views.ShoprTextView
-            android:id="@+id/tv_size_xl"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/bg_circular"
-            android:gravity="center"
-            android:text="XL"
-            android:textColor="@color/colorDarkGrey"
-            android:textSize="12sp" />
+            <com.android.shopr.views.ShoprTextView
+                android:id="@+id/tv_size_m"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/bg_circular"
+                android:gravity="center"
+                android:text="M"
+                android:textColor="@color/colorDarkGrey"
+                android:textSize="12sp" />
 
-        <com.android.shopr.views.ShoprTextView
-            android:id="@+id/tv_size_xxl"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/bg_circular"
-            android:gravity="center"
-            android:text="XXL"
-            android:textColor="@color/colorDarkGrey"
-            android:textSize="12sp" />
+            <com.android.shopr.views.ShoprTextView
+                android:id="@+id/tv_size_l"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/bg_circular"
+                android:gravity="center"
+                android:text="L"
+                android:textColor="@color/colorDarkGrey"
+                android:textSize="12sp" />
 
-        <com.android.shopr.views.ShoprTextView
-            android:id="@+id/tv_size_xxxl"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/bg_circular"
-            android:gravity="center"
-            android:text="XXXL"
-            android:textColor="@color/colorDarkGrey"
-            android:textSize="12sp" />
+            <com.android.shopr.views.ShoprTextView
+                android:id="@+id/tv_size_xl"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/bg_circular"
+                android:gravity="center"
+                android:text="XL"
+                android:textColor="@color/colorDarkGrey"
+                android:textSize="12sp" />
 
-    </LinearLayout>
+            <com.android.shopr.views.ShoprTextView
+                android:id="@+id/tv_size_xxl"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/bg_circular"
+                android:gravity="center"
+                android:text="XXL"
+                android:textColor="@color/colorDarkGrey"
+                android:textSize="12sp" />
+
+            <com.android.shopr.views.ShoprTextView
+                android:id="@+id/tv_size_xxxl"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/bg_circular"
+                android:gravity="center"
+                android:text="XXXL"
+                android:textColor="@color/colorDarkGrey"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/fl_scan_and_add_to_cart"
-        android:layout_width="220dp"
+        android:layout_width="170dp"
         android:layout_height="50dp"
-        android:layout_below="@+id/ll_sizes"
+        android:layout_below="@+id/rl_size_container"
         android:layout_marginTop="10dp"
         android:background="@color/colorDarkGrey">
+
+        <ImageView
+            app:srcCompat="@drawable/ic_bag"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="30dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
 
         <com.android.shopr.views.ShoprTextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:drawableLeft="@drawable/ic_barcode"
-            android:drawablePadding="10dp"
             android:drawableTint="@color/colorWhite"
             android:gravity="center"
+            android:layout_marginLeft="70dp"
             android:text="ADD TO BAG"
             android:textAllCaps="true"
             android:textColor="@color/colorWhite"
-            android:textSize="12sp"
+            android:textSize="14sp"
             app:fontFile="Roboto-Medium.ttf" />
     </FrameLayout>
 
     <FrameLayout
         android:id="@+id/fl_watch_product"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@+id/ll_sizes"
+        android:layout_height="40dp"
+        android:layout_below="@+id/rl_size_container"
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@+id/fl_scan_and_add_to_cart"
         android:background="@color/colorAccent">
+
+        <ImageView
+            app:srcCompat="@drawable/ic_watchlist"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="50dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
 
         <com.android.shopr.views.ShoprTextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:drawableLeft="@drawable/ic_watch_white"
             android:drawablePadding="10dp"
             android:gravity="center"
-            android:text="WATCH"
+            android:text="WATCHLIST"
             android:textAllCaps="true"
             android:textColor="@color/colorWhite"
-            android:textSize="12sp"
+            android:textSize="14sp"
             app:fontFile="Roboto-Medium.ttf" />
     </FrameLayout>
 

@@ -28,19 +28,12 @@ public class StoresDetailAdapter extends FragmentPagerAdapter {
         super(fm);
         this.placeWiseStores = placeWiseStores;
         storeWiseCategories = placeWiseStores.getCategories();
-//        storeWiseCategories.add(0,null);
     }
 
     @Override
     public Fragment getItem(int position) {
         ProductsFragment productsFragment = new ProductsFragment();
         Bundle bundle = new Bundle();
-//        if (position==0){
-//            bundle.putParcelableArrayList(ShoprConstants.STORE_CATEGORY_WISE_PRODUCTS, getAllProducts());
-//            productsFragment.setArguments(bundle);
-//            return productsFragment;
-//        }
-
         bundle.putParcelable(ShoprConstants.STORE_CATEGORY_WISE_PRODUCTS, getProductsByCategory(storeWiseCategories.get(position).getCategoryId()));
         productsFragment.setArguments(bundle);
         return productsFragment;
@@ -53,16 +46,8 @@ public class StoresDetailAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-//        if (position==0)
-//            return "All";
         return storeWiseCategories.get(position).getCategoryName();
     }
-
-//    private ArrayList<StoreWiseCategories> getAllProducts() {
-//        ArrayList<StoreWiseCategories> allCategoryProducts = new ArrayList<>(storeWiseCategories);
-//        allCategoryProducts.remove(0);
-//        return allCategoryProducts;
-//    }
 
     private StoreWiseCategories getProductsByCategory(int categoryId) {
         for (StoreWiseCategories category : storeWiseCategories) {

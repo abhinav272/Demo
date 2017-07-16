@@ -6,12 +6,13 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Abhinav on 23/03/17.
  */
-public class StoreWiseCategories implements Parcelable {
+public class StoreWiseCategories implements Parcelable, Cloneable {
     @SerializedName("category_id")
     @Expose
     private int categoryId;
@@ -78,4 +79,14 @@ public class StoreWiseCategories implements Parcelable {
             return new StoreWiseCategories[size];
         }
     };
+
+    @Override
+    public StoreWiseCategories clone() throws CloneNotSupportedException {
+        super.clone();
+        StoreWiseCategories storeWiseCategories = new StoreWiseCategories();
+        storeWiseCategories.categoryId = categoryId;
+        storeWiseCategories.categoryName = new String(categoryName);
+        storeWiseCategories.products = new ArrayList<>(products);
+        return storeWiseCategories;
+    }
 }

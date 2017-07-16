@@ -17,6 +17,7 @@ public class CartItem {
     private String storeName;
     private String locationName;
     private int size;
+    private Sizes sizes;
 
     public int getStoreId() {
         return storeId;
@@ -112,6 +113,14 @@ public class CartItem {
 
     public void setSize(int size) {
         this.size = size;
+    }
+
+    public Sizes getSizes() {
+        return sizes;
+    }
+
+    public void setSizes(Sizes sizes) {
+        this.sizes = sizes;
     }
 
     @Override

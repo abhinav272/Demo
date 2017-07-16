@@ -33,12 +33,20 @@
                 android:layout_height="40dp"
                 android:background="@color/colorWhite">
 
+                <ImageView
+                    app:srcCompat="@drawable/ic_coupons"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="24dp"
+                    android:layout_width="17dp"
+                    android:layout_height="17dp" />
+
                 <com.android.shopr.views.ShoprTextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_gravity="center_vertical"
                     android:background="@null"
-                    android:drawablePadding="170dp"
+                    android:layout_marginLeft="56dp"
+                    android:layout_marginRight="26dp"
                     android:drawableRight="@drawable/ic_right"
                     android:gravity="center_vertical"
                     android:text="Apply Coupon"
@@ -53,12 +61,20 @@
                 android:layout_below="@+id/fl_apply_coupon"
                 android:background="@color/colorWhite">
 
+                <ImageView
+                    app:srcCompat="@drawable/ic_loyality_cards"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="24dp"
+                    android:layout_width="17dp"
+                    android:layout_height="17dp" />
+
                 <com.android.shopr.views.ShoprTextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_gravity="center_vertical"
                     android:background="@null"
-                    android:drawablePadding="140dp"
+                    android:layout_marginLeft="56dp"
+                    android:layout_marginRight="26dp"
                     android:drawableRight="@drawable/ic_right"
                     android:gravity="center_vertical"
                     android:text="Apply Loyalty Card"
@@ -178,10 +194,31 @@
                 app:fontFile="Roboto-Medium.ttf" />
 
             <com.android.shopr.views.ShoprTextView
-                android:id="@+id/tv_total_after_coupon_placeholder"
+                android:id="@+id/tv_tax_placeholder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_coupon_placeholder"
+                android:layout_marginTop="10dp"
+                android:text="Tax"
+                android:textColor="@color/colorDarkGrey"
+                app:fontFile="Roboto-Regular.ttf" />
+
+            <com.android.shopr.views.ShoprTextView
+                android:id="@+id/tv_tax"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/tv_coupon"
+                android:layout_marginTop="10dp"
+                android:text="INR 267"
+                android:textColor="@color/colorDarkGrey"
+                app:fontFile="Roboto-Regular.ttf" />
+
+            <com.android.shopr.views.ShoprTextView
+                android:id="@+id/tv_total_after_coupon_placeholder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_tax_placeholder"
                 android:layout_marginTop="10dp"
                 android:text="Total Payable"
                 android:textColor="@color/colorBlack"
@@ -192,7 +229,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_below="@id/tv_coupon"
+                android:layout_below="@id/tv_tax"
                 android:layout_marginTop="10dp"
                 android:text="INR 2659"
                 android:textColor="@color/colorBlack"

@@ -4,6 +4,7 @@ import android.*;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
@@ -31,6 +32,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -47,6 +49,7 @@ import com.android.shopr.utils.ExecutorSupplier;
 import com.android.shopr.utils.PreferenceUtils;
 import com.android.shopr.utils.ShoprConstants;
 import com.android.shopr.utils.Utils;
+import com.appyvet.rangebar.RangeBar;
 import com.google.zxing.Result;
 import com.squareup.picasso.Picasso;
 
@@ -81,6 +84,9 @@ public class StoresDetailActivity extends BaseActivity implements View.OnClickLi
     private RelativeLayout rlTabContainer;
     private StoresDetailAdapter storesDetailAdapter;
     private Product product;
+    private TextView tvMin;
+    private TextView tvMax;
+    private int minValue = 1, maxValue = 9999, isAsc = -1;
 
     public String getTvStoreName() {
         return tvStoreName.getText().toString();
@@ -210,34 +216,95 @@ public class StoresDetailActivity extends BaseActivity implements View.OnClickLi
         View dialogView = inflater.inflate(R.layout.layout_filter_dialog, null);
         dialogBuilder.setView(dialogView);
 
-        RadioButton rbLowToHigh = (RadioButton) dialogView.findViewById(R.id.rb_low_to_high);
-        RadioButton rbHighToLow = (RadioButton) dialogView.findViewById(R.id.rb_high_to_low);
+        final LinearLayout highToLow = (LinearLayout) dialogView.findViewById(R.id.ll_high_to_low);
+        final LinearLayout lowToHigh = (LinearLayout) dialogView.findViewById(R.id.ll_low_to_high);
+        TextView tvClearFilter = (TextView) dialogView.findViewById(R.id.tv_clear_filters);
+        TextView tvApplyFilter = (TextView) dialogView.findViewById(R.id.tv_apply_filters);
+        ImageView ivCancel = (ImageView) dialogView.findViewById(R.id.iv_cancel);
+        tvMin = (TextView) dialogView.findViewById(R.id.tv_min_value);
+        tvMax = (TextView) dialogView.findViewById(R.id.tv_max_value);
+        tvMin.setText(String.format("%s%s", getString(R.string.ruppee_symbol), minValue));
+        tvMax.setText(String.format("%s%s", getString(R.string.ruppee_symbol), maxValue));
 
-        rbLowToHigh.setOnClickListener(new View.OnClickListener() {
+        ivCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                filterDialog.dismiss();
+                filterDialog.cancel();
+            }
+        });
+
+        tvApplyFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterDialog.cancel();
                 ProductsFragment productFragment = (ProductsFragment) mFragmentManager.
                         findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + viewPager.getCurrentItem());
-                if (productFragment!=null){
-                    productFragment.sortProducts(true);
+                if (productFragment != null) {
+                    productFragment.applyPriceRange(Integer.parseInt(tvMin.getText().toString().substring(1)),
+                            Integer.parseInt(tvMax.getText().toString().substring(1)));
+                    if (isAsc == 0) {
+                        productFragment.sortProducts(false);
+                    } else if (isAsc == 1) {
+                        productFragment.sortProducts(true);
+                    }
                 }
             }
         });
-        rbHighToLow.setOnClickListener(new View.OnClickListener() {
+
+        if (isAsc == 0) {
+            ((RadioButton) highToLow.findViewById(R.id.rb_high_to_low)).setChecked(true);
+        } else if (isAsc == 1) {
+            ((RadioButton) lowToHigh.findViewById(R.id.rb_low_to_high)).setChecked(true);
+        }
+
+        final RangeBar rangeBar = (RangeBar) dialogView.findViewById(R.id.range_selector);
+        rangeBar.setRangePinsByValue((float) minValue, maxValue);
+        rangeBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
+            @Override
+            public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex, int rightPinIndex, String leftPinValue, String rightPinValue) {
+                minValue = Integer.parseInt(leftPinValue);
+                maxValue = Integer.parseInt(rightPinValue);
+                tvMin.setText(String.format("%s%s", getString(R.string.ruppee_symbol), leftPinValue));
+                tvMax.setText(String.format("%s%s", getString(R.string.ruppee_symbol), rightPinValue));
+            }
+        });
+
+        tvClearFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                filterDialog.dismiss();
+//                filterDialog.dismiss();
                 ProductsFragment productFragment = (ProductsFragment) mFragmentManager.
                         findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + viewPager.getCurrentItem());
-                if (productFragment!=null){
-                    productFragment.sortProducts(false);
+                if (productFragment != null) {
+                    productFragment.clearFilters();
+                    minValue = 1;
+                    maxValue = 9999;
+                    isAsc = -1;
                 }
+            }
+        });
+
+        highToLow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((RadioButton) highToLow.findViewById(R.id.rb_high_to_low)).setChecked(true);
+                ((RadioButton) lowToHigh.findViewById(R.id.rb_low_to_high)).setChecked(false);
+                isAsc = 0;
+            }
+        });
+
+        lowToHigh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((RadioButton) lowToHigh.findViewById(R.id.rb_low_to_high)).setChecked(true);
+                ((RadioButton) highToLow.findViewById(R.id.rb_high_to_low)).setChecked(false);
+                isAsc = 1;
             }
         });
 
         filterDialog = dialogBuilder.create();
         filterDialog.show();
+        filterDialog.setCancelable(false);
     }
 
     private void showQRFragment() {
@@ -347,13 +414,17 @@ public class StoresDetailActivity extends BaseActivity implements View.OnClickLi
         tvSizeXL = (TextView) dialogView.findViewById(R.id.tv_size_xl);
         tvSizeXXL = (TextView) dialogView.findViewById(R.id.tv_size_xxl);
         tvSizeXXXL = (TextView) dialogView.findViewById(R.id.tv_size_xxxl);
+        RelativeLayout rlSizeContainer = (RelativeLayout) dialogView.findViewById(R.id.rl_size_container);
 
-        updateSizesView();
+        if (product.getSizes().getApplicable().size() > 0)
+            updateSizesView();
+        else rlSizeContainer.setVisibility(View.GONE);
+
         dAddToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (size > -1) {
-                    Utils.addProductToCart(StoresDetailActivity.this, productFromBarcode, size,
+                if (size > -1 || product.getSizes().getApplicable().size() == 0) {
+                    Utils.addProductToCart(StoresDetailActivity.this, productFromBarcode, locationName, size,
                             Integer.parseInt(dProductQuantity.getText().toString()));
                     alertDialog.dismiss();
                     supportInvalidateOptionsMenu();
@@ -417,37 +488,37 @@ public class StoresDetailActivity extends BaseActivity implements View.OnClickLi
                 case R.id.tv_size_s:
                     updateSizesView();
                     tvSizeS.setBackgroundResource(R.drawable.bg_circular_selected);
-                    tvSizeS.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorAccent));
+                    tvSizeS.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorWhite));
                     size = 0;
                     break;
                 case R.id.tv_size_m:
                     updateSizesView();
                     tvSizeM.setBackgroundResource(R.drawable.bg_circular_selected);
-                    tvSizeM.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorAccent));
+                    tvSizeM.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorWhite));
                     size = 1;
                     break;
                 case R.id.tv_size_l:
                     updateSizesView();
                     tvSizeL.setBackgroundResource(R.drawable.bg_circular_selected);
-                    tvSizeL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorAccent));
+                    tvSizeL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorWhite));
                     size = 2;
                     break;
                 case R.id.tv_size_xl:
                     updateSizesView();
                     tvSizeXL.setBackgroundResource(R.drawable.bg_circular_selected);
-                    tvSizeXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorAccent));
+                    tvSizeXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorWhite));
                     size = 3;
                     break;
                 case R.id.tv_size_xxl:
                     updateSizesView();
                     tvSizeXXL.setBackgroundResource(R.drawable.bg_circular_selected);
-                    tvSizeXXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorAccent));
+                    tvSizeXXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorWhite));
                     size = 4;
                     break;
                 case R.id.tv_size_xxxl:
                     updateSizesView();
                     tvSizeXXXL.setBackgroundResource(R.drawable.bg_circular_selected);
-                    tvSizeXXXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorAccent));
+                    tvSizeXXXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorWhite));
                     size = 5;
                     break;
 
@@ -462,60 +533,54 @@ public class StoresDetailActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void updateSizesChart(String s) {
-        switch (s){
+        switch (s) {
             case "s":
             case "S":
-                if (product.getSizes().getAvailable().contains(s)){
+                if (product.getSizes().getAvailable().contains(s)) {
                     tvSizeS.setOnClickListener(sizeListener);
                     tvSizeS.setBackgroundResource(R.drawable.bg_circular);
                     tvSizeS.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
-                }
-                else tvSizeS.setBackgroundResource(R.drawable.bg_circular_striketrough);
+                } else tvSizeS.setBackgroundResource(R.drawable.bg_circular_striketrough);
                 break;
             case "m":
             case "M":
-                if (product.getSizes().getAvailable().contains(s)){
+                if (product.getSizes().getAvailable().contains(s)) {
                     tvSizeM.setOnClickListener(sizeListener);
                     tvSizeM.setBackgroundResource(R.drawable.bg_circular);
                     tvSizeM.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
-                }
-                else tvSizeM.setBackgroundResource(R.drawable.bg_circular_striketrough);
+                } else tvSizeM.setBackgroundResource(R.drawable.bg_circular_striketrough);
                 break;
             case "l":
             case "L":
-                if (product.getSizes().getAvailable().contains(s)){
+                if (product.getSizes().getAvailable().contains(s)) {
                     tvSizeL.setOnClickListener(sizeListener);
                     tvSizeL.setBackgroundResource(R.drawable.bg_circular);
                     tvSizeL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
-                }
-                else tvSizeL.setBackgroundResource(R.drawable.bg_circular_striketrough);
+                } else tvSizeL.setBackgroundResource(R.drawable.bg_circular_striketrough);
                 break;
             case "xl":
             case "XL":
-                if (product.getSizes().getAvailable().contains(s)){
+                if (product.getSizes().getAvailable().contains(s)) {
                     tvSizeXL.setOnClickListener(sizeListener);
                     tvSizeXL.setBackgroundResource(R.drawable.bg_circular);
                     tvSizeXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
-                }
-                else tvSizeXL.setBackgroundResource(R.drawable.bg_circular_striketrough);
+                } else tvSizeXL.setBackgroundResource(R.drawable.bg_circular_striketrough);
                 break;
             case "xxl":
             case "XXL":
-                if (product.getSizes().getAvailable().contains(s)){
+                if (product.getSizes().getAvailable().contains(s)) {
                     tvSizeXXL.setOnClickListener(sizeListener);
                     tvSizeXXL.setBackgroundResource(R.drawable.bg_circular);
                     tvSizeXXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
-                }
-                else tvSizeXXL.setBackgroundResource(R.drawable.bg_circular_striketrough);
+                } else tvSizeXXL.setBackgroundResource(R.drawable.bg_circular_striketrough);
                 break;
             case "xxxl":
             case "XXXL":
-                if (product.getSizes().getAvailable().contains(s)){
+                if (product.getSizes().getAvailable().contains(s)) {
                     tvSizeXXXL.setOnClickListener(sizeListener);
                     tvSizeXXXL.setBackgroundResource(R.drawable.bg_circular);
                     tvSizeXXXL.setTextColor(ContextCompat.getColor(StoresDetailActivity.this, R.color.colorDarkGrey));
-                }
-                else tvSizeXXXL.setBackgroundResource(R.drawable.bg_circular_striketrough);
+                } else tvSizeXXXL.setBackgroundResource(R.drawable.bg_circular_striketrough);
                 break;
 
         }

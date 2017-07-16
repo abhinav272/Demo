@@ -14,8 +14,8 @@
 
         <ImageView
             android:id="@+id/iv_product_image"
-            android:layout_width="130dp"
-            android:layout_height="180dp" />
+            android:layout_width="120dp"
+            android:layout_height="150dp" />
 
         <com.android.shopr.views.ShoprTextView
             android:id="@+id/tv_product_name"
@@ -25,18 +25,18 @@
             android:layout_marginLeft="15dp"
             android:layout_toRightOf="@+id/iv_product_image"
             android:maxLines="2"
+            android:textSize="16sp"
             android:textColor="@color/colorDarkGrey"
-            app:fontFile="Roboto-MediumItalic.ttf" />
+            app:fontFile="Roboto-Medium.ttf" />
 
         <LinearLayout
             android:id="@+id/ll_size_container"
             android:layout_below="@+id/tv_product_name"
             android:layout_toRightOf="@+id/iv_product_image"
             android:orientation="horizontal"
-            android:layout_marginTop="10dp"
             android:layout_marginLeft="15dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="40dp">
 
             <com.android.shopr.views.ShoprTextView
                 android:id="@+id/tv_size_place_holder"
@@ -53,50 +53,58 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:spinnerMode="dropdown"
-                android:pointerIcon="hand"
                 android:entries="@array/size_array"
                 android:layout_toRightOf="@+id/tv_size_place_holder" />
 
         </LinearLayout>
 
-
-        <com.android.shopr.views.ShoprTextView
-            android:id="@+id/tv_product_quantity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/ll_size_container"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="10dp"
+        <LinearLayout
+            android:id="@+id/ll_qty_container"
             android:layout_toRightOf="@+id/iv_product_image"
-            android:text="Qty: "
-            android:textColor="@color/colorDarkGrey"
-            app:fontFile="Roboto-Regular.ttf" />
-
-        <ImageView
-            android:id="@+id/iv_decrease_qty"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
             android:layout_below="@+id/ll_size_container"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="10dp"
-            android:layout_toRightOf="@+id/tv_product_quantity"
-            app:srcCompat="@drawable/ic_remove_qty" />
+            android:orientation="horizontal"
+            android:layout_marginLeft="15dp"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/iv_increase_qty"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_below="@+id/ll_size_container"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="10dp"
-            android:layout_toRightOf="@+id/iv_decrease_qty"
-            app:srcCompat="@drawable/ic_add_qty" />
+            <com.android.shopr.views.ShoprTextView
+                android:id="@+id/tv_product_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ll_size_container"
+                android:layout_toRightOf="@+id/iv_product_image"
+                android:text="Qty: "
+                android:textColor="@color/colorDarkGrey"
+                app:fontFile="Roboto-Regular.ttf" />
+
+            <ImageView
+                android:id="@+id/iv_decrease_qty"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_below="@+id/ll_size_container"
+                android:layout_marginLeft="30dp"
+                android:layout_toRightOf="@+id/tv_product_quantity"
+                app:srcCompat="@drawable/ic_remove_qty" />
+
+            <ImageView
+                android:id="@+id/iv_increase_qty"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_below="@+id/ll_size_container"
+                android:layout_marginLeft="30dp"
+                android:layout_toRightOf="@+id/iv_decrease_qty"
+                app:srcCompat="@drawable/ic_add_qty" />
+        </LinearLayout>
+
+
+
 
         <com.android.shopr.views.ShoprTextView
             android:id="@+id/tv_product_price_after_discount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_product_quantity"
+            android:layout_below="@+id/ll_qty_container"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/iv_product_image"
@@ -107,7 +115,7 @@
             android:id="@+id/tv_product_price_original"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_product_quantity"
+            android:layout_below="@+id/ll_qty_container"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/tv_product_price_after_discount"
@@ -119,7 +127,7 @@
             android:id="@+id/tv_product_discount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_product_quantity"
+            android:layout_below="@+id/ll_qty_container"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/tv_product_price_original"
@@ -131,9 +139,10 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/tv_product_price_after_discount"
+            android:alpha="0.5"
             android:layout_margin="10dp"
             android:layout_toRightOf="@+id/iv_product_image"
-            android:background="@color/colorDarkGrey" />
+            android:background="@color/colorDividerCart" />
 
 
         <com.android.shopr.views.ShoprTextView
@@ -142,7 +151,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/divider1"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/iv_product_image"
             android:background="@drawable/bg_border_square"
             android:backgroundTint="@color/colorDarkGrey"
@@ -160,7 +168,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/divider1"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/tv_remove_product"
             android:background="@drawable/bg_border_square"
             android:backgroundTint="@color/colorAccent"

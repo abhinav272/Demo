@@ -3,6 +3,9 @@ package com.android.shopr;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.android.shopr.model.Cart;
+import com.android.shopr.utils.PreferenceUtils;
+
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 /**

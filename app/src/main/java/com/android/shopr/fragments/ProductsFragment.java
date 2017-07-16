@@ -21,6 +21,7 @@ import com.android.shopr.model.Product;
 import com.android.shopr.model.StoreWiseCategories;
 import com.android.shopr.utils.ShoprConstants;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -36,7 +37,7 @@ public class ProductsFragment extends BaseFragment implements ProductsRecyclerVi
     private static final String TAG = "ProductsFragment";
     private RecyclerView mRecyclerView;
     private int categoryId = -1, storeId = -1;
-    private StoreWiseCategories mStoreWiseCategories;
+    private StoreWiseCategories mStoreWiseCategories, mStoreWiseCategoriesCopy;
     private ProductsRecyclerViewAdapter mProductsRecyclerViewAdapter;
 
 
@@ -66,7 +67,13 @@ public class ProductsFragment extends BaseFragment implements ProductsRecyclerVi
     }
 
     private void getAllStores() {
+
         mStoreWiseCategories = getArguments().getParcelable(ShoprConstants.STORE_CATEGORY_WISE_PRODUCTS);
+        try {
+            mStoreWiseCategoriesCopy = mStoreWiseCategories.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
         setupUI(mStoreWiseCategories);
     }
 
@@ -112,6 +119,23 @@ public class ProductsFragment extends BaseFragment implements ProductsRecyclerVi
                 }
             });
         }
+        mProductsRecyclerViewAdapter.notifyDataSetChanged();
+    }
+
+    public void clearFilters() {
+        mStoreWiseCategories.setProducts(mStoreWiseCategoriesCopy.getProducts());
+        mProductsRecyclerViewAdapter.notifyDataSetChanged();
+    }
+
+    public void applyPriceRange(int minValue, int maxValue) {
+        List<Product> p = new ArrayList<>();
+        mStoreWiseCategories.setProducts(mStoreWiseCategoriesCopy.getProducts());
+        for (Product product : mStoreWiseCategories.getProducts()) {
+            if (Double.parseDouble(product.getPriceAfterDiscount()) <= maxValue
+                    && Double.parseDouble(product.getPriceAfterDiscount()) >= minValue)
+                p.add(product);
+        }
+        mStoreWiseCategories.setProducts(p);
         mProductsRecyclerViewAdapter.notifyDataSetChanged();
     }
 }

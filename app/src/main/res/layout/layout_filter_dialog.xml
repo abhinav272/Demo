@@ -1,33 +1,196 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:padding="20dp"
-    android:layout_height="wrap_content">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipChildren="false"
+    android:orientation="vertical"
+    android:padding="20dp">
 
     <com.android.shopr.views.ShoprTextView
         android:id="@+id/tv_title"
-        android:textColor="@color/colorBlack"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:text="Price Filter"
-        android:layout_marginLeft="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="FILTER"
+        android:textColor="#161616"
+        android:textSize="16sp"
+        app:fontFile="Roboto-Medium.ttf" />
 
-    <RadioButton
-        android:id="@+id/rb_low_to_high"
-        android:text="Prices Low to High"
-        android:layout_marginTop="10dp"
+    <ImageView
+        android:id="@+id/iv_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:tint="@color/colorBlack"
+        app:srcCompat="@drawable/ic_cross" />
+
+    <com.android.shopr.views.ShoprTextView
+        android:id="@+id/tv_sort_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/tv_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_marginTop="5dp"
+        android:text="SORT"
+        android:textColor="#161616"
+        android:textSize="13sp"
+        app:fontFile="Roboto-Medium.ttf" />
 
-    <RadioButton
-        android:id="@+id/rb_high_to_low"
-        android:text="Prices High to Low"
-        android:layout_below="@+id/rb_low_to_high"
-        android:layout_marginTop="10dp"
+
+    <LinearLayout
+        android:id="@+id/ll_high_to_low"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_sort_title"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_high_to_low"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/bg_radio_drawable"
+            android:clickable="false" />
+
+        <com.android.shopr.views.ShoprTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="Prices high to low"
+            android:textColor="#161616"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_low_to_high"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_high_to_low"
+        android:layout_marginTop="13dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_low_to_high"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/bg_radio_drawable"
+            android:clickable="false" />
+
+        <com.android.shopr.views.ShoprTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="Prices low to high"
+            android:textColor="#161616"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+
+    <com.android.shopr.views.ShoprTextView
+        android:id="@+id/tv_price_filter_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_low_to_high"
+        android:layout_marginTop="27dp"
+        android:text="PRICE"
+        android:textColor="#161616"
+        android:textSize="13sp"
+        app:fontFile="Roboto-Medium.ttf" />
+
+    <com.appyvet.rangebar.RangeBar
+        android:id="@+id/range_selector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_price_filter_title"
+        android:layout_marginTop="20dp"
+        custom:connectingLineColor="@color/colorAccent"
+        custom:pinColor="@color/colorAccent"
+        custom:pinMaxFont="12sp"
+        custom:pinMinFont="12sp"
+        custom:pinRadius="20dp"
+        custom:rangeBarColor="@color/colorAccent"
+        custom:selectorColor="@color/colorAccent"
+        custom:selectorSize="10dp"
+        custom:temporaryPins="true"
+        custom:tickColor="@color/colorAccent"
+        custom:tickEnd="9999"
+        custom:tickInterval="100"
+        custom:tickStart="1" />
+
+    <LinearLayout
+        android:id="@+id/ll_range_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/range_selector"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.android.shopr.views.ShoprTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Range: "
+            android:textColor="#161616"
+            android:textSize="16sp" />
+
+        <com.android.shopr.views.ShoprTextView
+            android:id="@+id/tv_min_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1200"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp"
+            app:fontFile="Roboto-Regular.ttf" />
+
+        <View
+            android:layout_width="4dp"
+            android:layout_height="1dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="#161616" />
+
+        <com.android.shopr.views.ShoprTextView
+            android:id="@+id/tv_max_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1400"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp"
+            app:fontFile="Roboto-Regular.ttf" />
+
+    </LinearLayout>
+
+    <com.android.shopr.views.ShoprTextView
+        android:id="@+id/tv_clear_filters"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_range_container"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_border_square"
+        android:backgroundTint="@color/colorAccent"
+        android:padding="10dp"
+        android:text="CLEAR FILTERS"
+        android:textAllCaps="true"
+        android:textColor="@color/colorAccent"
+        android:textSize="12sp"
+        app:fontFile="Roboto-Regular.ttf" />
+
+    <com.android.shopr.views.ShoprTextView
+        android:id="@+id/tv_apply_filters"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/ll_range_container"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_border_square"
+        android:backgroundTint="@color/colorAccent"
+        android:padding="10dp"
+        android:text="APPLY"
+        android:textAllCaps="true"
+        android:textColor="@color/colorAccent"
+        android:textSize="12sp"
+        app:fontFile="Roboto-Regular.ttf" />
 
 </RelativeLayout>

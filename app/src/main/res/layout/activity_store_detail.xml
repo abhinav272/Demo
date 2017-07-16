@@ -41,15 +41,20 @@
         android:layout_alignParentBottom="true"
         android:background="@color/colorDarkGrey">
 
+        <ImageView
+            android:layout_gravity="center_vertical"
+            android:layout_width="30dp"
+            android:layout_marginLeft="85dp"
+            app:srcCompat="@drawable/ic_barcode"
+            android:layout_height="30dp" />
+
         <Button
             android:id="@+id/btn_scan2"
             android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="130dp"
             android:background="@null"
-            android:drawableLeft="@drawable/ic_barcode"
-            android:drawablePadding="20dp"
             android:drawableTint="@color/colorWhite"
             android:text="SCAN &amp; ADD TO BAG"
             android:textColor="@color/colorWhite"

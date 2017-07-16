@@ -286,6 +286,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void hideSearchBarWithAnimation() {
+        supportInvalidateOptionsMenu();
         final View myView = edSearchStore;
 
         int cx = myView.getWidth();
@@ -338,7 +339,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
+    public boolean onPrepareOptionsMenu(final Menu menu) {
         Log.e(TAG, "onPrepareOptionsMenu: ");
         MenuItem item = menu.findItem(R.id.action_cart);
         RelativeLayout rootView = (RelativeLayout) item.getActionView();
@@ -351,6 +352,18 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
             @Override
             public void onClick(View view) {
                 showCartActivity();
+            }
+        });
+
+        MenuItem itemSearch = menu.findItem(R.id.action_search);
+        ImageView iv = (ImageView) itemSearch.getActionView();
+        iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                menu.findItem(R.id.action_search).setVisible(false);
+                menu.findItem(R.id.action_cart).setVisible(false);
+                menu.findItem(R.id.action_watch_list).setVisible(false);
+                showSearchBarWithAnimation();
             }
         });
 

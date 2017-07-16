@@ -10,6 +10,7 @@
     <color name="colorAppBg">#F5FBEF</color>
     <color name="colorDarkGrey">#26272C</color>
     <color name="colorGray">#696969</color>
-    <color name="colorLightWhite">#D5D8DC</color>
+    <color name="colorLightWhite">#F7F7F7</color>
+    <color name="colorDividerCart">#889CAF</color>
     <color name="colorLocationBg">#B7B7B7</color>
 </resources>

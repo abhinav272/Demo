@@ -33,6 +33,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <ImageView
+        app:srcCompat="@drawable/ic_location"
+        android:layout_below="@+id/tv_header"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/tv_detect_my_location"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="30dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp" />
+
     <EditText
         android:id="@+id/et_search_place"
         android:textSize="14sp"

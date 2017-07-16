@@ -2,10 +2,15 @@ package com.android.shopr.adapters;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.android.shopr.R;
 import com.android.shopr.adapters.viewholders.CartItemViewHolder;
@@ -69,7 +74,9 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
             optionsItemViewHolder.tvBagTotalAfterDiscount.setText("INR " + String.format("%.2f", cart.getCartTotal()));
             String discount = String.format("%.2f", cart.getCartTotalBeforeDiscount() - cart.getCartTotal());
             optionsItemViewHolder.tvBagDiscount.setText("(-)INR " + discount);
-            optionsItemViewHolder.tvAmountPayable.setText("INR " + String.format("%.2f", cart.getCartTotal()));
+            optionsItemViewHolder.tvTax.setText("INR " + String.format("%.2f", (cart.getCartTotal() * 0.10)));
+            optionsItemViewHolder.tvAmountPayable.setText("INR " + String.format("%.2f", cart.getCartTotal() * 1.10));
+
         } else {
             final CartItemViewHolder cartItemViewHolder = (CartItemViewHolder) holder;
             Picasso.with(context).load(getItem(position).getImgUrl())
@@ -107,7 +114,36 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                     }
                 }
             });
-            cartItemViewHolder.spinnerSize.setSelection(getItem(position).getSize() + 1);
+            if (getItem(position).getSizes().getApplicable().size() > 0){
+                cartItemViewHolder.spinnerSize.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, getItem(position).getSizes().getAvailable()));
+                int index = getItem(position).getSizes().getAvailable().indexOf(getItem(position).getSizes().getApplicable().get(getItem(position).getSize()));
+                cartItemViewHolder.spinnerSize.setSelection(index);
+                cartItemViewHolder.spinnerSize.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        if (!getItem(position).getSizes().getAvailable().contains(((AppCompatTextView) view).getText().toString())){
+                            Toast.makeText(context, "Size not available", Toast.LENGTH_SHORT).show();
+                        } else {
+                            int index = getItem(position).getSizes().getApplicable().indexOf(((AppCompatTextView) view).getText().toString());
+                            getItem(position).setSize(index);
+                            ExecutorSupplier.getInstance().getWorkerThreadExecutor().execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    PreferenceUtils.getInstance(context).saveUserCart(cart);
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+            } else {
+                cartItemViewHolder.spinnerSize.setVisibility(View.GONE);
+                cartItemViewHolder.spinnerSizePlaceHolder.setText("Size: N/A");
+            }
         }
     }
 

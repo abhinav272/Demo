@@ -46,12 +46,7 @@ public class HomeFragment extends BaseFragment implements StoresRecyclerViewAdap
         });
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(getLayoutManager());
-//        mRecyclerView.setItemAnimator(getItemAnimator());
         getAllStores();
-    }
-
-    private RecyclerView.ItemAnimator getItemAnimator() {
-        return new SlideInUpAnimator();
     }
 
     private void getAllStores() {
@@ -71,7 +66,6 @@ public class HomeFragment extends BaseFragment implements StoresRecyclerViewAdap
 
     @Override
     public void delegateToHost(int storeId) {
-//        ((HomeActivity) getActivity()).showCategoriesFragment(position);
         ((HomeActivity) getActivity()).showStoresDetailActivity(storeId);
     }
 

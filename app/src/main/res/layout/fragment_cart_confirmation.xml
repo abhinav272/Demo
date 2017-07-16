@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorLightWhite"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.android.shopr.views.ShoprTextView
+        android:id="@+id/tv_order_summary"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorDarkGrey"
+        android:drawableLeft="@drawable/ic_left_icon"
+        android:drawablePadding="20dp"
+        android:drawableTint="@color/colorWhite"
+        android:gravity="center_vertical"
+        android:textSize="19sp"
+        android:text="ORDER SUMMARY"
+        android:textColor="@color/colorWhite"
+        app:fontFile="Roboto-Regular.ttf" />
+
+    <TextView
+        android:id="@+id/tv_store_and_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_order_summary"
+        android:gravity="center"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        android:text="ZARA - Ambience Mall, Gurgaon"
+        android:textColor="@color/colorAccent"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_items_placeholder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_store_and_location"
+        android:layout_marginLeft="10dp"
+        android:text="ITEMS (6)"
+        android:textColor="@color/colorBlack"
+        android:textStyle="bold" />
+
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/tv_items_placeholder"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/colorBlack" />
+
+
+    <ListView
+        android:id="@+id/lv_items"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/rl_action_container"
+        android:layout_below="@+id/divider1"
+        android:divider="#BBBBBB"
+        android:dividerHeight="1dp" />
+
+    <RelativeLayout
+        android:id="@+id/rl_action_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/colorBlack" />
+
+
+        <TextView
+            android:id="@+id/tv_sub_total_place_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="5dp"
+            android:text="SUB TOTAL"
+            android:textColor="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/tv_sub_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:text="INR 5800"
+            android:textColor="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/tv_tax_placeholder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_sub_total_place_holder"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="2dp"
+            android:text="TAX"
+            android:textColor="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/tv_tax"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tv_sub_total_place_holder"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="2dp"
+            android:text="INR 580"
+            android:textColor="@color/colorBlack" />
+
+        <RelativeLayout
+            android:id="@+id/tv_total_payable_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_tax_placeholder"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/cardview_dark_background"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="TOTAL PAYABLE"
+                android:textColor="@color/colorWhite" />
+
+            <TextView
+                android:id="@+id/tv_total_payable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="INR 5800"
+                android:textColor="@color/colorWhite" />
+
+        </RelativeLayout>
+
+        <com.android.shopr.views.ShoprTextView
+            android:id="@+id/tv_proceed_to_payment"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/tv_total_payable_container"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorAccent"
+            android:gravity="center"
+            android:text="PROCEED TO PAYMENT"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp"
+            app:fontFile="Roboto-Medium.ttf"
+            />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

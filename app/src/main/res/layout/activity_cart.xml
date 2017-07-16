@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/colorLightWhite"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -7,5 +8,94 @@
         android:id="@+id/frame_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_container"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/iv_container"
+            android:background="@drawable/bg_zigzag"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="330dp">
+
+            <ImageView
+                android:id="@+id/iv_cart_qr"
+                android:visibility="visible"
+                android:layout_centerHorizontal="true"
+                android:layout_width="280dp"
+                android:layout_height="250dp" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tv_qr_title"
+            android:text="@string/code_text"
+            android:gravity="center_horizontal"
+            android:layout_below="@+id/iv_container"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/colorBlack"
+            android:layout_centerHorizontal="true"
+            android:textSize="19sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_cart_id"
+            android:layout_below="@+id/tv_qr_title"
+            android:textColor="@color/colorBlack"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:text="ORDER ID: 8726162"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_time_stamp"
+            android:textColor="@color/colorBlack"
+            android:layout_below="@+id/tv_cart_id"
+            android:layout_marginTop="10dp"
+            android:text="23 June 2017  08:31 PM"
+            android:layout_centerHorizontal="true"
+            android:textSize="19sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_order_status_place_holder"
+            android:text="ORDER STATUS: "
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="20dp"
+            android:textColor="@color/colorBlack"
+            android:layout_below="@+id/tv_time_stamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_order_status"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="25dp"
+            android:layout_below="@+id/tv_time_stamp"
+            android:layout_marginTop="37dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="AWAITING VERIFICATION"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"
+            android:background="@drawable/bg_awaiting_response"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

@@ -13,6 +13,7 @@ import com.android.shopr.R;
  */
 public class CartItemViewHolder extends RecyclerView.ViewHolder {
 
+    public TextView spinnerSizePlaceHolder;
     public ImageView ivProductImage, decreseQty, increaseQty;
     public TextView productName, productPriceBeforeDiscount, productPriceAfterDiscount, productDiscount, productQuantity, removeProduct, addToWatchList;
     public AppCompatSpinner spinnerSize;
@@ -30,6 +31,7 @@ public class CartItemViewHolder extends RecyclerView.ViewHolder {
         removeProduct = (TextView) itemView.findViewById(R.id.tv_remove_product);
         addToWatchList = (TextView) itemView.findViewById(R.id.tv_move_to_watchlist);
         spinnerSize = (AppCompatSpinner) itemView.findViewById(R.id.spinner_sizes);
+        spinnerSizePlaceHolder = (TextView) itemView.findViewById(R.id.tv_size_place_holder);
     }
 
 

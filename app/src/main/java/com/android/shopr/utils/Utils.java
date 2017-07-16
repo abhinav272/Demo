@@ -16,9 +16,13 @@ import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -89,9 +93,9 @@ public class Utils {
         Toast.makeText(context, "Product added to cart", Toast.LENGTH_SHORT).show();
     }
 
-    public static void addProductToCart(Context context, ProductFromBarcode productFromBarcode, int size, int quantity) {
+    public static void addProductToCart(Context context, ProductFromBarcode productFromBarcode, String storeLocation, int size, int quantity) {
         addProductToCart(context, productFromBarcode.getStoreId(), productFromBarcode.getCategoryId(),
-                productFromBarcode.getStoreName(), "", productFromBarcode.getProduct(), size, quantity);
+                productFromBarcode.getStoreName(), storeLocation, productFromBarcode.getProduct(), size, quantity);
     }
 
     @NonNull
@@ -109,6 +113,7 @@ public class Utils {
         cartItem.setStoreName(storeName);
         cartItem.setLocationName(storeLocation);
         cartItem.setSize(size);
+        cartItem.setSizes(product.getSizes());
         return cartItem;
     }
 
@@ -133,5 +138,13 @@ public class Utils {
         } else {
             showKeyboard(activity);
         }
+    }
+
+    public static String getDate(long timeStamp){
+        String dateFormat = "dd MMMM yyyy   hh:mm aa";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timeStamp);
+        return simpleDateFormat.format(calendar.getTime());
     }
 }

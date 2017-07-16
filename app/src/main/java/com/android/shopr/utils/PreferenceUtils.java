@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.android.shopr.model.AddedCartResponse;
 import com.android.shopr.model.Cart;
 import com.android.shopr.model.CartItem;
 import com.android.shopr.model.UserProfile;
@@ -71,5 +72,19 @@ public class PreferenceUtils {
         Gson gson = new Gson();
         String json = gson.toJson(cart);
         sharedPreferences.edit().putString(ShoprConstants.CART, json).apply();
+    }
+
+    public void saveAwaitingCart(AddedCartResponse body) {
+        Gson gson = new Gson();
+        String json = gson.toJson(body);
+        sharedPreferences.edit().putString(ShoprConstants.AWAITING_CART, json).apply();
+    }
+
+    public AddedCartResponse getAwaitingCart() {
+        String string = sharedPreferences.getString(ShoprConstants.AWAITING_CART, null);
+        if (string!=null){
+            return new Gson().fromJson(string, AddedCartResponse.class);
+        }
+        return null;
     }
 }

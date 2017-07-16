@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="5dp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_margin="8dp"
+    android:layout_width="160dp"
+    android:layout_height="215dp">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ImageView
             android:layout_marginTop="3dp"
             android:id="@+id/iv_image"
+            android:scaleType="centerCrop"
             android:layout_width="match_parent"
-            android:layout_height="180dp" />
+            android:layout_height="194dp" />
 
         <com.android.shopr.views.ShoprTextView
             android:id="@+id/tv_text"
             android:layout_below="@+id/iv_image"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
             android:textSize="16sp"
-            app:fontFile="Roboto-MediumItalic.ttf"
+            app:fontFile="Roboto-Regular.ttf"
+            android:textColor="#26272C"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="21sp"
             android:gravity="center" />
     </RelativeLayout>
 

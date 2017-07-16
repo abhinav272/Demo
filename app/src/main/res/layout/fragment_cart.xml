@@ -5,25 +5,67 @@
     android:layout_height="match_parent"
     android:background="@color/colorLightWhite">
 
-    <RelativeLayout
-        android:id="@+id/rl_container"
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/app_bar_cart"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:id="@+id/rl_empty_cart_container"
+        android:layout_width="match_parent"
+        android:background="@color/colorWhite"
+        android:layout_below="@+id/toolbar"
+        android:visibility="gone"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:id="@+id/iv_empty_cart"
+            app:srcCompat="@drawable/ic_empty_cart"
+            android:visibility="visible"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:layout_width="280dp"
+            android:layout_height="280dp" />
 
-        <include
-            android:id="@+id/toolbar"
-            layout="@layout/app_bar_cart"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tv_header_1"
+            android:layout_below="@+id/iv_empty_cart"
+            android:layout_centerHorizontal="true"
+            android:textSize="22sp"
+            android:text="Ouhh...it's empty in here!"
+            android:textStyle="bold"
+            android:textColor="@color/colorBlack"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_below="@+id/tv_header_1"
+            android:layout_marginTop="40dp"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp"
+            android:text="Go back, scan products and add\nthem to bag"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_container"
+        android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <com.android.shopr.views.ShoprTextView
             android:id="@+id/tv_store_and_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/toolbar"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
+            android:textSize="16sp"
             android:text="ZARA - Ambience Mall, Gurgaon"
             android:textColor="@color/colorAccent"
             app:fontFile="Roboto-Bold.ttf" />
@@ -71,10 +113,10 @@
         <FrameLayout
             android:id="@+id/fl_checkout"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="40dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/colorDarkGrey"
-            android:padding="10dp">
+            android:background="@color/colorWhite"
+            >
 
             <com.android.shopr.views.ShoprTextView
                 android:id="@+id/tv_checkout"
@@ -82,30 +124,11 @@
                 android:layout_height="match_parent"
                 android:background="@color/colorAccent"
                 android:gravity="center"
-                android:text="CHECKOUT"
+                android:text="CONTINUE"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp"
                 app:fontFile="Roboto-Medium.ttf" />
         </FrameLayout>
     </RelativeLayout>
-
-    <com.android.shopr.views.ShoprTextView
-        android:id="@+id/tv_qr_banner"
-        android:layout_above="@+id/iv_cart_qr"
-        android:layout_marginBottom="20dp"
-        android:text="Get this scan at the verification counter"
-        android:textColor="@color/colorDarkGrey"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <ImageView
-        android:id="@+id/iv_cart_qr"
-        android:visibility="gone"
-        android:layout_centerInParent="true"
-        android:layout_width="250dp"
-        android:layout_height="250dp" />
 
 </RelativeLayout>

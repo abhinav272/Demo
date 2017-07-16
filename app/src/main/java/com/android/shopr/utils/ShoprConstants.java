@@ -20,4 +20,5 @@ public class ShoprConstants {
     public static final String STORE_LOCATION = "store_location";
     public static final String CART = "cart";
     public static final String STORE_NAME = "store_name";
+    public static final String AWAITING_CART = "awaiting_cart";
 }
